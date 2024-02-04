@@ -1,0 +1,124 @@
+---
+title: "Data prep for experiment (PSY2213; 2023)"
+author: "Joe Sweetman"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    toc_float: yes
+    code_folding: hide
+    theme: cosmo
+---
+
+This covers how to prepare your data for analysis (see "Analysis of in-class experiment" for details of analysis).  There are loads of great [introductions for R available for free online](https://glennwilliams.me/r4psych/) to help build a deeper understanding, including how to install R and RStudio if you are having problems.     
+
+Here I provide the R code for combining and preparing your data from gorilla.
+
+# packages
+First, we will need to install and/or load then packages we need.
+
+```{r message=FALSE}
+# Package names
+packages <- c("tidyverse", "utils")
+
+# Install packages not yet installed
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+invisible(lapply(packages, library, character.only = TRUE))
+```
+
+# set working directory
+
+Setting a working directory can be helpful as it means you can keep all of your files and outputs in this folder making it easier to access them and meaning you don't have to type so much.
+
+```{r message=FALSE, results='hide'}
+setwd("~/Dropbox/Documents/My data/Moral sense task/practical")
+```
+
+Your working directory address will be different depending on your folders and OS (this is for a Mac, Windows machines are different if you look at a folder/file and "get info" it will tell you the directory. Alternatively, you can just use the default directory that was set when you installed RStudio)
+
+# import data and combine data
+Next, we will need to import the data files from gorilla. This only works if the file is in your working directory. You can either put it there or specify the whole file address or you can use RStudio to open the file. 
+
+Gorilla gives you a number of data files for each node/task in your experiment. In this case we are interested in the  main stimuli files (one file for each of the different counterbalanced key press conditions, Q=Yes vs. P=Yes). We read in the data from its directory address.  
+
+```{r message=FALSE, results='hide'}
+#Read in the data and rename
+dataQyes <- read.csv("~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_121600-v4_task-zith.csv", header=TRUE, na.strings="")
+
+dataPyes <- read.csv("~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_121600-v4_task-kbcz.csv", header=TRUE, na.strings="")
+
+dataDemo <- read.csv("~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_114793-v1_questionnaire-vivn.csv", header=TRUE, na.strings="")
+
+```
+
+Now we have the two counterbalanced conditions we can combine the data files.
+
+```{r, attr.output='style="max-height: 500px;"'}
+# combine data
+df <- rbind(dataQyes, dataPyes)
+head(df)
+```
+
+You will see that gorilla gives you a lot of stuff you don't need. We can select only the rows from the dataframe that have responses/judgments.
+```{r, attr.output='style="max-height: 500px;"'}
+# keep only data rows with responses/judgments not all the other stuff gorilla gives you
+df <- df %>% 
+  filter(Zone.Type == "response_keyboard")
+
+head(df)
+```
+
+This looks a lot nicer. Next we can select only the variables that we need for analysis.
+
+```{r, attr.output='style="max-height: 500px;"'}
+# select data we need 
+df <- df %>% 
+  select(Participant.Private.ID, Task.Name, Trial.Number, Dilemma, Personal, DPv1.0.Permissible, 
+         Personal.force, Intention, DPv2.0.Permissible, Action.aversion, Outcome.aversion, DPv3.0.Permissible,
+         Prohibited.act, Not.intended, Good....bad.intended, Good...bad, No.alternative, MG.Permissible, Reaction.Time, Response)
+
+head(df)
+```
+
+A couple of the model parameter names have gone a little weird due to some of the automatic uploading settings. We can rename these so they are more descriptive.
+
+```{r, attr.output='style="max-height: 500px;"'}
+
+# rename a couple of parameters
+df <- df %>% 
+  rename(ID = Participant.Private.ID,
+         Good_not_Bad = Good....bad.intended,
+         Good_Grt_Bad = Good...bad,
+         RT = Reaction.Time,
+         Permissible = Response)
+
+head(df)
+```
+We can also change our response variable from yes/no to 1/0 for analysis. 
+
+```{r, attr.output='style="max-height: 500px;"'}
+
+#make DV numeric
+df <- df %>% 
+  mutate(Permissible = recode(Permissible, 
+                    "YES" = "1", 
+                    "NO" = "0")) 
+
+df$Permissible <- as.numeric(as.character(df$Permissible))
+
+head(df)
+```
+
+We can now analyse the data in R or if you like we can export it to a csv file to analyse in JASP.
+
+```{r message=FALSE, results='hide'}
+
+# rename a couple of parameters
+write.csv(df, "~/Dropbox/Documents/My data/Moral sense task/practical/data.csv", row.names=FALSE)
+```

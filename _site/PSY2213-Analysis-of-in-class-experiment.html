@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Joe Sweetman" />
+
+
+<title>Analysis of in-class study (PSY2213; 2023)</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Analysis of in-class study (PSY2213;
+2023)</h1>
+<h4 class="author">Joe Sweetman</h4>
+
+</div>
+
+
+<p>I am so happy you are here! You have decided to take your first steps
+toward learning a very powerful statistical programming languages
+(sounds impressive, right). R has a universe of statistical and data
+science tools (what we call “packages”) that allow you to do just about
+anything you want to with data. If the tool you need isn’t available, R
+is so cool that you can (with enough skill and effort) create it
+yourself! Obviously I am not going to be able to fully teach you R
+through this one example analysis but I hope there will be enough here
+for you to be able to run analyses for your own experiment and begin to
+see why this might me something worth learning and investing your time
+in. There are loads of great <a
+href="https://glennwilliams.me/r4psych/">introductions for R available
+for free online</a> to help build a deeper understanding, including how
+to install R and RStudio if you are having problems.</p>
+<p>Here I provide the R code for the generalized linear mixed effects
+model that we used to analyse our in-class experiment. The experiment
+set out to test whether the dual process theory v2.0 is better than v1.0
+at explaining moral judgments. We had the hypothesis that</p>
+<blockquote>
+<p>If dual process theory v2.0 is more descriptively adequate than v1.0,
+then the model should fit the data better</p>
+</blockquote>
+<p>If you copy and paste the code below (the stuff in boxes) into a new
+R script (you can open one in RStudio with “File” <span
+class="math inline">\(\\rightarrow\)</span> “New File” <span
+class="math inline">\(\\rightarrow\)</span> “R Script”) you should be
+able reproduce these analyses. Ok, let’s get going.</p>
+<hr />
+<p><br></p>
+<div id="packages" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> packages</h1>
+<p>First, we will need to install and/or load then packages we
+nneed.</p>
+<pre class="r"><code># Package names
+packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;lme4&quot;, &quot;lmerTest&quot;, &quot;sjPlot&quot;, &quot;performance&quot;)
+
+# Install packages not yet installed
+installed_packages &lt;- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+invisible(lapply(packages, library, character.only = TRUE))</code></pre>
+</div>
+<div id="set-working-directory" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> set working
+directory</h1>
+<p>Setting a working directory can be helpful as it means you can keep
+all of your files and outputs in this folder making it easier to access
+them and meaning you don’t have to type so much.</p>
+<pre class="r"><code>setwd(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/website&quot;)</code></pre>
+<p>Your working directory address will be different depending on your
+folders and OS (this is for a Mac, Windows machines are different if you
+look at a folder/file and “get info” it will tell you the directory.
+Alternatively, you can just use the default directory that was set when
+you installed RStudio)</p>
+</div>
+<div id="import-data-and-set-coding" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> import data and set
+coding</h1>
+<p>Next, we will need to import the data from the in-class study. Here
+we import the <a
+href="https://vle.exeter.ac.uk/course/view.php?id=10296">datafile (“data
+example.csv”)</a>. This only works if the file is in your working
+directory. You can either put it there or specify the whole file address
+or you can use RStudio to open the file.</p>
+<pre class="r"><code>df_all &lt;- read_csv(&quot;data example.csv&quot;)</code></pre>
+<p>For ease of interpretation, set deviation coding for the factors
+(what does that mean! Just that this makes it easier to interpret the
+estimates of the effect size with complex models including interactions,
+so it’s a bit like making it an ANOVA - the estimates are for main
+effects and interactions).</p>
+<pre class="r"><code># make sure everything is factor
+df_all$Task.Name &lt;- as.factor(df_all$Task.Name)
+df_all$Personal &lt;- as.factor(df_all$Personal)
+df_all$DPv1.0.Permissible &lt;- as.factor(df_all$DPv1.0.Permissible)
+df_all$Personal.force &lt;- as.factor(df_all$Personal.force)
+df_all$Intention &lt;- as.factor(df_all$Intention)
+df_all$DPv2.0.Permissible &lt;- as.factor(df_all$DPv2.0.Permissible)
+
+#set deviation contrasts for ease of interpretation -.5 vs .5
+c&lt;-contr.treatment(2)
+my.coding&lt;-matrix(rep(1/2, 2), ncol=1)
+my.simple&lt;-c-my.coding
+my.simple
+
+#keys  .5 Q-Yes,  -.5 P-Yes 
+contrasts(df_all$Task.Name)&lt;-my.simple
+contrasts(df_all$Task.Name)
+
+#personal .5 Yes, -.5 No
+contrasts(df_all$Personal)&lt;-my.simple
+contrasts(df_all$Personal)
+
+#prediction DPv1.0 act no intended .5 Yes, -.5 No
+contrasts(df_all$DPv1.0.Permissible)&lt;-my.simple
+contrasts(df_all$DPv1.0.Permissible)
+
+#personal force .5 Yes, -.5 No
+contrasts(df_all$Personal.force)&lt;-my.simple
+contrasts(df_all$Personal.force)
+
+#intention .5 Yes, -.5 No
+contrasts(df_all$Intention)&lt;-my.simple
+contrasts(df_all$Intention)
+
+#prediction DPv2.0 .5 Yes, -.5 No 
+contrasts(df_all$DPv2.0.Permissible)&lt;-my.simple
+contrasts(df_all$DPv2.0.Permissible)</code></pre>
+</div>
+<div id="generalized-linear-mixed-models" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> generalized linear
+mixed models</h1>
+<p>We fit a generalized linear mixed models (GLMM) to test the
+hypothesis. We attempted to specify “maximal” models <a
+href="https://www.sciencedirect.com/science/article/abs/pii/S0749596X12001180?via%3Dihub">(see
+Barr et al., 2013)</a> with all random intercepts and slopes for
+participant and dilemma.</p>
+<div id="glmm-for-dual-process-model-v1.0" class="section level2"
+number="4.1">
+<h2><span class="header-section-number">4.1</span> GLMM for dual process
+model v1.0</h2>
+<p>Let’s fit the GLMM for the dual process v1.0 model. We can see the
+summary and get some 95% CIs.</p>
+<pre class="r"><code>#Dual process v1.0 model
+DPv1.0&lt;- glmer(Permissible ~ Personal +  (1+Personal|ID) + (1+Personal|Dilemma),  data=df_all, family = binomial(link = &quot;logit&quot;))
+
+summary(DPv1.0)</code></pre>
+<pre style="max-height: 500px;"><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: Permissible ~ Personal + (1 + Personal | ID) + (1 + Personal |  
+##     Dilemma)
+##    Data: df_all
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##   4310.8   4362.4  -2147.4   4294.8     4672 
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -11.2170  -0.4933   0.1455   0.4501   7.6298 
+## 
+## Random effects:
+##  Groups  Name        Variance Std.Dev. Corr
+##  Dilemma (Intercept) 3.064    1.751        
+##          Personal2   5.466    2.338    0.17
+##  ID      (Intercept) 1.582    1.258        
+##          Personal2   1.328    1.153    0.86
+## Number of obs: 4680, groups:  Dilemma, 104; ID, 45
+## 
+## Fixed effects:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)   0.5201     0.2949   1.764   0.0777 .
+## Personal2     0.1343     0.4865   0.276   0.7825  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##           (Intr)
+## Personal2 0.512</code></pre>
+<pre class="r"><code>confint(DPv1.0, parm = &quot;beta_&quot;, method=&quot;Wald&quot;)</code></pre>
+<pre style="max-height: 500px;"><code>##                   2.5 %   97.5 %
+## (Intercept) -0.05778327 1.098047
+## Personal2   -0.81920370 1.087813</code></pre>
+<p>The personal (vs. impersonal) parameter doesn’t seem to differ
+significantly from the null. The log odds ratio = 0.134 so the odds
+ratio is exp(0.134) = 1.14 about equal odds. The 95% CIs show a fair
+amount of imprecision in the estimate - we need more data for more
+precision. We can also see the information criterion methods for model
+comparison with AIC = 4310.8 and BIC = 4362.4.</p>
+<p>###plot data We can plot the data from the model.</p>
+<pre class="r"><code>set_theme(base = theme_classic())
+plot_model(DPv1.0, type = &quot;pred&quot;)</code></pre>
+<pre style="max-height: 500px;"><code>## $Personal</code></pre>
+<p><img src="PSY2213-Analysis-of-in-class-experiment_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Here we can see similar rates of permissible judgments across
+personal and impersonal conditions. The 95% CIs on the estimates show a
+fair amount of imprecision in the estimate, at least for the personal
+condition (this reflects the relative low number of personal dilemmas in
+the task).</p>
+</div>
+<div id="glmm-for-dual-process-model-v2.0" class="section level2"
+number="4.2">
+<h2><span class="header-section-number">4.2</span> GLMM for dual process
+model v2.0</h2>
+<p>OK, let’s do the GLMM for dual process model v2.0. Here we add the
+parameters and their interaction to the model.</p>
+<pre class="r"><code>#Dual process v2.0 model
+DPv2.0&lt;- glmer(Permissible ~ Personal.force*Intention +  (1+Personal.force+Intention|ID) + (1+Personal.force+Intention|Dilemma),  data=df_all, family = binomial(link = &quot;logit&quot;), control = glmerControl(optimizer = &quot;nloptwrap&quot;, optCtrl = list(algorithm =  &quot;NLOPT_LN_NELDERMEAD&quot;,
+                                                          maxfun = 1e7,
+                                                          maxeval = 1e7)))
+
+summary(DPv2.0)</code></pre>
+<pre style="max-height: 500px;"><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: Permissible ~ Personal.force * Intention + (1 + Personal.force +  
+##     Intention | ID) + (1 + Personal.force + Intention | Dilemma)
+##    Data: df_all
+## Control: 
+## glmerControl(optimizer = &quot;nloptwrap&quot;, optCtrl = list(algorithm = &quot;NLOPT_LN_NELDERMEAD&quot;,  
+##     maxfun = 1e+07, maxeval = 1e+07))
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##   4345.3   4448.6  -2156.7   4313.3     4664 
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -9.2514 -0.4840  0.1505  0.4590  8.4201 
+## 
+## Random effects:
+##  Groups  Name            Variance Std.Dev. Corr       
+##  Dilemma (Intercept)     0.4643   0.6814              
+##          Personal.force2 4.3776   2.0923   0.09       
+##          Intention2      6.7468   2.5975   0.60  0.85 
+##  ID      (Intercept)     1.3629   1.1674              
+##          Personal.force2 0.7499   0.8660    0.61      
+##          Intention2      0.2233   0.4725    0.27 -0.13
+## Number of obs: 4680, groups:  Dilemma, 104; ID, 45
+## 
+## Fixed effects:
+##                            Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                  0.8280     0.2569   3.223 0.001267 ** 
+## Personal.force2              0.9024     0.3990   2.262 0.023720 *  
+## Intention2                  -1.4247     0.3842  -3.708 0.000209 ***
+## Personal.force2:Intention2  -1.4234     0.7540  -1.888 0.059034 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) Prsn.2 Intnt2
+## Persnl.frc2 0.443               
+## Intention2  0.356  0.518        
+## Prsnl.f2:I2 0.416  0.425  0.435</code></pre>
+<pre class="r"><code>confint(DPv2.0, parm = &quot;beta_&quot;,method=&quot;Wald&quot;)</code></pre>
+<pre style="max-height: 500px;"><code>##                                 2.5 %      97.5 %
+## (Intercept)                 0.3245250  1.33139892
+## Personal.force2             0.1203752  1.68450944
+## Intention2                 -2.1777038 -0.67161361
+## Personal.force2:Intention2 -2.9011586  0.05430117</code></pre>
+<p>The parameters for personal force and intention are both significant.
+The log odds ratio for personal force = 0.90 so the odds ratio is
+exp(0.90) = 2.46, so (weirdly) the odds are about twice as likely that
+an action will be seen as permissible if it has personal force. The 95%
+CIs show a fair amount of imprecision in the estimate - we need more
+data for more precision. More in line with expectations, we can see the
+log odds ratio for intention (means vs. side-effect) = -1.4247 so the
+odds ratio is exp(-1.4247) = .24, so the odds are about four times as
+likely that an action will be seen as permissible if it is not
+intentional - harm as a side-effect. The 95% CIs also show a fair amount
+of imprecision in the estimate. Finally, we can also see the information
+criterion model comparison indices, AIC = 4345.3 and BIC = 4448.6.</p>
+<p>###plot data We can plot the data from the model.</p>
+<pre class="r"><code>set_theme(base = theme_classic())
+plot_model(DPv2.0, type = &quot;int&quot;)</code></pre>
+<p><img src="PSY2213-Analysis-of-in-class-experiment_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>#Model comparison Let’s have a look at the model comparisons.</p>
+</div>
+<div id="bayes-factor-model-comparison" class="section level2"
+number="4.3">
+<h2><span class="header-section-number">4.3</span> Bayes Factor model
+comparison</h2>
+<p>Now we can compare the models using Bayes Factors to get the relative
+likelihood of the models given the data we have.</p>
+<pre class="r"><code>test_performance(DPv1.0,DPv2.0)</code></pre>
+<pre style="max-height: 500px;"><code>## Name   |    Model |       BF
+## ----------------------------
+## DPv1.0 | glmerMod |         
+## DPv2.0 | glmerMod | 1.99e-19
+## Each model is compared to DPv1.0.</code></pre>
+<p>This shows us that the dual process v2.0 model (our alternative
+hypothesis) is 1.99^-19 times more likely than the dual process v1.0
+model (our null hypothesis) given the data. Being 1.99^-19 times more
+likely means it’s actually a lot less likely!* That is, since our BF is
+(a lot) less than 1 it mean that the evidence is favouring the null. We
+can see this if we take the inverse 1/1.99^-19 = 476659.7. This shows us
+that the dual process v1.0 model is 476,000 times more likely than
+v2.0</p>
+<p>*if that’s counter intuitive consider if you were 2 times more likely
+than your friend to get a fist in a horrible practical module, here
+you’d be twice as likely to get top grades. If you were 1 times more
+likely than your friend to ace this module from hell, then you’d be
+equally likely. However, if you were 0.5 times (less than 1) more likely
+to get greater than or equal to 70%, then you’d be less likely than your
+friend to get that first.</p>
+<p>##information criterion (AIC and BIC) We cann look at our more
+traditional information criterion indices</p>
+<pre class="r"><code>compare_performance(DPv1.0,DPv2.0)</code></pre>
+<pre style="max-height: 500px;"><code>## # Comparison of Model Performance Indices
+## 
+## Name   |    Model |  AIC (weights) | AICc (weights) |  BIC (weights) | R2 (cond.) | R2 (marg.) |   ICC |  RMSE | Sigma | Log_loss | Score_log | Score_spherical
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+## DPv1.0 | glmerMod | 4310.8 (&gt;.999) | 4310.9 (&gt;.999) | 4362.4 (&gt;.999) |      0.636 |  4.518e-04 | 0.636 | 0.348 | 1.000 |    0.390 |      -Inf |       2.154e-04
+## DPv2.0 | glmerMod | 4345.3 (&lt;.001) | 4345.5 (&lt;.001) | 4448.6 (&lt;.001) |      0.621 |      0.028 | 0.610 | 0.349 | 1.000 |    0.392 |      -Inf |       3.379e-04</code></pre>
+<p>Here we see what we could have seen in the model outputs above: that
+the dual process v1.0 model has a relatively better fit than the v2.0
+model. That is, both it’s AIC 4310 (vs. 4345) and BIC 4362 (vs. 4448)
+are lower than those of v2.0.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

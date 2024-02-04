@@ -1,0 +1,24 @@
+---
+title: "PSY2213 Social Practical II"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    toc_float: yes
+    code_folding: hide
+    theme: cosmo
+---
+
+***
+
+This site provides all the data, code, and information for PSY2213 social practical II.
+
+***
+
+<br>
+
+# [PSY2213-Analysis-of-in-class-experiment](PSY2213-Analysis-of-in-class-experiment.html)
+
+# [PSY2213-Data-prep-for-experiment](PSY2213-Analysis-of-in-class-experiment.html)
+  
