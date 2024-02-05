@@ -30,13 +30,13 @@ If you have not installed R & RStudio, then do so now.
 <br>
 
 ## open the R script in RStudio
-Below I walk you through the R code for the analysis of the in-class study. You can download a copy of the [script ("Analysis of in-class study.R")](https://vle.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To open the script in RStudio click **"File" &rarr; "Open file..."** and select the file from your downloads folder. 
+Below I walk you through the R code for the analysis of the in-class study. You can download a copy of the [script ("Analysis of in-class study.R")](https://ele.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To open the script in RStudio click **"File" &rarr; "Open file..."** and select the file from your downloads folder. 
 
 ![](images/Open script.png)
 <br> 
 
 ## import data and set coding
-Next, we will need to import the data from the in-class study. We download the [datafile ("data example.csv")](https://vle.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To import the data in RStudio click **"Import Dataset" &rarr; "From Text (base)..."** and select the file from your downloads folder.
+Next, we will need to import the data from the in-class study. We download the [datafile ("data example.csv")](https://ele.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To import the data in RStudio click **"Import Dataset" &rarr; "From Text (base)..."** and select the file from your downloads folder.
 
 ![](images/Open data.png)
 Next, name the file "df" and select **"Yes"** for the heading option and click **"Import"**.
@@ -203,7 +203,7 @@ If you have not installed Jamovi, then do so now.
 
 ## import data and add module
 
-Next, we will need to import the data from the in-class study. We download the [datafile ("data example.csv")](https://vle.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To import the data in Jamovi click the menu (three horizontal bars at the top left) button then **"Special Import"** and select the data file from your downloads folder.
+Next, we will need to import the data from the in-class study. We download the [datafile ("data example.csv")](https://ele.exeter.ac.uk/course/view.php?id=10296) from the module ELE page. To import the data in Jamovi click the menu (three horizontal bars at the top left) button then **"Special Import"** and select the data file from your downloads folder.
 
 ![](images/Jamovi open data.png)
 
@@ -274,4 +274,3 @@ To test our hypothesis we fitted two mixed effects models to examine the relatio
 The dual process model v2.0 showed a significant effect of intention, *b* = -1.4247, 95% CIs [-2.18, -0.67], *p* < 0.001. Figure 2 shows that when the harm is intended (a means) the action is judged as less permissible. Personal force also showed a significant effect, *b* = 0.90, 95% CIs [0.12, 1.68], *p* = 0.02.  Figure 2 shows how when the harm was caused by personal force the action was judged as more permissible. We can also see that this is driven by unintended personal force, although the interaction between personal force and intention was not significant, *b* = -1.42, 95% CIs [-2.90, 0.05], *p* = 0.06. Model summary fit statistics were AIC = 4345.3  and BIC = 4448.6
 
 Comparison of the model fit statistics suggest that the dual process model v1.0 better fit the data as it has a lower AIC and BIC. Indeed, we find extreme evidence in favour of the dual process v1.0 model (compared to v2.0), BF = 5.02 * 10^18^. This is despite that fact that v2.0 did show some significant effects. These fit statistics and model comparison are relative and not absolute. The fact that dual process v2.0 has significant effects but v1.0 still fits the data better may suggest that both models do not fit the data that well. Future research is needed to test alternative models. 
-
