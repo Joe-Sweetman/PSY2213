@@ -367,8 +367,8 @@ or “ground truth”. This will allow us to compute estimates of sample
 size.</p>
 <hr />
 <p><br></p>
-<div id="packages" class="section level2" number="0.1">
-<h2><span class="header-section-number">0.1</span> packages</h2>
+<div id="packages" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> packages</h1>
 <p>First, we will need to install and/or load the packages that we need
 into RStudio.</p>
 <pre class="r"><code># Package names
@@ -392,8 +392,8 @@ library(future.apply)
 library(binom)
 library(see)</code></pre>
 </div>
-<div id="import-data-and-set-coding" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> import data and set
+<div id="import-data-and-set-coding" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> import data and set
 coding</h1>
 <p>We will need to import the data from the in-class study. We download
 the <a href="https://ele.exeter.ac.uk/course/view.php?id=10296">datafile
@@ -433,16 +433,16 @@ contrasts(df$DPv2.0.Permissible)</code></pre>
 <p><br></p>
 </div>
 <div id="sample-size-simulations-subjects" class="section level1"
-number="2">
-<h1><span class="header-section-number">2</span> sample size simulations
+number="3">
+<h1><span class="header-section-number">3</span> sample size simulations
 (subjects)</h1>
 <p>We will use the simr package to run simulations. This can be
 computationally intensive, especially for complex (e.g., maximal)
 models. Indeed, even when using the future package for parallel
 computation simulations can still sometimes take days to run!</p>
 <div id="fit-generalized-linear-mixed-model-reduced-model"
-class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> fit generalized
+class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> fit generalized
 linear mixed model (reduced model)</h2>
 <p>We fit the reduced (dropping the by-subject and by-dilemma random
 slope for the personal force x intention effect) generalized linear
@@ -503,8 +503,8 @@ doTest(fit, fixed(&quot;Personal.force2&quot;, &quot;z&quot;))</code></pre>
 <p>Great, this is the same as in the model summary so simr reading the
 model object correctly.</p>
 </div>
-<div id="simulation-parameters" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> simulation
+<div id="simulation-parameters" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> simulation
 parameters</h2>
 <p>We set up the parameters for the simulation. First we change the
 estimate for the personal force effect to our smallest effect size of
@@ -555,8 +555,8 @@ simulation.</p>
 lnitem&lt;-length(nitems)
 poweroutput &lt;- data.frame(nitem=nitems, mean=rep(NA_real_, lnitem),lower=rep(NA_real_, lnitem), upper=rep(NA_real_, lnitem), warnings=rep(NA_real_, lnitem), errors=rep(NA_real_, lnitem))</code></pre>
 </div>
-<div id="run-the-simulation" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> run the
+<div id="run-the-simulation" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> run the
 simulation</h2>
 <p>Now we have everything we need to run the simulation - go read a
 book.</p>
@@ -751,7 +751,10 @@ ggplot(poweroutput, aes(nitem, mean)) +
 <p>The simulation reveals our power estimate and 95% CIs at various
 numbers of participants. The power curve is a nice graphical
 representation of how much benefit in terms of power there is in
-increasing sample size further.</p>
+increasing sample size further. We can see that we have 84% (95% CIs
+[0.81, 0.87]) power with 50 participants. Increases in pariticipants
+doesn’t make that much difference after that, althouhg it would increase
+the precision of our estimate (make our 95% CIs more narrow).</p>
 </div>
 </div>
 
@@ -792,7 +795,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
+  window.initializeCodeFolding("show" === "show");
 });
 </script>
 
