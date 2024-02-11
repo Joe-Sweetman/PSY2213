@@ -7,7 +7,7 @@ output:
     toc_depth: 3
     number_sections: yes
     toc_float: yes
-    code_folding: hide
+    code_folding: show
     theme: cosmo
 ---
 
