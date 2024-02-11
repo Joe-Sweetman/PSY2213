@@ -12,7 +12,7 @@ output:
 
 ***
 
-This practical aims to provide students with the chance to develop their skills in [scientific thinking](Scientific thinking.html) (an under appreciated skill!); the latest [research and statistical methods](PSY2213-Analysis-of-in-class-experiment.html); and effective collaboration and communication. Our focus is on the moral mind/brain, something that many of our greatest thinkers, including [Darwin](https://psychclassics.yorku.ca/Darwin/Descent/descent4.htm), saw as the most important characteristic of human beings. We will examine and test current models of our [moral sense](Models of our moral sense.html) in order to answer the question
+This practical aims to provide students with the chance to develop their skills in [scientific thinking](Scientific-thinking.html) (an under appreciated skill!); the latest [research and statistical methods](PSY2213-Analysis-of-in-class-experiment.html); and effective collaboration and communication. Our focus is on the moral mind/brain, something that many of our greatest thinkers, including [Darwin](https://psychclassics.yorku.ca/Darwin/Descent/descent4.htm), saw as the most important characteristic of human beings. We will examine and test current models of our [moral sense](Models-of-our-moral-sense.html) in order to answer the question
 
 >"Is our moral sense best described by moral grammar or dual process models?” 
 
@@ -22,17 +22,17 @@ This site provides important information, materials, data and R code to help you
 
 <br>
 
-# [Developing the right mindset for the practical](Developing the right mindset for the practical.html)
+# [Developing the right mindset for the practical](Developing-the-right-mindset-for-the-practical.html)
 
-# [Models of our moral sense](Models of our moral sense.html)
+# [Models of our moral sense](Models-of-our-moral-sense.html)
 
-# [Scientific thinking](Scientific thinking.html)
+# [Scientific thinking](Scientific-thinking.html)
 
-# [The replication crisis and some solutions](The replication crisis and some solutions.html)
+# [The replication crisis and some solutions](The-replication-crisis-and-some- solutions.html)
 
 # [Analysis of in-class experiment](PSY2213-Analysis-of-in-class-experiment.html)
 
 # [Sample size simulation for experiment](PSY2213-Sample-size-simulation-for-experiment.html)
 
-# [Data prep for experiment](PSY2213-Analysis-of-in-class-experiment.html)
+# [Data prep for experiment](PSY2213-Data-prep-for-experiment.html)
   
