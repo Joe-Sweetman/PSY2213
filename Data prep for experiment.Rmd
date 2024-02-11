@@ -1,5 +1,5 @@
 ---
-title: "Data prep for experiment (PSY2213; 2023)"
+title: "Data prep for experiment (PSY2213)"
 author: "Joe Sweetman"
 output:
   html_document:

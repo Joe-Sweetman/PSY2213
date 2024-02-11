@@ -12,17 +12,17 @@ output:
 
 ***
 
-This practical aims to provide students with the chance to develop their skills in [scientific thinking](Scientific-thinking.html) (an under appreciated skill!); the latest [research and statistical methods](PSY2213-Analysis-of-in-class-experiment.html); and effective collaboration and communication. Our focus is on the moral mind/brain, something that many of our greatest thinkers, including [Darwin](https://psychclassics.yorku.ca/Darwin/Descent/descent4.htm), saw as the most important characteristic of human beings. We will examine and test current models of our [moral sense](Models-of-our-moral-sense.html) in order to answer the question
+This practical aims to provide students with the chance to develop their skills in [scientific thinking](Scientific-thinking.html) (an under appreciated skill!); the latest [research and statistical methods](Analysis-of-in-class-experiment.html); and effective collaboration and communication. Our focus is on the moral mind/brain, something that many of our greatest thinkers, including [Darwin](https://psychclassics.yorku.ca/Darwin/Descent/descent4.htm), saw as the most important characteristic of human beings. We will examine and test [current models of our moral sense](Models-of-our-moral-sense.html) in order to answer the question
 
 >"Is our moral sense best described by moral grammar or dual process models?” 
 
-This site provides important information, materials, data and R code to help you both develop your skills and a deeper understanding of the content covered in the practical. As the practical covers content and methods that may be new to students (e.g.,  mixed effects models, effect sizes, confidence intervals, model comparison, and using the programming language R or Jamovi) I encourage you to develop the right mindset for science. You will find that many of these seemingly new approaches are in fact just variations on topics that you have already covered (e.g., multiple regression, logistic regression, repeated measures ANOVA, etc). 
+This site provides important information, materials, data and R code to help you both develop your skills and a deeper understanding of the content covered in the practical. As the practical covers content and methods that may be new to students (e.g.,  mixed effects models, effect sizes, confidence intervals, model comparison, and using the programming language R), I encourage you to [develop a scientific mindset for the practical](Developing-the-right-mindset-for-the-practical.html). You will find that many of these seemingly new approaches are in fact just variations on topics that you have previously covered (e.g., multiple regression, logistic regression, repeated measures ANOVA, etc). 
 
 ***
 
 <br>
 
-# [Developing the right mindset for the practical](Developing-the-right-mindset-for-the-practical.html)
+# [Developing a scientific mindset for the practical](Developing-the-right-mindset-for-the-practical.html)
 
 # [Models of our moral sense](Models-of-our-moral-sense.html)
 
@@ -30,9 +30,9 @@ This site provides important information, materials, data and R code to help you
 
 # [The replication crisis and some solutions](The-replication-crisis-and-some- solutions.html)
 
-# [Analysis of in-class experiment](PSY2213-Analysis-of-in-class-experiment.html)
+# [Analysis of in-class experiment](Analysis-of-in-class-experiment.html)
 
-# [Sample size simulation for experiment](PSY2213-Sample-size-simulation-for-experiment.html)
+# [Sample size simulation for experiment](Sample-size-simulation-for-experiment.html)
 
-# [Data prep for experiment](PSY2213-Data-prep-for-experiment.html)
+# [Data prep for experiment](Data-prep-for-experiment.html)
   

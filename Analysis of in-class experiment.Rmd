@@ -1,5 +1,5 @@
 ---
-title: "Analysis of in-class study (PSY2213; 2024)"
+title: "Analysis of in-class study (PSY2213)"
 author: "Joe Sweetman"
 output:
   html_document:

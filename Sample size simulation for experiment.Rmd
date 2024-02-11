@@ -17,7 +17,7 @@ Computing a sample size requirement for a mixed effects model cannot be done ana
 
 <br>
 
-## packages
+# packages
 First, we will need to install and/or load the packages that we need into RStudio.
 ```{r message=FALSE}
 # Package names
@@ -102,7 +102,7 @@ doTest(fit, fixed("Personal.force2", "z"))
 ```
 Great, this is the same as in the model summary so simr reading the model object correctly.
 
-## simulation parameters
+# simulation parameters
 We set up the parameters for the simulation. First we change the estimate for the personal force effect to our smallest effect size of interest (SESOI), OR = 3.5 or a "medium" sized effect. This is 1.25 in log odds.
 
 ```{r, attr.output='style="max-height: 500px;"'}
@@ -161,7 +161,7 @@ lnitem<-length(nitems)
 poweroutput <- data.frame(nitem=nitems, mean=rep(NA_real_, lnitem),lower=rep(NA_real_, lnitem), upper=rep(NA_real_, lnitem), warnings=rep(NA_real_, lnitem), errors=rep(NA_real_, lnitem))
 ```
 
-## run the simulation
+# run the simulation
 Now we have everything we need to run the simulation - go read a book.   
 ```{r, attr.output='style="max-height: 500px;"'}
 #power curve 25, 50, 75, and 100 participants (original dataset had 45 participants) with 104 scenarios
