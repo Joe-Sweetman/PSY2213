@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="BLINDED FOR PEER REVIEW" />
+
+
+<title>Sample size simulation for experiment</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Sample size simulation for experiment</h1>
+<h4 class="author">BLINDED FOR PEER REVIEW</h4>
+
+</div>
+
+
+<p>Computing a sample size requirement for a mixed effects model cannot
+be done analytically (e.g., using G-Power or some other calculator).
+Instead, we need to turn to simulation in order to estimate a required
+sample size. Simulation is at the heart of understanding statistics and
+is a very powerful tool. In short, we will simulate the results of
+experiments under repeated sampling where we know the true effect size
+or “ground truth”. This will allow us to compute estimates of sample
+size.</p>
+<hr />
+<p><br></p>
+<div id="packages" class="section level2" number="0.1">
+<h2><span class="header-section-number">0.1</span> packages</h2>
+<p>First, we will need to install and/or load the packages that we need
+into RStudio.</p>
+<pre class="r"><code># Package names
+packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;lme4&quot;, &quot;lmerTest&quot;, &quot;simr&quot;, &quot;MBESS&quot;,&quot;future&quot;,&quot;future.apply&quot;,&quot;binom&quot;, &quot;see&quot;)
+
+# Install packages not yet installed
+installed_packages &lt;- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+library(ggplot2)
+library(lme4)
+library(lmerTest)
+library(tidyverse)
+library(simr)
+library(MBESS)
+library(future)
+library(future.apply)
+library(binom)
+library(see)</code></pre>
+</div>
+<div id="import-data-and-set-coding" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> import data and set
+coding</h1>
+<p>We will need to import the data from the in-class study. We download
+the <a href="https://ele.exeter.ac.uk/course/view.php?id=10296">datafile
+(“data example.csv”)</a> from ELE or Teams. We will need to run the dual
+process v2.0 model and then we will use this model to generate our
+simulations.</p>
+<pre class="r"><code>df &lt;- read.csv(&quot;~/Library/CloudStorage/Dropbox/Documents/My data/Moral sense task/practical/data example.csv&quot;)</code></pre>
+<p>For ease of interpretation, we set deviation/simple coding for the
+factors.</p>
+<pre class="r"><code># make sure everything is factor
+df$Task.Name &lt;- as.factor(df$Task.Name)
+df$Personal.force &lt;- as.factor(df$Personal.force)
+df$Intention &lt;- as.factor(df$Intention)
+df$DPv2.0.Permissible &lt;- as.factor(df$DPv2.0.Permissible)
+
+#set deviation contrasts for ease of interpretation -.5 vs .5
+c&lt;-contr.treatment(2)
+my.coding&lt;-matrix(rep(1/2, 2), ncol=1)
+my.simple&lt;-c-my.coding
+my.simple
+
+#keys  .5 Q-Yes,  -.5 P-Yes 
+contrasts(df$Task.Name)&lt;-my.simple
+contrasts(df$Task.Name)
+
+#personal force .5 Yes, -.5 No
+contrasts(df$Personal.force)&lt;-my.simple
+contrasts(df$Personal.force)
+
+#intention .5 Yes, -.5 No
+contrasts(df$Intention)&lt;-my.simple
+contrasts(df$Intention)
+
+#prediction DPv2.0 .5 Yes, -.5 No 
+contrasts(df$DPv2.0.Permissible)&lt;-my.simple
+contrasts(df$DPv2.0.Permissible)</code></pre>
+<p><br></p>
+</div>
+<div id="sample-size-simulations-subjects" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> sample size simulations
+(subjects)</h1>
+<p>We will use the simr package to run simulations. This can be
+computationally intensive, especially for complex (e.g., maximal)
+models. Indeed, even when using the future package for parallel
+computation simulations can still sometimes take days to run!</p>
+<div id="fit-generalized-linear-mixed-model-reduced-model"
+class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> fit generalized
+linear mixed model (reduced model)</h2>
+<p>We fit the reduced (dropping the by-subject and by-dilemma random
+slope for the personal force x intention effect) generalized linear
+mixed model (GLMM) to form the basis for our sample size
+simulations.</p>
+<pre class="r"><code>#fit reduced model without by-subject random slope for intent:domain 
+fit&lt;- glmer(Permissible ~ Personal.force*Intention +  (1+Personal.force+Intention|ID) + (1+Personal.force+Intention|Dilemma),  data=df, family = binomial(link = &quot;logit&quot;), control = glmerControl(optimizer = &quot;nloptwrap&quot;, optCtrl = list(algorithm =  &quot;NLOPT_LN_NELDERMEAD&quot;)))
+
+summary(fit)</code></pre>
+<pre style="max-height: 500px;"><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: Permissible ~ Personal.force * Intention + (1 + Personal.force +  
+##     Intention | ID) + (1 + Personal.force + Intention | Dilemma)
+##    Data: df
+## Control: 
+## glmerControl(optimizer = &quot;nloptwrap&quot;, optCtrl = list(algorithm = &quot;NLOPT_LN_NELDERMEAD&quot;))
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##   4345.3   4448.6  -2156.7   4313.3     4664 
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -9.2514 -0.4840  0.1505  0.4590  8.4201 
+## 
+## Random effects:
+##  Groups  Name            Variance Std.Dev. Corr       
+##  Dilemma (Intercept)     0.4643   0.6814              
+##          Personal.force2 4.3776   2.0923   0.09       
+##          Intention2      6.7468   2.5975   0.60  0.85 
+##  ID      (Intercept)     1.3629   1.1674              
+##          Personal.force2 0.7499   0.8660    0.61      
+##          Intention2      0.2233   0.4725    0.27 -0.13
+## Number of obs: 4680, groups:  Dilemma, 104; ID, 45
+## 
+## Fixed effects:
+##                            Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                  0.8280     0.2569   3.223 0.001267 ** 
+## Personal.force2              0.9024     0.3990   2.262 0.023726 *  
+## Intention2                  -1.4247     0.3842  -3.708 0.000209 ***
+## Personal.force2:Intention2  -1.4234     0.7540  -1.888 0.059057 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) Prsn.2 Intnt2
+## Persnl.frc2 0.443               
+## Intention2  0.356  0.518        
+## Prsnl.f2:I2 0.416  0.425  0.435</code></pre>
+<p>We test the effect of interest to make sure simr is getting the
+estimates correctly, this should be same as the model summary above.</p>
+<pre class="r"><code>#test the effect of interest to make sure it&#39;s getting the model correctly, this should be same as standard model  
+doTest(fit, fixed(&quot;Personal.force2&quot;, &quot;z&quot;))</code></pre>
+<pre style="max-height: 500px;"><code>## p-value for predictor &#39;Personal.force2&#39;: 0.0237256
+##           --------------------
+## Test: z-test
+##       Effect size for Personal.force2 is 0.90</code></pre>
+<p>Great, this is the same as in the model summary so simr reading the
+model object correctly.</p>
+</div>
+<div id="simulation-parameters" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> simulation
+parameters</h2>
+<p>We set up the parameters for the simulation. First we change the
+estimate for the personal force effect to our smallest effect size of
+interest (SESOI), OR = 3.5 or a “medium” sized effect. This is 1.25 in
+log odds.</p>
+<pre class="r"><code>#change effect size to OR = 1.5 (sensitivity to detect a &quot;small&quot; effect)
+
+teff &lt;- &quot;Personal.force2&quot;
+veff &lt;- 1.25
+
+fef &lt;- fixef(fit)
+fef[teff] &lt;- veff</code></pre>
+<p>We take the random effects structure from the model’s
+variance-covariance matrix.</p>
+<pre class="r"><code>#grab random effects from variance-covariance matrix
+vcv &lt;- VarCorr(fit)
+for (l in names(vcv)) {
+  attr(vcv[[l]],&quot;stddev&quot;) &lt;- NULL
+  attr(vcv[[l]],&quot;correlation&quot;) &lt;- NULL
+}</code></pre>
+<p>We grab the dataframe from the model, retaining the fixed and random
+factors (there are no missing values in this data but if you have them
+you will need to use na.omit() here). We also extract the residual
+standard deviation.</p>
+<pre class="r"><code>#dataframe from model
+sdata &lt;- cbind(fit@frame[,c(&quot;ID&quot;,&quot;Dilemma&quot;,&quot;Personal.force&quot;,&quot;Intention&quot;)])</code></pre>
+<p>We set-up some basic options for the simulation (number of sims,
+alpha, the levels of subjects or items to test, and a seed). We also
+set-up the optimizer and any other glmer options.</p>
+<pre class="r"><code># basic options
+nsim &lt;- 500
+alpha &lt;- 0.05
+nitems &lt;- c(25, 50, 75, 100)
+
+# set seed 
+set.seed(123)
+
+#set glmer options
+glmerctrlist &lt;- glmerControl(optimizer = &quot;nloptwrap&quot;, optCtrl = list(algorithm =  &quot;NLOPT_LN_NELDERMEAD&quot;))</code></pre>
+<p>We now have what we need to create the model structure for the
+simulation.</p>
+<pre class="r"><code>#create the model structure
+tglmer &lt;- makeGlmer(attr(fit@frame,&quot;formula&quot;), 
+                    family=&quot;binomial&quot;, fixef=fef, VarCorr=vcv, data=sdata)</code></pre>
+<p>Finally, we create a dataframe to save the output from the
+simulation.</p>
+<pre class="r"><code># Create empty dataframe for power sim output
+lnitem&lt;-length(nitems)
+poweroutput &lt;- data.frame(nitem=nitems, mean=rep(NA_real_, lnitem),lower=rep(NA_real_, lnitem), upper=rep(NA_real_, lnitem), warnings=rep(NA_real_, lnitem), errors=rep(NA_real_, lnitem))</code></pre>
+</div>
+<div id="run-the-simulation" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> run the
+simulation</h2>
+<p>Now we have everything we need to run the simulation - go read a
+book.</p>
+<pre class="r"><code>#power curve 25, 50, 75, and 100 participants (original dataset had 45 participants) with 104 scenarios
+
+for (nitem in nitems) {
+  
+  print(nitem)
+  
+  tglx &lt;- extend(tglmer,along=&quot;ID&quot;,n=nitem)
+  
+  plan(multisession)
+  
+  pstests &lt;- future_replicate(nsim, powerSim(tglx, nsim=1,   
+                              test=fixed(&quot;Personal.force2&quot;, &quot;z&quot;),
+                              fitOpts=list(control=glmerctrlist),
+                                             progress = FALSE),
+                              future.globals = c(&quot;powerSim&quot;,&quot;tglx&quot;,&quot;teff&quot;,&quot;glmerctrlist&quot;),
+                              simplify = FALSE)
+  plan(sequential)
+  
+  pvals &lt;- sapply(pstests,function(x){x$pval})
+  print(round(sum(pvals&lt;alpha)/length(pvals),2))
+  sucess &lt;- sum(pvals&lt;alpha)
+  n &lt;- length(pvals)
+  interval &lt;- binom.confint(sucess, n, level=0.95)[c(&quot;mean&quot;, &quot;lower&quot;, &quot;upper&quot;)]
+  mean &lt;- (round(mean(interval$mean),digits = 2))
+  lower &lt;- (round(mean(interval$lower),digits = 2))
+  upper &lt;- (round(mean(interval$upper),digits = 2))
+  print(sprintf(&quot;power is %s, 95%% CIs [%s, %s]&quot;, mean, lower, upper))
+  warnings &lt;- sapply(pstests,function(x){length(unique(x$warnings$index))})
+  errors &lt;- sapply(pstests,function(x){length(unique(x$errors$index))})
+  print(sprintf(&quot;with %s warnings and %s errors&quot;, sum(warnings), sum(errors)))
+  output &lt;- data.frame(nitem = nitem, mean = mean, lower=lower, upper = upper, warnings = sum(warnings), errors = sum(errors))
+  poweroutput &lt;- poweroutput %&gt;% 
+    rows_update(output)
+}</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 25</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 0.75
+## [1] &quot;power is 0.75, 95% CIs [0.71, 0.79]&quot;
+## [1] &quot;with 295 warnings and 0 errors&quot;</code></pre>
+<pre><code>## Matching, by = &quot;nitem&quot;</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 50</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 0.84
+## [1] &quot;power is 0.84, 95% CIs [0.81, 0.87]&quot;
+## [1] &quot;with 364 warnings and 0 errors&quot;</code></pre>
+<pre><code>## Matching, by = &quot;nitem&quot;</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 75</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 0.82
+## [1] &quot;power is 0.82, 95% CIs [0.79, 0.85]&quot;
+## [1] &quot;with 354 warnings and 0 errors&quot;</code></pre>
+<pre><code>## Matching, by = &quot;nitem&quot;</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 100</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 0.85
+## [1] &quot;power is 0.85, 95% CIs [0.81, 0.88]&quot;
+## [1] &quot;with 390 warnings and 0 errors&quot;</code></pre>
+<pre><code>## Matching, by = &quot;nitem&quot;</code></pre>
+<p>We can plot the power curve.</p>
+<pre class="r"><code>#plot power curve
+ggplot(poweroutput, aes(nitem, mean)) +        
+  geom_point(size = 3, colour = &quot;lightblue&quot;) +
+  geom_line(linetype=&quot;dashed&quot;, colour = &quot;lightblue&quot;) +
+  lims(y = c(0, 1)) +
+  labs(title = &quot;&quot;, x = &quot;number of participants&quot;, y = &quot;power&quot;) +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = &quot;black&quot;))+
+  geom_errorbar(aes(ymin = lower, ymax = upper),colour = &quot;lightblue&quot;, width = 2)</code></pre>
+<p><img src="Sample-size-simulation-for-experiment_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The simulation reveals our power estimate and 95% CIs at various
+numbers of participants. The power curve is a nice graphical
+representation of how much benefit in terms of power there is in
+increasing sample size further.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
