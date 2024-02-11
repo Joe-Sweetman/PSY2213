@@ -213,4 +213,4 @@ ggplot(poweroutput, aes(nitem, mean)) +
   geom_errorbar(aes(ymin = lower, ymax = upper),colour = "lightblue", width = 2)
 ```
 
-The simulation reveals our power estimate and 95% CIs at various numbers of participants. The power curve is a nice graphical representation of how much benefit in terms of power there is in increasing sample size further. We can see that we have 84% (95% CIs [0.81, 0.87]) power with 50 participants. Increases in participants doesn't make that much difference after that, although it would increase the precision of our estimate (make our 95% CIs more narrow). 
+The simulation reveals our power estimate and 95% CIs at various numbers of participants. The power curve is a nice graphical representation of how much benefit in terms of power there is in increasing sample size further. We can see that we have 84% (95% CIs [0.81, 0.87]) power with 50 participants. Increases in pariticipants doesn't make that much difference after that, althouhg it would increase the precision of our estimate (make our 95% CIs more narrow). 
