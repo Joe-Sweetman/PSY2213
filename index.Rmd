@@ -28,7 +28,7 @@ This site provides important information, materials, data and R code to help you
 
 # [Scientific thinking](Scientific-thinking.html)
 
-# [The replication crisis and some solutions](The-replication-crisis-and-some- solutions.html)
+# [The replication crisis and some solutions](The-replication-crisis-and-some-solutions.html)
 
 # [Analysis of in-class experiment](Analysis-of-in-class-experiment.html)
 
