@@ -1,8 +1,14 @@
 ---
 title: "Scientific thinking"
 author: "Joe Sweetman"
-date: "2024-02-10"
-output: html_document
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    toc_float: yes
+    code_folding: show
+    theme: cosmo
 ---
 
 ```{r setup, include=FALSE}
