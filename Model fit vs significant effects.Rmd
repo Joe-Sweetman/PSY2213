@@ -1,0 +1,136 @@
+---
+title: "Model fit vs. significant effects"
+author: "Joe Sweetman"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    toc_float: yes
+    code_folding: show
+    theme: cosmo
+---
+
+Here I discuss the difference between model fit and significant parameters/"effects" in your model. It is possible for a model to have significant parameters/"effects" but poor fit. It's also possible for your model to have good fit but no significant parameters/effects. This might seem like crazy talk but it is nonetheless true. Below we will simulate some data and show how are intuitions about the the relationship between model fit and significant parameters/effects is wrong. If you want to run the code and have a play around with this yourself you'll need to [installed R and RStudio](https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt).
+
+***
+<br>
+
+# packages
+First, we will need to install and/or load the packages that we need into RStudio. To run the code just make sure your cursor is on the right line and click select **"Run"**. This will run the current lines of code.
+```{r message=FALSE}
+# Package names
+packages <- c("ggplot2",  "tidyverse", "performance")
+
+# Install packages not yet installed
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+library(ggplot2)
+library(tidyverse)
+library(performance)
+
+```
+
+<br> 
+
+# model with no significant "effects" but good fit
+Ok, let's look at a model with no significant effects/parameters but good fit.
+<br> 
+
+## simulate some data and stick it in a dataframe
+Simulation is an important tool for understanding statistics. Here we will simulate some data for independent variables x1 and x2 and a dependent variable y, although with an error term. We will put this all into a dataframe. Notice that because we created the data we know what the correct regression coefficients are for predicting Y. In other words, we know the "ground truth".
+
+```{r, attr.output='style="max-height: 500px;"'}
+# we set a seed to make sure this example is exactly reproducible
+set.seed(123)                 
+
+# we generate some data for the varibale x1 and x2 from a uniform distribution
+x1 = runif(100, min=-5, max=5)  
+x2 = runif(100, min=-5, max=5)  #  between -5 and 5
+
+# we generate some errors from a normal distribution
+e  = rnorm(100, mean=0, sd=1)   
+
+# since we are making up the example can set the ground truth for the true intercept and slopes as 0
+y  = 0 + 0*x1 + 0*x2 + e    
+
+# make a dataframe
+df <- data.frame(x1, x2, y, e)
+```
+
+## fit the model 
+Now let's fit a simple linear model to the data and have a look at the model summary. 
+```{r, attr.output='style="max-height: 500px;"'}
+# fit the linear model
+m1 <- lm(y~x1+x2)
+
+# look at the model summary
+summary(m1)
+```
+
+Sad times, none of our parameters are significant. But let's do something crazy and actually look at the data. We can plot the regression line for the model (red) against the data and the ground truth (blue), along with the predicted and observed conditional means using LOWESS (what we would compare against if we didn't know the ground truth - i.e., this was real data).  
+
+```{r, attr.output='style="max-height: 500px;"'}
+# we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
+ggplot(df, aes(x = x1, y = y)) +
+  geom_point() +
+  stat_smooth(aes(col = "Model fit"),method = lm,fill = "red")+
+  stat_smooth(aes(col = "LOWESS"),fill = "black")+
+  geom_abline(aes(slope = 0, intercept = 0, col = "True function"),size =1)+
+  scale_color_manual(name = "Line",values = c("black", "red", "blue"))
+```
+You can see that despite the non-significant parameters/effects the model's is pretty close to the ground truth (i.e., true function that generated the data!) In other words, the fit is not too bad. 
+<br> 
+
+# model with significant "effects" but poor fit
+But surely if we have some significant parameters/effects then the model will fit the data better, right? Yeah, that's absolutely wrong! Let's look. 
+
+## create a new ground truth and stick it in a dataframe
+Here we will Let's update our ground truth with a curvilinear relationship and put that in a new dataframe.   
+```{r, attr.output='style="max-height: 500px;"'}
+# since we are making up the example we can set the ground truth for the true intercept and slopes, this time they are not 0 they show curvilinear relationship 
+y2 = 4.96 + 0.65*x1 + -0.16*x1^2 + 0.62*x2 + -0.19*x2^2 + e  
+
+# make a dataframe
+df2 <- data.frame(x1, x2, y2, e)
+```
+
+## fit the model 
+Now let's fit the same predictors again and have a look at the model summary. 
+```{r, attr.output='style="max-height: 500px;"'}
+# fit the linear model
+m2 <- lm(y2~x1+x2)
+
+# look at the model summary
+summary(m2)
+```
+<br> 
+
+Happy days, our parameters are significant! But let's look at the data.  
+
+```{r, attr.output='style="max-height: 500px;"'}
+# we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
+ggplot(df2, aes(x = x1, y = y2)) +
+  geom_point() +
+  stat_smooth(aes(col = "Model fit"),method = lm,fill = "red")+
+  stat_smooth(aes(col = "LOWESS"),fill = "black")+
+  stat_smooth(aes(col = "True function"),method = "lm", formula=y ~ poly(x,2))+
+  scale_color_manual(name = "Line",values = c("black", "red", "blue"))
+```
+
+Oh no, there a lot of gap between the model and the true function that generated the data (i.e., ground truth)! We can compare the models using information criterion (AIC and BIC).   
+
+<br> 
+
+# information criterion (AIC and BIC) 
+Let's look at the more traditional information criterion indices.
+```{r, attr.output='style="max-height: 500px;"'}
+# we can compare the AIC and BIC for model fit
+compare_performance(m1,m2)
+```
+Here we see that the model that had non-significant parameters/effects (m1) has relatively better fit than the model that had significant parameters/effects (m2). That is, both its AIC 286.4 (vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m2. This shows how model fit and the significance of parameters/effects are not necessarily related. When you see a significant parameters/effect it is just telling you that the slope is significantly different from zero, it's not telling you how good the model fits the actual data and the underlying data generation process.    
+

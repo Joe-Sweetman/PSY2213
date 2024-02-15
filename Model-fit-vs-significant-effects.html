@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Joe Sweetman" />
+
+
+<title>Model fit vs. significant effects</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Model fit vs. significant effects</h1>
+<h4 class="author">Joe Sweetman</h4>
+
+</div>
+
+
+<p>Here I discuss the difference between model fit and significant
+parameters/“effects” in your model. It is possible for a model to have
+significant parameters/“effects” but poor fit. It’s also possible for
+your model to have good fit but no significant parameters/effects. This
+might seem like crazy talk but it is nonetheless true. Below we will
+simulate some data and show how are intuitions about the the
+relationship between model fit and significant parameters/effects is
+wrong. If you want to run the code and have a play around with this
+yourself you’ll need to <a
+href="https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt">installed
+R and RStudio</a>.</p>
+<hr />
+<p><br></p>
+<div id="packages" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> packages</h1>
+<p>First, we will need to install and/or load the packages that we need
+into RStudio. To run the code just make sure your cursor is on the right
+line and click select <strong>“Run”</strong>. This will run the current
+lines of code.</p>
+<pre class="r"><code># Package names
+packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;performance&quot;)
+
+# Install packages not yet installed
+installed_packages &lt;- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+library(ggplot2)
+library(tidyverse)
+library(performance)</code></pre>
+<p><br></p>
+</div>
+<div id="model-with-no-significant-effects-but-good-fit"
+class="section level1" number="2">
+<h1><span class="header-section-number">2</span> model with no
+significant “effects” but good fit</h1>
+<p>Ok, let’s look at a model with no significant effects/parameters but
+good fit. <br></p>
+<div id="simulate-some-data-and-stick-it-in-a-dataframe"
+class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> simulate some data
+and stick it in a dataframe</h2>
+<p>Simulation is an important tool for understanding statistics. Here we
+will simulate some data for independent variables x1 and x2 and a
+dependent variable y, although with an error term. We will put this all
+into a dataframe. Notice that because we created the data we know what
+the correct regression coefficients are for predicting Y. In other
+words, we know the “ground truth”.</p>
+<pre class="r"><code># we set a seed to make sure this example is exactly reproducible
+set.seed(123)                 
+
+# we generate some data for the varibale x1 and x2 from a uniform distribution
+x1 = runif(100, min=-5, max=5)  
+x2 = runif(100, min=-5, max=5)  #  between -5 and 5
+
+# we generate some errors from a normal distribution
+e  = rnorm(100, mean=0, sd=1)   
+
+# since we are making up the example can set the ground truth for the true intercept and slopes as 0
+y  = 0 + 0*x1 + 0*x2 + e    
+
+# make a dataframe
+df &lt;- data.frame(x1, x2, y, e)</code></pre>
+</div>
+<div id="fit-the-model" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> fit the model</h2>
+<p>Now let’s fit a simple linear model to the data and have a look at
+the model summary.</p>
+<pre class="r"><code># fit the linear model
+m1 &lt;- lm(y~x1+x2)
+
+# look at the model summary
+summary(m1)</code></pre>
+<pre style="max-height: 500px;"><code>## 
+## Call:
+## lm(formula = y ~ x1 + x2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.8994 -0.6821 -0.1086  0.5749  3.3663 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) -0.106985   0.097788  -1.094    0.277
+## x1           0.009726   0.034567   0.281    0.779
+## x2          -0.002964   0.037347  -0.079    0.937
+## 
+## Residual standard error: 0.9765 on 97 degrees of freedom
+## Multiple R-squared:  0.0009275,  Adjusted R-squared:  -0.01967 
+## F-statistic: 0.04503 on 2 and 97 DF,  p-value: 0.956</code></pre>
+<p>Sad times, none of our parameters are significant. But let’s do
+something crazy and actually look at the data. We can plot the
+regression line for the model (red) against the data and the ground
+truth (blue), along with the predicted and observed conditional means
+using LOWESS (what we would compare against if we didn’t know the ground
+truth - i.e., this was real data).</p>
+<pre class="r"><code># we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
+ggplot(df, aes(x = x1, y = y)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  stat_smooth(aes(col = &quot;LOWESS&quot;),fill = &quot;black&quot;)+
+  geom_abline(aes(slope = 0, intercept = 0, col = &quot;True function&quot;),size =1)+
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;black&quot;, &quot;red&quot;, &quot;blue&quot;))</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+You can see that despite the non-significant parameters/effects the
+model’s is pretty close to the ground truth (i.e., true function that
+generated the data!) In other words, the fit is not too bad. <br></p>
+</div>
+</div>
+<div id="model-with-significant-effects-but-poor-fit"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> model with significant
+“effects” but poor fit</h1>
+<p>But surely if we have some significant parameters/effects then the
+model will fit the data better, right? Yeah, that’s absolutely wrong!
+Let’s look.</p>
+<div id="create-a-new-ground-truth-and-stick-it-in-a-dataframe"
+class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> create a new ground
+truth and stick it in a dataframe</h2>
+<p>Here we will Let’s update our ground truth with a curvilinear
+relationship and put that in a new dataframe.</p>
+<pre class="r"><code># since we are making up the example we can set the ground truth for the true intercept and slopes, this time they are not 0 they show curvilinear relationship 
+y2 = 4.96 + 0.65*x1 + -0.16*x1^2 + 0.62*x2 + -0.19*x2^2 + e  
+
+# make a dataframe
+df2 &lt;- data.frame(x1, x2, y2, e)</code></pre>
+</div>
+<div id="fit-the-model-1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> fit the model</h2>
+<p>Now let’s fit the same predictors again and have a look at the model
+summary.</p>
+<pre class="r"><code># fit the linear model
+m2 &lt;- lm(y2~x1+x2)
+
+# look at the model summary
+summary(m2)</code></pre>
+<pre style="max-height: 500px;"><code>## 
+## Call:
+## lm(formula = y2 ~ x1 + x2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.6886 -1.4149  0.1573  1.4060  4.4776 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.28503    0.19372  11.795  &lt; 2e-16 ***
+## x1           0.63071    0.06848   9.210 6.80e-15 ***
+## x2           0.39479    0.07399   5.336 6.23e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.934 on 97 degrees of freedom
+## Multiple R-squared:  0.5211, Adjusted R-squared:  0.5112 
+## F-statistic: 52.77 on 2 and 97 DF,  p-value: 3.116e-16</code></pre>
+<p><br></p>
+<p>Happy days, our parameters are significant! But let’s look at the
+data.</p>
+<pre class="r"><code># we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
+ggplot(df2, aes(x = x1, y = y2)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  stat_smooth(aes(col = &quot;LOWESS&quot;),fill = &quot;black&quot;)+
+  stat_smooth(aes(col = &quot;True function&quot;),method = &quot;lm&quot;, formula=y ~ poly(x,2))+
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;black&quot;, &quot;red&quot;, &quot;blue&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Oh no, there a lot of gap between the model and the true function
+that generated the data (i.e., ground truth)! We can compare the models
+using information criterion (AIC and BIC).</p>
+<p><br></p>
+</div>
+</div>
+<div id="information-criterion-aic-and-bic" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> information criterion
+(AIC and BIC)</h1>
+<p>Let’s look at the more traditional information criterion indices.</p>
+<pre class="r"><code># we can compare the AIC and BIC for model fit
+compare_performance(m1,m2)</code></pre>
+<pre><code>## When comparing models, please note that probably not all models were fit
+##   from same data.</code></pre>
+<pre style="max-height: 500px;"><code>## # Comparison of Model Performance Indices
+## 
+## Name | Model | AIC (weights) | AICc (weights) | BIC (weights) |        R2 | R2 (adj.) |  RMSE | Sigma
+## -----------------------------------------------------------------------------------------------------
+## m1   |    lm | 284.0 (&gt;.999) |  284.4 (&gt;.999) | 294.4 (&gt;.999) | 9.275e-04 |    -0.020 | 0.962 | 0.976
+## m2   |    lm | 420.7 (&lt;.001) |  421.1 (&lt;.001) | 431.1 (&lt;.001) |     0.521 |     0.511 | 1.905 | 1.934</code></pre>
+<p>Here we see that the model that had non-significant
+parameters/effects (m1) has relatively better fit than the model that
+had significant parameters/effects (m2). That is, both its AIC 286.4
+(vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m2. This
+shows how model fit and the significance of parameters/effects are not
+necessarily related. When you see a significant parameters/effect it is
+just telling you that the slope is significantly different from zero,
+it’s not telling you how good the model fits the actual data and the
+underlying data generation process.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

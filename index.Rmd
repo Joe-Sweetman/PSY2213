@@ -32,6 +32,8 @@ This site provides important information, materials, data and R code to help you
 
 # [Analysis of in-class experiment](Analysis-of-in-class-experiment.html)
 
+# [Model fit vs. significant effects](Model-fit-vs-significant-effects.html)
+
 # [Sample size simulation for experiment](Sample-size-simulation-for-experiment.html)
 
 # [Data prep for experiment](Data-prep-for-experiment.html)
