@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Joe Sweetman" />
+
+
+<title>Prevalence analysis of in-class study (PSY2213)</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Prevalence analysis of in-class study
+(PSY2213)</h1>
+<h4 class="author">Joe Sweetman</h4>
+
+</div>
+
+
+<p>Group-level analyses like t-tests, ANOVAs, regressions and mixed
+effects models performed on condition means may provide the happy
+researcher with statistically significant effects, representing some
+significant mean difference between experimental conditions in the
+population. Psychologists and other researchers often then infer support
+for their psychological theories or models on the basis of this
+significant group-level effect. All sounds perfectly ok, right? No, it’s
+not! As we pointed out recently, this is problematic because means are
+not always representative of their constituents and psychology is
+something that happens in individual mind/brains <a
+href="https://journals.sagepub.com/doi/10.1177/25152459231186615">McManus,
+Young &amp; Sweetman</a>. Even if we find a significant effect at the
+group level between conditions this doesn’t mean that most (or even any
+in some cases!) of the individuals in the sample/population show the
+effect. We cannot generalize from the group/condition mean to person
+level as it commonly done by experimental psychologists. In our paper we
+show a quick survey of this problem in the field and offer some
+within-person analytic approaches to address it. Below I will walk you
+through two of these approaches: Frequentist and Bayesian prevalence
+testing. These approaches allow you to test whether individuals show a
+particular effect of interest at the within-person level and then allow
+you to make inferences about the prevalence of the within-person effect
+in the population. If you want to make an inference to support a
+psychological model or theory you really need to have some idea about
+whether the effect is present at the individual/within-person level,
+since, well, psychology is a property of individual people or at least
+their minds/brains!</p>
+<hr />
+<p><br></p>
+<div id="frequentist-prevalence" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Frequentist
+prevalence</h1>
+<p>First, we will perform a frequentist (i.e., classic stats) prevalence
+test. We will need to create some custom functions to compute the
+prevalence test.</p>
+<pre class="r"><code># CREATE NECESSARY FREQUENTIST FUNCTION (code we adapted from Donhauser et al.&#39;s (2018) MATLAB code)
+prevalence_test &lt;- function(observed, alpha_ind=0.05, beta_ind=1, alpha_group=0.05, gamma_0=0.5) {
+  
+  # Inputs:
+  # observed    = vector of p-values OR vector with two values, e.g., &#39;c(positive cases, total cases)&#39;
+  # alpha_ind   = alpha threshold for person-level tests, if &#39;observed&#39; = vector of p-values (typically set to .05)
+  # beta_ind    = sensitivity of person-level tests (probably set to 1.00)
+  # alpha_group = see &quot;outputs&quot;
+  # gamma_0     = null gamma value for empirical prevalence to be tested against (defaults to majority null)
+  
+  # Outputs:
+  # p_null      = p-value for majority null or whatever null you specify in the gamma_0 argument (e.g., to specify a global null set &quot;gamma_0 = 0&quot;) 
+  # gamma_0     = highest gamma_0 value that can be rejected at threshold of &#39;alpha_group&#39; given positive cases. Note this output is not the same as the input argument
+  if(sum(observed &gt; 1) == 0) {
+    pvals &lt;- observed
+  } else {
+    pvals &lt;- c(rep(0, observed[1]), rep(1, observed[2]-observed[1]))
+  }
+  
+  n &lt;- length(pvals)
+  k_obs &lt;- sum(pvals &lt; alpha_ind)
+  kvals &lt;- 0:n
+  dgamma &lt;- 0.001
+  gammavals &lt;- seq(0, 1, dgamma)
+  
+  p_k_gamma &lt;- matrix(0, nrow=length(gammavals), ncol=length(kvals))
+  p_kk_gamma &lt;- matrix(0, nrow=length(gammavals), ncol=length(kvals))
+  
+  for(iGam in 1:length(gammavals)) {
+    p_pos &lt;- gammavals[iGam] * beta_ind + (1 - gammavals[iGam]) * alpha_ind
+    p_neg &lt;- gammavals[iGam] * (1 - beta_ind) + (1 - gammavals[iGam]) * (1 - alpha_ind)
+    for(iK in 1:length(kvals)) {
+      k &lt;- kvals[iK]
+      tmp &lt;- choose(n, k) * p_pos^k * p_neg^(n - k)
+      p_k_gamma[iGam, iK] &lt;- tmp
+      p_kk_gamma[iGam, iK] &lt;- 1 - sum(p_k_gamma[iGam, 1:iK]) + tmp
+    }
+  }
+  
+  iK &lt;- which(kvals == k_obs)
+  p_null &lt;- p_kk_gamma[which(gammavals == gamma_0), iK]
+  
+  index &lt;- sum(p_kk_gamma[, iK] &lt; alpha_group)
+  if(index != 0) {
+    gamma_0 &lt;- gammavals[index]
+  } else {
+    gamma_0 &lt;- 0
+  }
+  
+  return(list(p_null=p_null, gamma_0=gamma_0, p_kk_gamma=p_kk_gamma, gammavals=gammavals, p_k_gamma=p_k_gamma))
+}</code></pre>
+<p>Next, we will import the packages we need and the data from our
+in-class experiment. For ease of interpretation, we set deviation coding
+for the factors.</p>
+<pre class="r"><code># import packages, data and set coding
+
+library(lme4) # linear mixed effects models
+library(lmerTest) # p-values for lmers
+library(ggplot2)
+library(tidyverse)
+library(sjPlot)
+library(performance)
+
+#Read in the data and rename
+df &lt;- read.csv(&quot;~/Library/CloudStorage/Dropbox/Documents/My data/Moral sense task/practical/data example.csv&quot;)
+
+# make sure everything is factor
+df$Task.Name &lt;- as.factor(df$Task.Name)
+df$Personal &lt;- as.factor(df$Personal)
+df$DPv1.0.Permissible &lt;- as.factor(df$DPv1.0.Permissible)
+df$Personal.force &lt;- as.factor(df$Personal.force)
+df$Intention &lt;- as.factor(df$Intention)
+df$DPv2.0.Permissible &lt;- as.factor(df$DPv2.0.Permissible)
+
+#set deviation contrasts for ease of interpretation -.5 vs .5
+c&lt;-contr.treatment(2)
+my.coding&lt;-matrix(rep(1/2, 2), ncol=1)
+my.simple&lt;-c-my.coding
+my.simple
+
+#keys  .5 Q-Yes,  -.5 P-Yes 
+contrasts(df$Task.Name)&lt;-my.simple
+contrasts(df$Task.Name)
+
+#personal .5 Yes, -.5 No
+contrasts(df$Personal)&lt;-my.simple
+contrasts(df$Personal)
+
+#prediction DPv1.0 act no intended .5 Yes, -.5 No
+contrasts(df$DPv1.0.Permissible)&lt;-my.simple
+contrasts(df$DPv1.0.Permissible)
+
+#personal force .5 Yes, -.5 No
+contrasts(df$Personal.force)&lt;-my.simple
+contrasts(df$Personal.force)
+
+#intention .5 Yes, -.5 No
+contrasts(df$Intention)&lt;-my.simple
+contrasts(df$Intention)
+
+#prediction DPv2.0 .5 Yes, -.5 No 
+contrasts(df$DPv2.0.Permissible)&lt;-my.simple
+contrasts(df$DPv2.0.Permissible)</code></pre>
+<p><br></p>
+<p>Let’s create another custom function for our within-person level
+analysis. Basically, we will collect the output of a logistic regression
+model for a single individual’s data to see if the effects in our model
+are found at the individual level. For this to be possible we need many
+trials. You can think about the trials a bit like you’d think of
+participants if we were doing a standard group-level analysis. With the
+within-person analysis we are seeing if there is an effect of some IV on
+responses across an individual’s trials. Here we see whether each
+individuals showed an effect of personal (vs. impersonal) on their moral
+judgments in the moral sense task.</p>
+<pre class="r"><code># Create within-person level analysis functions
+
+### Making analysis / output-storing function (for designs where item/vignette is of one condition)
+get_person_effx_mixed &lt;- function(df) { 
+  # argument is dat = data_of_interest
+  
+  id         &lt;- unique(as.character(df$ID)) # subject_id var
+  
+  dp1_eff   &lt;- summary(glm(Permissible ~ Personal, # dv ~ predictor_factor 
+                             data = df, family = binomial(link = &quot;logit&quot;)))
+  dp1_coeff &lt;- round(as.numeric(dp1_eff$coefficients[2,1]),5) # estimate (row, column)  - change rounding to be higher if your estimates are universally smaller
+  # note that the coefficient rounding was implemented so exact zero effects wouldn&#39;t be estimated as approximately zero
+  # see https://stackoverflow.com/questions/73886492/statistically-identical-lm-and-t-test-yield-marginally-different-effect-size for rounding justification
+  dp1_pval  &lt;- as.numeric(dp1_eff$coefficients[2,4]) # p-value (row, column)
+  
+  
+  return(data.frame(id, dp1_coeff, dp1_pval))
+}</code></pre>
+<p>Let’s perform the within-person tests.</p>
+<pre class="r"><code>## Create and run loop to conduct typical group-level tests within each person using the above functions
+
+### Study 1
+list_ID_s2 &lt;- unique(as.character(df$ID)) # pull person-IDs from dataset of interest
+dat_save_s2 &lt;- data.frame(matrix(ncol = 7, nrow = 0)) # create empty dataset to store values
+for (single_ID in list_ID_s2) {
+  single_dataset &lt;- df %&gt;% filter(ID == single_ID) # create single person dataset from dataset of interest
+  single_result_df &lt;- get_person_effx_mixed(df = single_dataset) # create single person analysis output
+  dat_save_s2 &lt;- rbind(dat_save_s2, single_result_df) # add single person analysis script output to empty dataset
+} # repeat for each person in dataset
+
+### Check that looped function worked
+View(dat_save_s2) # nrow should equal number of participants</code></pre>
+<p>We can now create a dataframe that indicates each individual’s
+effect, and whether it is in the predicted direction and whether it is
+significant, given a particular alpha level (here .05). We can then get
+the total number of participants who show an significant within-person
+effect in the predicted direction.</p>
+<pre class="r"><code>## Create dataset that indicates, for each person, whether their tests pass alpha threshold
+
+### Study 1
+dat_save_s2 &lt;- dat_save_s2 %&gt;%
+  mutate(dp1_Diff = case_when(
+    dp1_coeff &gt; 0 ~ &quot;Claimed Direction&quot;,
+    dp1_coeff == 0 ~ &quot;No Difference&quot;,
+    dp1_coeff &lt; 0 ~ &quot;Opposite Direction&quot;)) %&gt;%
+  mutate(Alpha_Threshold = case_when(
+    dp1_pval &lt; .05 ~ &quot;Passed&quot;, # controls false pos rate at person-level for three tests
+    TRUE ~ &quot;Failed&quot;)) %&gt;%
+  mutate(Prevalence_Inclusion = case_when(
+    (dp1_Diff == &quot;Claimed Direction&quot; &amp; Alpha_Threshold == &quot;Passed&quot;) ~ &quot;Yes&quot;,
+    TRUE ~ &quot;No&quot;))
+
+
+## Get number of Ps whose pattern is correct with all statistical tests having p-vals under .05
+table(dat_save_s2$Prevalence_Inclusion)  # &#39;yes&#39; means all statistical tests passed alpha threshold</code></pre>
+<pre style="max-height: 500px;"><code>## 
+##  No Yes 
+##  41   4</code></pre>
+<p>We can see that out of our 45 participants only 4 of them showed the
+predicted significant effect of personal (vs. impersonal). We can
+perform a test of whether the prevalence of the effect is greater than
+50%. That is, we can test against a “majority null.” We argue in the
+paper and social psychologists seemed to agree when we asked them that
+if we want to infer support for a general psychological model or theory
+the effects it predicts should be shown by the majority of individuals
+in the population.</p>
+<pre class="r"><code># CONDUCT FREQUENTIST PREVALENCE
+
+## Study 1 (using numbers from &#39;table&#39; functions&#39; output above)
+n &lt;- 45 # total N
+k &lt;- 4  # number of persons matching hypothesized / group-level pattern (i.e., those marked &#39;yes&#39; in &#39;prevalence_inclusion var)
+s2_freqprev &lt;- prevalence_test(c(k, n)) # specify positive cases out of total cases for prev test function
+s2_freqprev$p_null # print p-value testing against majority null (&gt; 50% where the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = 0.5)</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 1</code></pre>
+<pre class="r"><code>## if you want to get a p-value for the global null, use the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = 0
+## if you want to get a p-value for a different null value, use the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = [enter different null value]</code></pre>
+<p>Here we can see that we, as you might guess, fail to reject the
+majority null, p = 1. That is, we do not find that the prevalence of the
+individual-level effect is greater than 50% in the population. We can
+also test against a global null by changing ‘gamma_0’ to = 0 in the
+prevalence function. That is, is the prevalence of the individual-level
+effect greater than 0% in the population - i.e., does it exist in anyone
+in the population!</p>
+<pre class="r"><code># Change gamma to 0 in the NECESSARY FREQUENTIST FUNCTION (code we adapted from Donhauser et al.&#39;s (2018) MATLAB code)
+prevalence_test &lt;- function(observed, alpha_ind=0.05, beta_ind=1, alpha_group=0.05, gamma_0=0.0) {
+  
+  # Inputs:
+  # observed    = vector of p-values OR vector with two values, e.g., &#39;c(positive cases, total cases)&#39;
+  # alpha_ind   = alpha threshold for person-level tests, if &#39;observed&#39; = vector of p-values (typically set to .05)
+  # beta_ind    = sensitivity of person-level tests (probably set to 1.00)
+  # alpha_group = see &quot;outputs&quot;
+  # gamma_0     = null gamma value for empirical prevalence to be tested against (defaults to majority null)
+  
+  # Outputs:
+  # p_null      = p-value for majority null or whatever null you specify in the gamma_0 argument (e.g., to specify a global null set &quot;gamma_0 = 0&quot;) 
+  # gamma_0     = highest gamma_0 value that can be rejected at threshold of &#39;alpha_group&#39; given positive cases. Note this output is not the same as the input argument
+  if(sum(observed &gt; 1) == 0) {
+    pvals &lt;- observed
+  } else {
+    pvals &lt;- c(rep(0, observed[1]), rep(1, observed[2]-observed[1]))
+  }
+  
+  n &lt;- length(pvals)
+  k_obs &lt;- sum(pvals &lt; alpha_ind)
+  kvals &lt;- 0:n
+  dgamma &lt;- 0.001
+  gammavals &lt;- seq(0, 1, dgamma)
+  
+  p_k_gamma &lt;- matrix(0, nrow=length(gammavals), ncol=length(kvals))
+  p_kk_gamma &lt;- matrix(0, nrow=length(gammavals), ncol=length(kvals))
+  
+  for(iGam in 1:length(gammavals)) {
+    p_pos &lt;- gammavals[iGam] * beta_ind + (1 - gammavals[iGam]) * alpha_ind
+    p_neg &lt;- gammavals[iGam] * (1 - beta_ind) + (1 - gammavals[iGam]) * (1 - alpha_ind)
+    for(iK in 1:length(kvals)) {
+      k &lt;- kvals[iK]
+      tmp &lt;- choose(n, k) * p_pos^k * p_neg^(n - k)
+      p_k_gamma[iGam, iK] &lt;- tmp
+      p_kk_gamma[iGam, iK] &lt;- 1 - sum(p_k_gamma[iGam, 1:iK]) + tmp
+    }
+  }
+  
+  iK &lt;- which(kvals == k_obs)
+  p_null &lt;- p_kk_gamma[which(gammavals == gamma_0), iK]
+  
+  index &lt;- sum(p_kk_gamma[, iK] &lt; alpha_group)
+  if(index != 0) {
+    gamma_0 &lt;- gammavals[index]
+  } else {
+    gamma_0 &lt;- 0
+  }
+  
+  return(list(p_null=p_null, gamma_0=gamma_0, p_kk_gamma=p_kk_gamma, gammavals=gammavals, p_k_gamma=p_k_gamma))
+}
+
+# CONDUCT FREQUENTIST PREVALENCE
+
+## Study 1 (using numbers from &#39;table&#39; functions&#39; output above)
+n &lt;- 45 # total N
+k &lt;- 2  # number of persons matching hypothesized / group-level pattern (i.e., those marked &#39;yes&#39; in &#39;prevalence_inclusion var)
+s2_freqprev &lt;- prevalence_test(c(k, n)) # specify positive cases out of total cases for prev test function
+s2_freqprev$p_null # print p-value testing against majority null (&gt; 50% where the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = 0.5)</code></pre>
+<pre><code>## [1] 0.6650433</code></pre>
+<pre class="r"><code>## if you want to get a p-value for the global null, use the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = 0
+## if you want to get a p-value for a different null value, use the &#39;prevalence_test&#39; function and specify &#39;gamma_0&#39; = [enter different null value]</code></pre>
+<p>Here we fail to reject the global null, p = 0.67. That is, the
+prevalence of the individual-level effect is not significantly greater
+than 0% in the population. It seems the individual-level effect doesn’t
+exist in anyone in the population!</p>
+</div>
+<div id="bayesian-prevalence" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Bayesian
+prevalence</h1>
+<p>We can also test prevalence in the Bayesian framework, you will have
+needed to have run the code above to get the results of the
+within-person analysis first. We need to create some more custom
+functions for this. You may need to install the nleqslv package if you
+don’t have it.</p>
+<pre class="r"><code># CREATE NECESSARY BAYES FUNCTIONS (code from Ince et al., 2021)
+library(nleqslv)
+
+bayesprev_map &lt;- function(k, n, a=0.05, b=1) {
+  # Bayesian maximum a posteriori estimate of population prevalence gamma
+  # under a uniform prior
+  # 
+  # Args:
+  #  k: number of participants/tests significant out of 
+  #  n: total number of participants/tests
+  #  a: alpha value of within-participant test (default=0.05)
+  #  b: sensitivity/beta of within-participant test (default=1)
+  
+  gm &lt;- (k/n -a)/(b-a)
+  if(gm &lt;0) gm &lt;- 0
+  if(gm&gt;1) gm &lt;- 1
+  return(gm)
+} 
+
+bayesprev_posterior &lt;- function(x, k, n, a=0.05, b=1) {
+  # Bayesian posterior of population prevalence gamma under a uniform prior
+  #
+  # Args:
+  # x : values of gamma at which to evaluate the posterior density
+  # k : number of participants significant out of 
+  # n : total number of participants
+  # a : alpha value of within-participant test (default=0.05)
+  # b : sensitivity/beta of within-participant test (default=1)
+  
+  m1 &lt;-  k + 1
+  m2 &lt;- n - k + 1
+  theta &lt;- a + (b-a)*x
+  post &lt;- (b -a)*dbeta(theta,m1, m2)
+  post &lt;- post/(pbeta(b, m1, m2) - pbeta(a, m1, m2))
+  return(post)
+}
+
+
+bayesprev_bound &lt;- function(p, k, n, a=0.05, b=1) {
+  # Bayesian lower bound of population prevalence gamma under a uniform prior
+  #
+  # Args:
+  #  p : density the lower bound should bound (e.g. 0.95)
+  #  k : number of participants significant out of 
+  #  n : total number of participants
+  #  a : alpha value of within-participant test (default=0.05)
+  #  b : sensitivity/beta of within-participant test (default=1)
+  
+  m1 &lt;-  k + 1
+  m2 &lt;- n - k + 1
+  th_c &lt;- qbeta( p*pbeta(a, m1, m2) + (1-p)*pbeta(b, m1, m2), m1, m2 )
+  g_c &lt;- (th_c -a)/(b-a)
+  return(g_c)
+}
+
+
+bayesprev_hpdi &lt;- function(p, k, n, a=0.05, b=1) {
+  # Bayesian highest posterior density interval of population prevalence gamma
+  # under a uniform prior
+  #
+  # Args:
+  #  p : HPDI to return (e.g. 0.95 for 95%)
+  #  k : number of participants significant out of 
+  #  n : total number of participants
+  #  a : alpha value of within-participant test (default=0.05)
+  #  b : sensitivity/beta of within-participant test (default=1)
+  
+  m1 &lt;- k+1
+  m2 &lt;- n-k+1
+  
+  if(m1 ==1) {
+    endpts &lt;- c(a, qbeta( (1 -p)*pbeta(a, m1, m2) + p*pbeta(b, m1, m2), m1, m2 ) ) 
+    return((endpts -a)/(b-a))
+  }
+  
+  if(m2 ==1) {
+    endpts &lt;- c( qbeta( p*pbeta(a, m1, m2) + (1- p)* pbeta(b, m1, m2), m1, m2 ) , b) 
+    return( (endpts-a)/(b-a))
+  }
+  
+  if(k&lt;= n*a) {
+    endpts &lt;- c(a, qbeta( (1 -p)*pbeta(a, m1, m2) + p*pbeta(b, m1, m2), m1, m2 ) ) 
+    return((endpts -a)/(b-a))
+  }
+  
+  if(k&gt;= n*b) {
+    endpts &lt;- c( qbeta( p*pbeta(a, m1, m2) + (1- p)* pbeta(b, m1, m2), m1, m2 ) , b) 
+    return( (endpts-a)/(b-a))
+  }
+  
+  
+  g &lt;- function(x, m1, m2, a, b, p ) {
+    y &lt;- numeric(2)
+    y[1] &lt;-  pbeta(x[2], m1, m2) - pbeta(x[1], m1, m2) - p*(pbeta(b, m1, m2) - pbeta(a, m1, m2))
+    y[2] &lt;- log(dbeta(x[2], m1, m2)) - log(dbeta(x[1], m1, m2))
+    return(y)
+  }
+  
+  x_init &lt;- numeric(2)
+  
+  p1 &lt;- (1-p)/2 
+  p2 &lt;- (1 +p)/2
+  
+  x_init[1] &lt;- qbeta( (1 -p1)*pbeta(a, m1, m2) + p1* pbeta(b, m1, m2), m1, m2 )
+  x_init[2] &lt;- qbeta( (1 -p2)*pbeta(a, m1, m2) + p2* pbeta(b, m1, m2), m1, m2 )
+  
+  opt &lt;- nleqslv(x_init, g, method =&quot;Newton&quot;, control=list(maxit=1000), m1=m1, m2=m2, a=a, b=b, p=p)
+  
+  if (opt$termcd ==1)  print(&quot;convergence achieved&quot;) 
+  if (opt$termcd != 1)  print(&quot;failed to converge&quot;) 
+  
+  temp &lt;- opt$x
+  if (temp[1] &lt;a) {
+    temp[1] &lt;- a
+    temp[2] &lt;- qbeta( (1 -p)*pbeta(a, m1, m2) + p* pbeta(b, m1, m2), m1, m2 )
+  }
+  if (temp[2] &gt; b) {
+    temp[1] &lt;- qbeta( p*pbeta(a, m1, m2) + (1-p)* pbeta(b, m1, m2), m1, m2 )
+    temp[2] &lt;- b
+  }
+  endpts &lt;- (temp -a)/(b-a)
+  return(endpts) 
+}
+
+
+bayesprev_posteriorprob &lt;- function(x, k, n, a=0.05, b=1) {
+  # Bayesian posterior probability in favour of the population prevalence gamma being greater than x
+  #
+  # Args:
+  # x : values of gamma at which to evaluate the posterior probability
+  # k : number of participants significant out of 
+  # n : total number of participants
+  # a : alpha value of within-participant test (default=0.05)
+  # b : sensitivity/beta of within-participant test (default=1)
+  
+  theta &lt;- a + (b-a)*x
+  m1 &lt;-  k + 1
+  m2 &lt;- n - k + 1
+  p &lt;- (pbeta(b,m1,m2)-pbeta(theta,m1,m2)) / (pbeta(b,m1,m2)-pbeta(a,m1,m2))
+  return(p)
+  
+}
+
+bayesprev_posteriorlogodds &lt;- function(x, k, n, a=0.05, b=1) {
+  # Bayesian posterior log-odds in favour of the population prevalence gamma being greater than x
+  #
+  # Args:
+  # x : log-odds threshold
+  # k : number of participants significant out of 
+  # n : total number of participants
+  # a : alpha value of within-participant test (default=0.05)
+  # b : sensitivity/beta of within-participant test (default=1)
+  
+  theta &lt;- a + (b-a)*x
+  m1 &lt;-  k + 1
+  m2 &lt;- n - k + 1
+  p &lt;- (pbeta(b,m1,m2)-pbeta(theta,m1,m2)) / (pbeta(b,m1,m2)-pbeta(a,m1,m2))
+  lo&lt;- log(p / (1 - p))
+  return(lo)
+  
+}</code></pre>
+<p>So we plug in the results of our within-person tests (4 out of 45
+participants showed the predicted significant effect).</p>
+<pre class="r"><code># CONDUCT BAYESIAN PREVALENCE
+
+## Study 1 (using numbers from &#39;table&#39; functions&#39; output above)
+n &lt;- 45 # total N
+k &lt;- 4  # number of persons matching hypothesized / group-level pattern (i.e., those marked &#39;yes&#39; in &#39;prevalence_inclusion var)
+x &lt;- 0.50 # minority cut-off of population prevalence gamma for Bayesian posterior probability
+x_0 &lt;- 0.00 # global null of population prevalence gamma for Bayesian posterior probability
+map = bayesprev_map(k, n) # get maximum a posteriori (MAP) estimate (i.e., the likeliest person-level prevalence population value)
+int = bayesprev_hpdi(0.96, k, n) # get 96% HPDIs</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;convergence achieved&quot;</code></pre>
+<pre class="r"><code>i1 = int[1] # get lower 96% HPDI
+i2 = int[2] # get upper 96% HPDI
+print(c(i1, map ,i2)) # print lower 96 HPDI, map estimate, and upper 96 HPDI</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 0.00000000 0.04093567 0.15471798</code></pre>
+<pre class="r"><code>bayesprev_posteriorprob(x, k, n) # Bayesian posterior probability in favor of population prevalence being greater than x</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 3.865992e-10</code></pre>
+<pre class="r"><code>bayesprev_posteriorlogodds(x, k, n) # Bayesian posterior log-odds in favor of the population prevalence being greater than x</code></pre>
+<pre style="max-height: 500px;"><code>## [1] -21.67363</code></pre>
+<pre class="r"><code>bayesprev_posteriorprob(x_0, k, n) # Bayesian posterior probability in favor of population prevalence being greater than x_0</code></pre>
+<pre style="max-height: 500px;"><code>## [1] 1</code></pre>
+<pre class="r"><code>bayesprev_posteriorlogodds(x_0, k, n) # Bayesian posterior log-odds in favor of the population prevalence being greater than x_0</code></pre>
+<pre style="max-height: 500px;"><code>## [1] Inf</code></pre>
+<p>We can see that Bayesian estimation suggests that the population
+prevalence of the effect is .04, 96% HPDI [0.00, 0.15] (think of these
+as Bayesian CIs). The probability of the prevalence being greater than
+.50 is pretty much 0 (3.865992e-10). But it seems the probability and
+log-odds that it’s greater than 0 is high.</p>
+<p>We can plot our Bayesian prevalence results.</p>
+<pre class="r"><code>### plot posterior distribution of population prevalence
+xvals &lt;- seq(0, 1, .01)
+pdf &lt;- bayesprev_posterior(xvals, k, n)
+plot(xvals, pdf, type =&quot;l&quot;, xlab = expression(gamma), ylab =&quot;Posterior density&quot;, lwd=3) # create plot base
+
+### add the MAP estimate as a point
+xmap = bayesprev_map(k, n)
+pmap = bayesprev_posterior(xmap, k, n)
+points(xmap, pmap, cex =2, col= &quot;red&quot;, pch=16) 
+
+### add the .95 lower bound as a vertical line
+xbound = bayesprev_bound(0.95, k, n)
+pbound = bayesprev_posterior(xbound, k, n)
+lines(c(xbound, xbound), c(0, pbound+0.5), col=&quot;blue&quot;, lwd=3) 
+
+### add the 0.96 HPDI as a horizontal line
+int = bayesprev_hpdi(0.96, k, n) </code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;convergence achieved&quot;</code></pre>
+<pre class="r"><code>h1 = bayesprev_posterior(i1, k, n)
+h2 = bayesprev_posterior(i2, k, n)
+lines(c(i1, i2), c(h1, h2), col =&quot;green&quot;, lwd=3) # see https://easystats.github.io/bayestestR/articles/credible_interval.html#different-types-of-cis</code></pre>
+<p><img src="Prevalence-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="example-write-up" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Example write-up</h1>
+<p>To examine whether the effect of the personal parameter of the dual
+process model v1.0 was shown at the individual (within-person) level. We
+conducted both frequentist and Bayesian prevalence testing. This
+involved testing the effect for each individual to see if it was in the
+correct direction and significant. Then we computed the prevalence of
+predicted significant effects in the population. Frequentist prevalence
+revealed that the prevalence of significant within-person effects was
+not significantly greater than 0%, <em>p</em> = .67. Bayesian estimation
+revealed a population prevalence of .04, 96% HPDI [0.00, 0.15]. The
+probability of the prevalence being greater than .50 is was very small
+<em>p</em> &lt; .001.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

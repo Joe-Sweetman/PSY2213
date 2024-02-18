@@ -34,6 +34,8 @@ This site provides important information, materials, data and R code to help you
 
 # [Model fit vs. significant effects](Model-fit-vs-significant-effects.html)
 
+# [Prevalence analysis of within-person effects for in-class experiment](Prevalence-analysis.html)
+
 # [Sample size simulation for experiment](Sample-size-simulation-for-experiment.html)
 
 # [Data prep for experiment](Data-prep-for-experiment.html)
