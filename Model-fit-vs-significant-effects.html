@@ -12,7 +12,7 @@
 <meta name="author" content="Joe Sweetman" />
 
 
-<title>Model fit vs. significant effects</title>
+<title>Model comparison vs. significant effects</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -351,21 +351,34 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Model fit vs. significant effects</h1>
+<h1 class="title toc-ignore">Model comparison vs. significant
+effects</h1>
 <h4 class="author">Joe Sweetman</h4>
 
 </div>
 
 
-<p>Here I discuss the difference between model fit and significant
-parameters/“effects” in your model. It is possible for a model to have
-significant parameters/“effects” but poor fit. It’s also possible for
-your model to have good fit but no significant parameters/effects. This
-might seem like crazy talk but it is nonetheless true. Below we will
-simulate some data and show how are intuitions about the the
-relationship between model fit and significant parameters/effects is
-wrong. If you want to run the code and have a play around with this
-yourself you’ll need to <a
+<p>Here I discuss the difference between model comparison (how well
+models fit/predicts the data) and significant parameters or “effects” in
+your model. As the analysis of our in-class experiment showed, it is
+possible for a model to have significant “effects” but (relatively) poor
+fit. It’s also possible for your model to have (relatively) good fit but
+no significant parameters/effects. This might seem like crazy talk but
+it is nonetheless true. Below we will simulate some data and try and
+develop our understanding of what it means to have a significant effect
+and what it means for your model to fit the data. We will show how the
+intuition that a model with significant effects will necessarily fit the
+data better than a model with no significant effects is not necessarily
+true. The focus on model comparison (i.e., fit of different models to
+the data) or significant effects (whether model parameters/slopes are
+different from 0) reflects a differences in whether researcher are
+interested in null hypothesis significance testing (i.e., knowing
+whether a slope is significantly different from 0) or whether they are
+interested in comparing different plausible models of the data
+generating process (i.e., how well the model predits the current and
+future data).</p>
+<p>If you want to run the code and have a play around with this yourself
+you’ll need to <a
 href="https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt">installed
 R and RStudio</a>.</p>
 <hr />
@@ -377,7 +390,7 @@ into RStudio. To run the code just make sure your cursor is on the right
 line and click select <strong>“Run”</strong>. This will run the current
 lines of code.</p>
 <pre class="r"><code># Package names
-packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;performance&quot;)
+packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;performance&quot;, &quot;broom&quot;)
 
 # Install packages not yet installed
 installed_packages &lt;- packages %in% rownames(installed.packages())
@@ -388,53 +401,338 @@ if (any(installed_packages == FALSE)) {
 # Packages loading
 library(ggplot2)
 library(tidyverse)
-library(performance)</code></pre>
+library(performance)
+library(broom)</code></pre>
 <p><br></p>
 </div>
-<div id="model-with-no-significant-effects-but-good-fit"
+<div
+id="finding-out-whats-the-best-theory-is-null-hypothesis-or-data-generating-process"
 class="section level1" number="2">
-<h1><span class="header-section-number">2</span> model with no
-significant “effects” but good fit</h1>
-<p>Ok, let’s look at a model with no significant effects/parameters but
-good fit. <br></p>
+<h1><span class="header-section-number">2</span> Finding out what’s the
+best theory is? Null hypothesis or data generating process</h1>
+<p>The practical is trying to answer the question</p>
+<blockquote>
+<p>Is the moral mind/brain best described by moral grammar or dual
+process models?”</p>
+</blockquote>
+<p>To do this we could follow business as usual and fit statistical
+models and see if their parameters/fixed effects are significant. Maybe
+we could count the number of significant effects and say that the model
+with the most significant effect is the best. But this would advantage
+models with a large amount of small effects vs. a model with one overall
+larger effect. Indeed, R^2 as a measure of variance “explained” (really
+predicted) suffers from the problem that adding more predictors/IVs just
+keeps on increasing R^2! In science we want parsimony - as simple an
+explanation as possible, that still accounts for the relevant data.
+Fortunately, there are a number of better ways of determining which
+model better fits (or predicts) the data such as AIC, BIC, or using
+Bayes Factors in model comparison. First, let’s get our head around the
+difference between significant effects and model fit.</p>
+<p><br></p>
+</div>
+<div id="model-fit-vs.-signifcant-effects" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Model fit
+vs. signifcant effects</h1>
+<p>Let’s look at two models that can help us understand the difference
+between model fit (prediction of data) and significant effects.</p>
+<p><br></p>
 <div id="simulate-some-data-and-stick-it-in-a-dataframe"
-class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> simulate some data
+class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> simulate some data
 and stick it in a dataframe</h2>
 <p>Simulation is an important tool for understanding statistics. Here we
-will simulate some data for independent variables x1 and x2 and a
-dependent variable y, although with an error term. We will put this all
-into a dataframe. Notice that because we created the data we know what
-the correct regression coefficients are for predicting Y. In other
-words, we know the “ground truth”.</p>
+will simulate some data for two independent variables x1 and x2 (values
+ranging between -5 and 5) and a dependent variable y (with a mean or
+intercept of 0), along with an error term e. Notice that because we
+created the data we know that the correct regression coefficients for
+predicting y from x1 and x2 are 1 (we defined y = 0 + 1<em>x1 + 1</em>x2
++ e). In other words, we know the “ground truth”. This is not the case
+in the real world (unfortunately) but knowing the truth in our
+simulations allows us to explore aspects of our models with full
+understanding of what’s going on. We will put this all into a dataframe
+for analysis df.</p>
 <pre class="r"><code># we set a seed to make sure this example is exactly reproducible
 set.seed(123)                 
 
 # we generate some data for the varibale x1 and x2 from a uniform distribution
-x1 = runif(100, min=-5, max=5)  
-x2 = runif(100, min=-5, max=5)  #  between -5 and 5
+x1 = runif(1000, min=-5, max=5)  
+x2 = runif(1000, min=-5, max=5)  #  between -5 and 5
 
 # we generate some errors from a normal distribution
-e  = rnorm(100, mean=0, sd=1)   
+e  = rnorm(1000, mean=0, sd=0.05)   
 
 # since we are making up the example can set the ground truth for the true intercept and slopes as 0
-y  = 0 + 0*x1 + 0*x2 + e    
+y  = 0 + 1*x1 + 1*x2 + e    
 
 # make a dataframe
 df &lt;- data.frame(x1, x2, y, e)</code></pre>
 </div>
-<div id="fit-the-model" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> fit the model</h2>
-<p>Now let’s fit a simple linear model to the data and have a look at
-the model summary.</p>
+<div id="fit-the-first-model-m1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> fit the first model
+(m1)</h2>
+<p>Now let’s fit a simple linear model (m1) to the data and have a look
+at the model summary.</p>
 <pre class="r"><code># fit the linear model
-m1 &lt;- lm(y~x1+x2)
+m1 &lt;- lm(y~x1+x2,data = df)
 
 # look at the model summary
 summary(m1)</code></pre>
 <pre style="max-height: 500px;"><code>## 
 ## Call:
-## lm(formula = y ~ x1 + x2)
+## lm(formula = y ~ x1 + x2, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.15355 -0.03470  0.00051  0.03488  0.16687 
+## 
+## Coefficients:
+##              Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 0.0021278  0.0015980    1.332    0.183    
+## x1          1.0002100  0.0005571 1795.445   &lt;2e-16 ***
+## x2          0.9999318  0.0005605 1783.844   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.05053 on 997 degrees of freedom
+## Multiple R-squared:  0.9998, Adjusted R-squared:  0.9998 
+## F-statistic: 3.024e+06 on 2 and 997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Happy times, we can see that both of our predictors are significant
+and the coefficient (slope) estimates are pretty close to the truth
+(i.e., 1)! We can also see that R^2 is very high (we will look at better
+measures of fit later). Let’s do something crazy and actually look at
+the data rather than just the p-values! We can plot the regression line
+for the model (red) against the data and the ground truth (blue).</p>
+<pre class="r"><code># we can plot the the ground truth (blue) and model fit (red)
+ggplot(df, aes(x = x1, y = y)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  geom_abline(aes(slope = 1, intercept = 0, col = &quot;True function&quot;),size =1)+
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;)) +
+  ylim(-20, 20)</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+You can see the model’s is pretty close to the ground truth (i.e., the
+true function that generated the data!). We can see that the slope of
+the regression line is around 1. That is, an increase of 1 unit in x1 is
+associated with a 1 unit increases in y. We know from the model summary
+that this slope is significantly different from 0 - our rejected null
+hypothesis. <br></p>
+</div>
+<div id="increase-the-spread-noise-of-the-error-in-y"
+class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> increase the spread
+(noise) of the error in y</h2>
+<p>Let’s introduce a greater amount of noise in y as reflected by a
+wider SD in our error term. Simulate the new values and stick it in a
+dataframe.</p>
+<pre class="r"><code># we set a seed to make sure this example is exactly reproducible
+set.seed(123) 
+
+# we generate some errors from a normal distribution
+e2  = rnorm(1000, mean=0, sd=5)   
+
+# since we are making up the example can set the ground truth for the true intercept and slopes as 0
+y2  = 0 + 1*x1 + 1*x2 + e2    
+
+# make a dataframe
+df2 &lt;- data.frame(x1, x2, y2, e2)</code></pre>
+</div>
+<div id="fit-the-second-model-m2" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> fit the second model
+(m2)</h2>
+<p>Now let’s fit a second linear model (m2) with the same predictors (x1
+and x2) to the noisier data and have a look at the model summary.</p>
+<pre class="r"><code># fit the linear model
+m2 &lt;- lm(y2~x1+x2, data = df2)
+
+# look at the model summary
+summary(m2)</code></pre>
+<pre style="max-height: 500px;"><code>## 
+## Call:
+## lm(formula = y2 ~ x1 + x2, data = df2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -14.3371  -3.2445   0.0095   3.2570  16.2479 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.08036    0.15671   0.513    0.608    
+## x1           0.94114    0.05463  17.227   &lt;2e-16 ***
+## x2           1.07614    0.05497  19.576   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.955 on 997 degrees of freedom
+## Multiple R-squared:  0.3918, Adjusted R-squared:  0.3906 
+## F-statistic: 321.1 on 2 and 997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>You can see that we approximately reproduce the results from the
+first model. Both our predictors are significant and the coefficient
+(slope) estimates are pretty close to the true value of 1. You can see
+however that R^2 in this model (albeit a poor measure of model fit) is
+much lower. Let’s look at the data.</p>
+<pre class="r"><code># we can plot the the ground truth (blue) and model fit (red)
+ggplot(df2, aes(x = x1, y = y2)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  geom_abline(aes(slope = 1, intercept = 0, col = &quot;True function&quot;),size =1)+
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+This is almost identical to the first model. The model regression line
+is again pretty close to the ground truth of 1. What is different though
+is the spread of the data. We can see that unlike our first model (m1)
+the data here are widely spread along either side of the regression
+line.</p>
+</div>
+<div id="model-fit" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> model fit</h2>
+<p>So we have two models m1 and m2 that give significant effects for our
+two IVs x1 and x2. That is, the slopes in both models are almost
+identical and are both significantly different from 0. But what about
+model fit? How well do each of the model’s fit (i.e., predict) the
+data?</p>
+<div id="model-fit-indices-aic-and-bic" class="section level3"
+number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> model fit indices
+(AIC and BIC)</h3>
+<p>We can look at some model fit indices for each of the models to see
+which one fits (i.e., predicts) our data the best. As revealed in the
+model summary we see that R^2 is better for our first model (m1) than
+our second. But we want to focus on the AIC and BIC as they are better
+indices of model fit than R^2. Both AIC and BIC are lower for our first
+model then our second, indicating better fit.</p>
+<pre class="r"><code>compare_performance(m1,m2)</code></pre>
+<pre><code>## When comparing models, please note that probably not all models were fit
+##   from same data.</code></pre>
+<pre style="max-height: 500px;"><code>## # Comparison of Model Performance Indices
+## 
+## Name | Model |   AIC (weights) |  AICc (weights) |   BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
+## ------------------------------------------------------------------------------------------------------
+## m1   |    lm | -3127.5 (&gt;.999) | -3127.5 (&gt;.999) | -3107.9 (&gt;.999) | 1.000 |     1.000 | 0.050 | 0.051
+## m2   |    lm |  6043.8 (&lt;.001) |  6043.8 (&lt;.001) |  6063.4 (&lt;.001) | 0.392 |     0.391 | 4.948 | 4.955</code></pre>
+<p>Why is this? To see why, we can plot the the residual distance from
+the regression line for our first model (m1) and for our second model
+(m2).</p>
+<pre class="r"><code># we can plot the the residual distance from the regression line
+df$fitted &lt;- m1$coefficients[1] + m1$coefficients[2] * df$x1
+ggplot(df, aes(x1, y)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  geom_abline(aes(slope = 1, intercept = 0, col = &quot;True function&quot;),size =1)+
+  geom_segment(aes(xend = x1, yend = fitted),alpha = 0.4) +
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;))+
+  ylim(-20, 20)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code># we can plot the the residual distance from the regression line
+df2$fitted &lt;- m2$coefficients[1] + m2$coefficients[2] * df2$x1
+ggplot(df2, aes(x1, y2)) +
+  geom_point() +
+  stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
+  geom_abline(aes(slope = 1, intercept = 0, col = &quot;True function&quot;),size =1)+
+  geom_segment(aes(xend = x1, yend = fitted),alpha = 0.4) +
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;))+
+  ylim(-20, 20)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+You can see that the residuals, or the distance between each data point
+and the regression line (i.e., the grey/black lines), are much greater
+for our second model (m2). The mean of the square of these residuals or
+the mean squared error (MSE) forms part of something called the
+likelihood which can thought of as the likelihood of observing the data
+given the model.</p>
+<pre class="r"><code>resm1&lt;-m1$residuals
+nm1&lt;-nrow(m1$model)    
+
+resm2&lt;-m2$residuals
+nm2&lt;-nrow(m2$model)
+
+llm1&lt;- 0.5 * (nm1 * (log(2 * pi) +1 - log(nm1) + log(sum(resm1^2))))
+llm2&lt;- 0.5 * (nm2 * (log(2 * pi) +1 - log(nm2) + log(sum(resm2^2))))
+
+print(sprintf(&quot;model 1, log likelihood = %s&quot;, llm1))</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 1, log likelihood = -1567.74801360134&quot;</code></pre>
+<pre class="r"><code>print(sprintf(&quot;model 2, log likelihood = %s&quot;, llm2))</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 2, log likelihood = 3017.90051131984&quot;</code></pre>
+<p>The AIC and BIC are based on the log likelihood (ll), correcting or
+penalising to different degrees for the number of parameters (k)
+included in the model.</p>
+<pre class="r"><code>km1&lt;-length(m1$coefficients)
+km2&lt;-length(m2$coefficients)
+df.llm1&lt;-km1+1 
+df.llm2&lt;-km2+1 
+bicm1&lt;- -2 * llm1 + log(nm1) * df.llm1
+aicm1&lt;- -2 * llm1 + 2 * df.llm1
+bicm2&lt;- -2 * llm2 + log(nm2) * df.llm2
+aicm2&lt;- -2 * llm2 + 2 * df.llm2
+
+AICm1&lt;-round(aicm1, digits = 1)
+BICm1&lt;-round(bicm1, digits = 1)
+AICm2&lt;-round(aicm2, digits = 1)
+BICm2&lt;-round(bicm2, digits = 1)
+
+
+print(sprintf(&quot;model 1, AIC = %s; BIC = %s&quot;, AICm1, BICm1))</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 1, AIC = 3143.5; BIC = 3163.1&quot;</code></pre>
+<pre class="r"><code>print(sprintf(&quot;model 2, AIC = %s; BIC = %s&quot;, AICm2, BICm2))</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 2, AIC = -6027.8; BIC = -6008.2&quot;</code></pre>
+<p>So we can see how the residuals go into our indices of model fit.
+Even though the models have equivalent significant effects one of the
+models (m1) is a better fit of the data.</p>
+</div>
+</div>
+</div>
+<div id="model-with-no-significant-effects-but-good-fit"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> model with no
+significant “effects” but good fit</h1>
+<p>We can look at other scenarios comapring model fit and significance.
+Let’s look at a model with no significant effects/parameters but good
+fit. <br></p>
+<div id="simulate-some-data-and-stick-it-in-a-dataframe-1"
+class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> simulate some data
+and stick it in a dataframe</h2>
+<p>Here we will simulate some data for independent variables x3 and x4
+and a dependent variable y3, along with an error term. We will put this
+all into a dataframe. Again, because we created the data we know what
+the correct regression coefficients are for predicting y3. In other
+words, we know the “ground truth”.</p>
+<pre class="r"><code># we set a seed to make sure this example is exactly reproducible
+set.seed(123)                 
+
+# we generate some data for the varibale x1 and x2 from a uniform distribution
+x3 = runif(100, min=-5, max=5)  
+x4 = runif(100, min=-5, max=5)  #  between -5 and 5
+
+# we generate some errors from a normal distribution
+e3  = rnorm(100, mean=0, sd=1)   
+
+# since we are making up the example can set the ground truth for the true intercept and slopes as 0
+y3  = 0 + 0*x3 + 0*x4 + e3    
+
+# make a dataframe
+df3 &lt;- data.frame(x3, x4, y3, e3)</code></pre>
+</div>
+<div id="fit-the-model" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> fit the model</h2>
+<p>Now let’s fit a simple linear model to the data and have a look at
+the model summary.</p>
+<pre class="r"><code># fit the linear model
+m3 &lt;- lm(y3~x3+x4)
+
+# look at the model summary
+summary(m3)</code></pre>
+<pre style="max-height: 500px;"><code>## 
+## Call:
+## lm(formula = y3 ~ x3 + x4)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
@@ -443,8 +741,8 @@ summary(m1)</code></pre>
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)
 ## (Intercept) -0.106985   0.097788  -1.094    0.277
-## x1           0.009726   0.034567   0.281    0.779
-## x2          -0.002964   0.037347  -0.079    0.937
+## x3           0.009726   0.034567   0.281    0.779
+## x4          -0.002964   0.037347  -0.079    0.937
 ## 
 ## Residual standard error: 0.9765 on 97 degrees of freedom
 ## Multiple R-squared:  0.0009275,  Adjusted R-squared:  -0.01967 
@@ -452,60 +750,53 @@ summary(m1)</code></pre>
 <p>Sad times, none of our parameters are significant. But let’s do
 something crazy and actually look at the data. We can plot the
 regression line for the model (red) against the data and the ground
-truth (blue), along with the predicted and observed conditional means
-using LOWESS (what we would compare against if we didn’t know the ground
-truth - i.e., this was real data).</p>
-<pre class="r"><code># we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
-ggplot(df, aes(x = x1, y = y)) +
+truth (blue).</p>
+<pre class="r"><code># we can plot the the ground truth (black) and model fit (red)
+ggplot(df3, aes(x = x3, y = y3)) +
   geom_point() +
   stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
-  stat_smooth(aes(col = &quot;LOWESS&quot;),fill = &quot;black&quot;)+
   geom_abline(aes(slope = 0, intercept = 0, col = &quot;True function&quot;),size =1)+
-  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;black&quot;, &quot;red&quot;, &quot;blue&quot;))</code></pre>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
-## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;))+
+  ylim(-5, 5)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 You can see that despite the non-significant parameters/effects the
-model’s is pretty close to the ground truth (i.e., true function that
-generated the data!) In other words, the fit is not too bad. <br></p>
+model is pretty close to the ground truth (i.e., true function that
+generated the data!) Overall it looks like the fit is not too bad.
+<br></p>
 </div>
 </div>
 <div id="model-with-significant-effects-but-poor-fit"
-class="section level1" number="3">
-<h1><span class="header-section-number">3</span> model with significant
+class="section level1" number="5">
+<h1><span class="header-section-number">5</span> model with significant
 “effects” but poor fit</h1>
 <p>But surely if we have some significant parameters/effects then the
 model will fit the data better, right? Yeah, that’s absolutely wrong!
 Let’s look.</p>
 <div id="create-a-new-ground-truth-and-stick-it-in-a-dataframe"
-class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> create a new ground
+class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> create a new ground
 truth and stick it in a dataframe</h2>
 <p>Here we will Let’s update our ground truth with a curvilinear
 relationship and put that in a new dataframe.</p>
 <pre class="r"><code># since we are making up the example we can set the ground truth for the true intercept and slopes, this time they are not 0 they show curvilinear relationship 
-y2 = 4.96 + 0.65*x1 + -0.16*x1^2 + 0.62*x2 + -0.19*x2^2 + e  
+y4 = 4.96 + 0.65*x3 + -0.16*x3^2 + 0.62*x4 + -0.19*x4^2 + e3  
 
 # make a dataframe
-df2 &lt;- data.frame(x1, x2, y2, e)</code></pre>
+df4 &lt;- data.frame(x3, x4, y4, e3)</code></pre>
 </div>
-<div id="fit-the-model-1" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> fit the model</h2>
+<div id="fit-the-model-1" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> fit the model</h2>
 <p>Now let’s fit the same predictors again and have a look at the model
 summary.</p>
 <pre class="r"><code># fit the linear model
-m2 &lt;- lm(y2~x1+x2)
+m4 &lt;- lm(y4~x3+x4)
 
 # look at the model summary
-summary(m2)</code></pre>
+summary(m4)</code></pre>
 <pre style="max-height: 500px;"><code>## 
 ## Call:
-## lm(formula = y2 ~ x1 + x2)
+## lm(formula = y4 ~ x3 + x4)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
@@ -514,8 +805,8 @@ summary(m2)</code></pre>
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
 ## (Intercept)  2.28503    0.19372  11.795  &lt; 2e-16 ***
-## x1           0.63071    0.06848   9.210 6.80e-15 ***
-## x2           0.39479    0.07399   5.336 6.23e-07 ***
+## x3           0.63071    0.06848   9.210 6.80e-15 ***
+## x4           0.39479    0.07399   5.336 6.23e-07 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -525,46 +816,50 @@ summary(m2)</code></pre>
 <p><br></p>
 <p>Happy days, our parameters are significant! But let’s look at the
 data.</p>
-<pre class="r"><code># we can plot the the ground truth (black), model fit (red), and the predicted and observed conditional means using LOWESS (black)
-ggplot(df2, aes(x = x1, y = y2)) +
+<pre class="r"><code># we can plot the the ground truth (blue) and model fit (red)
+ggplot(df4, aes(x = x3, y = y4)) +
   geom_point() +
   stat_smooth(aes(col = &quot;Model fit&quot;),method = lm,fill = &quot;red&quot;)+
-  stat_smooth(aes(col = &quot;LOWESS&quot;),fill = &quot;black&quot;)+
   stat_smooth(aes(col = &quot;True function&quot;),method = &quot;lm&quot;, formula=y ~ poly(x,2))+
-  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;black&quot;, &quot;red&quot;, &quot;blue&quot;))</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
-## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+  scale_color_manual(name = &quot;Line&quot;,values = c(&quot;red&quot;, &quot;blue&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>Oh no, there a lot of gap between the model and the true function
-that generated the data (i.e., ground truth)! We can compare the models
-using information criterion (AIC and BIC).</p>
+that generated the data (i.e., ground truth)! We can compare the model
+fit using information criterion (AIC and BIC).</p>
 <p><br></p>
 </div>
 </div>
 <div id="information-criterion-aic-and-bic" class="section level1"
-number="4">
-<h1><span class="header-section-number">4</span> information criterion
+number="6">
+<h1><span class="header-section-number">6</span> information criterion
 (AIC and BIC)</h1>
 <p>Let’s look at the more traditional information criterion indices.</p>
 <pre class="r"><code># we can compare the AIC and BIC for model fit
-compare_performance(m1,m2)</code></pre>
+compare_performance(m3,m4)</code></pre>
 <pre><code>## When comparing models, please note that probably not all models were fit
 ##   from same data.</code></pre>
 <pre style="max-height: 500px;"><code>## # Comparison of Model Performance Indices
 ## 
 ## Name | Model | AIC (weights) | AICc (weights) | BIC (weights) |        R2 | R2 (adj.) |  RMSE | Sigma
 ## -----------------------------------------------------------------------------------------------------
-## m1   |    lm | 284.0 (&gt;.999) |  284.4 (&gt;.999) | 294.4 (&gt;.999) | 9.275e-04 |    -0.020 | 0.962 | 0.976
-## m2   |    lm | 420.7 (&lt;.001) |  421.1 (&lt;.001) | 431.1 (&lt;.001) |     0.521 |     0.511 | 1.905 | 1.934</code></pre>
+## m3   |    lm | 284.0 (&gt;.999) |  284.4 (&gt;.999) | 294.4 (&gt;.999) | 9.275e-04 |    -0.020 | 0.962 | 0.976
+## m4   |    lm | 420.7 (&lt;.001) |  421.1 (&lt;.001) | 431.1 (&lt;.001) |     0.521 |     0.511 | 1.905 | 1.934</code></pre>
 <p>Here we see that the model that had non-significant
-parameters/effects (m1) has relatively better fit than the model that
-had significant parameters/effects (m2). That is, both its AIC 286.4
-(vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m2. This
+parameters/effects (m3) has relatively better fit than the model that
+had significant parameters/effects (m4). That is, both m3’s AIC 286.4
+(vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m4. This
 shows how model fit and the significance of parameters/effects are not
 necessarily related. When you see a significant parameters/effect it is
 just telling you that the slope is significantly different from zero,
-it’s not telling you how good the model fits the actual data and the
-underlying data generation process.</p>
+it’s not telling you how good the model fits (predicts) the actual data
+and the underlying data generation process. If you have a look at R^2
+you will see it’s favouring m4 which is why we shouldn’t pay it much
+attention as a measure of model fit! This is one of the many occasion
+when R^2 makes no sense as a measure of model fit. We can see that
+prediction will be better in m3 while not so good in m4 because the
+model is trying to predict a curvlinear relationship with a linear
+regression line!</p>
 </div>
 
 
