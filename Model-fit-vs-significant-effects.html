@@ -405,11 +405,10 @@ library(performance)
 library(broom)</code></pre>
 <p><br></p>
 </div>
-<div
-id="finding-out-whats-the-best-theory-is-null-hypothesis-or-data-generating-process"
-class="section level1" number="2">
+<div id="finding-out-whats-the-best-theory-is" class="section level1"
+number="2">
 <h1><span class="header-section-number">2</span> Finding out what’s the
-best theory is? Null hypothesis or data generating process</h1>
+best theory is?</h1>
 <p>The practical is trying to answer the question</p>
 <blockquote>
 <p>Is the moral mind/brain best described by moral grammar or dual
@@ -499,10 +498,11 @@ summary(m1)</code></pre>
 ## F-statistic: 3.024e+06 on 2 and 997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Happy times, we can see that both of our predictors are significant
 and the coefficient (slope) estimates are pretty close to the truth
-(i.e., 1)! We can also see that R^2 is very high (we will look at better
-measures of fit later). Let’s do something crazy and actually look at
-the data rather than just the p-values! We can plot the regression line
-for the model (red) against the data and the ground truth (blue).</p>
+(i.e., 1)! We can also see that R<sup>2</sup> is very high
+(R<sup>2</sup> is not a good measure of fit as we will see later). Let’s
+do something crazy and actually look at the data rather than just the
+p-values! We can plot the regression line for the model (red) against
+the data and the ground truth (blue).</p>
 <pre class="r"><code># we can plot the the ground truth (blue) and model fit (red)
 ggplot(df, aes(x = x1, y = y)) +
   geom_point() +
@@ -575,8 +575,8 @@ summary(m2)</code></pre>
 <p>You can see that we approximately reproduce the results from the
 first model. Both our predictors are significant and the coefficient
 (slope) estimates are pretty close to the true value of 1. You can see
-however that R^2 in this model (albeit a poor measure of model fit) is
-much lower. Let’s look at the data.</p>
+however that R<sup>2</sup> in this model (albeit a poor measure of model
+fit as we will see later) is much lower. Let’s look at the data.</p>
 <pre class="r"><code># we can plot the the ground truth (blue) and model fit (red)
 ggplot(df2, aes(x = x1, y = y2)) +
   geom_point() +
@@ -604,10 +604,11 @@ number="3.5.1">
 (AIC and BIC)</h3>
 <p>We can look at some model fit indices for each of the models to see
 which one fits (i.e., predicts) our data the best. As revealed in the
-model summary we see that R^2 is better for our first model (m1) than
-our second. But we want to focus on the AIC and BIC as they are better
-indices of model fit than R^2. Both AIC and BIC are lower for our first
-model then our second, indicating better fit.</p>
+model summary we see that R<sup>2</sup> is better for our first model
+(m1) than our second. But we want to focus on the AIC and BIC as they
+are better indices of model fit than R<sup>2</sup> (we will see how bad
+R<sup>2</sup> is as a measure of fit shortly). Both AIC and BIC are
+lower for our first model then our second, indicating better fit.</p>
 <pre class="r"><code>compare_performance(m1,m2)</code></pre>
 <pre><code>## When comparing models, please note that probably not all models were fit
 ##   from same data.</code></pre>
@@ -693,7 +694,7 @@ models (m1) is a better fit of the data.</p>
 class="section level1" number="4">
 <h1><span class="header-section-number">4</span> model with no
 significant “effects” but good fit</h1>
-<p>We can look at other scenarios comapring model fit and significance.
+<p>We can look at other scenarios comparing model fit and significance.
 Let’s look at a model with no significant effects/parameters but good
 fit. <br></p>
 <div id="simulate-some-data-and-stick-it-in-a-dataframe-1"
@@ -762,8 +763,8 @@ ggplot(df3, aes(x = x3, y = y3)) +
 <p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 You can see that despite the non-significant parameters/effects the
 model is pretty close to the ground truth (i.e., true function that
-generated the data!) Overall it looks like the fit is not too bad.
-<br></p>
+generated the data!) Overall, it looks like the fit is not too bad with
+the data points not too far from the model regression line. <br></p>
 </div>
 </div>
 <div id="model-with-significant-effects-but-poor-fit"
@@ -777,8 +778,8 @@ Let’s look.</p>
 class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> create a new ground
 truth and stick it in a dataframe</h2>
-<p>Here we will Let’s update our ground truth with a curvilinear
-relationship and put that in a new dataframe.</p>
+<p>Here we will update our ground truth with a curvilinear relationship
+and put that in a new dataframe.</p>
 <pre class="r"><code># since we are making up the example we can set the ground truth for the true intercept and slopes, this time they are not 0 they show curvilinear relationship 
 y4 = 4.96 + 0.65*x3 + -0.16*x3^2 + 0.62*x4 + -0.19*x4^2 + e3  
 
@@ -825,8 +826,10 @@ ggplot(df4, aes(x = x3, y = y4)) +
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>Oh no, there a lot of gap between the model and the true function
-that generated the data (i.e., ground truth)! We can compare the model
-fit using information criterion (AIC and BIC).</p>
+that generated the data (i.e., ground truth)! And you can see a large
+distance between the model regression line and the data points. We can
+compare the model fit for our two models using information criterion
+(AIC and BIC).</p>
 <p><br></p>
 </div>
 </div>
@@ -848,18 +851,22 @@ compare_performance(m3,m4)</code></pre>
 <p>Here we see that the model that had non-significant
 parameters/effects (m3) has relatively better fit than the model that
 had significant parameters/effects (m4). That is, both m3’s AIC 286.4
-(vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m4. This
-shows how model fit and the significance of parameters/effects are not
-necessarily related. When you see a significant parameters/effect it is
-just telling you that the slope is significantly different from zero,
-it’s not telling you how good the model fits (predicts) the actual data
-and the underlying data generation process. If you have a look at R^2
+(vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m4. Again,
+this shows how model fit and the significance of parameters/effects are
+not necessarily related.</p>
+<p>When you see a significant parameter/effect it is just telling you
+that the slope is significantly different from zero, it’s not telling
+you how good the model fits (predicts) the actual data and the
+underlying data generation process. If you have a look at R<sup>2</sup>
 you will see it’s favouring m4 which is why we shouldn’t pay it much
 attention as a measure of model fit! This is one of the many occasion
-when R^2 makes no sense as a measure of model fit. We can see that
-prediction will be better in m3 while not so good in m4 because the
-model is trying to predict a curvlinear relationship with a linear
-regression line!</p>
+when R<sup>2</sup> makes no sense as a measure of model fit [for
+details, see this] (<a
+href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf"
+class="uri">https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf</a>).
+We can see in the plot that prediction will be better in m3 than in m4
+because the m4 is trying to predict a curvlinear relationship with a
+linear regression line!</p>
 </div>
 
 
