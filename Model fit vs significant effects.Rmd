@@ -13,7 +13,7 @@ output:
 
 Here I discuss the difference between model comparison (how well models fit/predicts the data) and significant parameters or "effects" in your model. As the analysis of our in-class experiment showed, it is possible for a model to have significant "effects" but (relatively) poor fit. It's also possible for your model to have (relatively) good fit but no significant parameters/effects. This might seem like crazy talk but it is nonetheless true. Below we will simulate some data and try and develop our understanding of what it means to have a significant effect and what it means for your model to fit the data. We will show how the intuition that a model with significant effects will necessarily fit the data better than a model with no significant effects is not necessarily true. The focus on model comparison (i.e., fit of different models to the data) or significant effects (whether model parameters/slopes are different from 0) reflects a differences in whether researcher are interested in null hypothesis significance testing (i.e., knowing whether a slope is significantly different from 0) or whether they are interested in comparing different plausible models of the data generating process (i.e., how well the model predits the current and future data).   
 
-If you want to run the code and have a play around with this yourself you'll need to [installed R and RStudio](https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt).
+If you want to run the code and have a play around with this yourself you'll need to [install R and RStudio](https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt).
 
 ***
 <br>
@@ -170,7 +170,7 @@ ggplot(df2, aes(x1, y2)) +
   scale_color_manual(name = "Line",values = c("red", "blue"))+
   ylim(-20, 20)
 ```
-You can see that the residuals, or the distance between each data point and the regression line (i.e., the grey/black lines), are much greater for our second model (m2). The mean of the square of these residuals or the mean squared error (MSE) forms part of something called the likelihood which can thought of as the likelihood of observing the data given the model.   
+You can see that the residuals, or the distance between each data point and the regression line (i.e., the grey/black lines), are much greater for our second model (m2). The sum of squared residuals is equal to -2 * the log-likelihood. The likelihood can thought of as the likelihood of observing the data given the model. We use the log-likelihood for mathematical reasons.  
 
 ```{r, attr.output='style="max-height: 500px;"'}
 resm1<-m1$residuals
@@ -189,7 +189,7 @@ print(sprintf("model 2, log likelihood = %s", llm2))
 
 ```
 
-The AIC and BIC are based on the log likelihood (ll), correcting or penalising to different degrees for the number of parameters (k) included in the model.  
+The AIC and BIC are based on the log-likelihood (ll), correcting or penalising to different degrees for the number of parameters (k) included in the model.  
 
 ```{r, attr.output='style="max-height: 500px;"'}
 km1<-length(m1$coefficients)
@@ -211,7 +211,7 @@ print(sprintf("model 1, AIC = %s; BIC = %s", AICm1, BICm1))
 print(sprintf("model 2, AIC = %s; BIC = %s", AICm2, BICm2))
 ```
 
-So we can see how the residuals go into our indices of model fit. Even though the models have equivalent significant effects one of the models (m1) is a better fit of the data.
+So we can see how the residuals relate to our indices of model fit. Even though the models have equivalent significant effects, one of the models (m1) is a better fit of the data.
 
 # model with no significant "effects" but good fit
 We can look at other scenarios comparing model fit and significance. Let's look at a model with no significant effects/parameters but good fit.
@@ -309,4 +309,4 @@ compare_performance(m3,m4)
 ```
 Here we see that the model that had non-significant parameters/effects (m3) has relatively better fit than the model that had significant parameters/effects (m4). That is, both m3's AIC 286.4 (vs. 448) and BIC 296.8 (vs. 458.4) are lower than those of m4. Again, this shows how model fit and the significance of parameters/effects are not necessarily related.
 
-When you see a significant parameter/effect it is just telling you that the slope is significantly different from zero, it's not telling you how good the model fits (predicts) the actual data and the underlying data generation process. If you have a look at R^2^ you will see it's favouring m4 which is why we shouldn't pay it much attention as a measure of model fit! This is one of the many occasion when R^2^ makes no sense as a measure of model fit [for details, see this] (https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf). We can see in the plot that prediction will be better in m3 than in m4 because the m4 is trying to predict a curvlinear relationship with a linear regression line!    
+When you see a significant parameter/effect it is just telling you that the slope is significantly different from zero, it's not telling you how good the model fits (predicts) the actual data and the underlying data generation process. If you have a look at R^2^ you will see it's favouring m4 which is why we shouldn't pay it much attention as a measure of model fit! This is one of the many occasion when R^2^ makes no sense as a measure of model fit [for details, see this](https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf). We can see in the plot that prediction will be better for m3 than m4 because m4 is trying to predict a curvilinear relationship (i.e., function) with a linear regression line!    
