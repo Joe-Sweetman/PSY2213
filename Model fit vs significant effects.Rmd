@@ -179,8 +179,10 @@ nm1<-nrow(m1$model)
 resm2<-m2$residuals
 nm2<-nrow(m2$model)
 
-llm1<- 0.5 * (nm1 * (log(2 * pi) +1 - log(nm1) + log(sum(resm1^2))))
-llm2<- 0.5 * (nm2 * (log(2 * pi) +1 - log(nm2) + log(sum(resm2^2))))
+w<-rep(1,n) #not applicable
+
+llm1<-0.5 * (sum(log(w)) - nm1 * (log(2 * pi) + 1 - log(nm1) + log(sum(w * resm1^2))))
+llm2<-0.5 * (sum(log(w)) - nm2 * (log(2 * pi) + 1 - log(nm2) + log(sum(w * resm2^2))))
 
 print(sprintf("model 1, log likelihood = %s", llm1))
 print(sprintf("model 2, log likelihood = %s", llm2))
@@ -300,7 +302,7 @@ Oh no, there a lot of gap between the model and the true function that generated
 <br> 
 
 # information criterion (AIC and BIC) 
-Let's look at the more traditional information criterion indices.
+Let's look at the AIC and BIC indices of model fit.
 ```{r, attr.output='style="max-height: 500px;"'}
 # we can compare the AIC and BIC for model fit
 compare_performance(m3,m4)
