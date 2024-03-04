@@ -11,7 +11,7 @@ output:
     theme: cosmo
 ---
 
-Here I discuss the difference between model comparison (how well models fit/predicts the data) and significant parameters or "effects" in your model. As the analysis of our in-class experiment showed, it is possible for a model to have significant "effects" but (relatively) poor fit. It's also possible for your model to have (relatively) good fit but no significant parameters/effects. This might seem like crazy talk but it is nonetheless true. Below we will simulate some data and try and develop our understanding of what it means to have a significant effect and what it means for your model to fit the data. We will show how the intuition that a model with significant effects will necessarily fit the data better than a model with no significant effects is not necessarily true. The focus on model comparison (i.e., fit of different models to the data) or significant effects (whether model parameters/slopes are different from 0) reflects a differences in whether researcher are interested in null hypothesis significance testing (i.e., knowing whether a slope is significantly different from 0) or whether they are interested in comparing different plausible models of the data generating process (i.e., how well the model predits the current and future data).   
+Here I discuss the difference between model comparison (how well models fit/predicts the data) and significant parameters or "effects" in your model. As the analysis of our in-class experiment showed, it is possible for a model to have significant "effects" but (relatively) poor fit. It's also possible for your model to have (relatively) good fit but no significant parameters/effects. This might seem like crazy talk but it is nonetheless true. Below we will simulate some data and try and develop our understanding of what it means to have a significant effect and what it means for your model to fit the data. We will show how the intuition that a model with significant effects will necessarily fit the data better than a model with no significant effects is not necessarily true. The focus on model comparison (i.e., fit of different models to the data) or significant effects (whether model parameters/slopes are different from 0) reflects a differences in whether researcher are interested in null hypothesis significance testing (i.e., knowing whether a slope is significantly different from 0) or whether they are interested in comparing different plausible models of the data generating process (i.e., how well the model predicts the current and future data).   
 
 If you want to run the code and have a play around with this yourself you'll need to [install R and RStudio](https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt).
 
@@ -40,7 +40,7 @@ library(broom)
 
 <br> 
 
-# Finding out what's the best theory is?
+# Finding out what the best theory is?
 The practical is trying to answer the question
 
 >Is the moral mind/brain best described by moral grammar or dual process models?”
