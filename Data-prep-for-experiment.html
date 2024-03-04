@@ -12,7 +12,7 @@
 <meta name="author" content="Joe Sweetman" />
 
 
-<title>Data prep for experiment (PSY2213; 2023)</title>
+<title>Data prep for experiment (PSY2213)</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -351,20 +351,20 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Data prep for experiment (PSY2213;
-2023)</h1>
+<h1 class="title toc-ignore">Data prep for experiment (PSY2213)</h1>
 <h4 class="author">Joe Sweetman</h4>
 
 </div>
 
 
-<p>This covers how to prepare your data for analysis (see “Analysis of
-in-class experiment” for details of analysis). There are loads of great
-<a href="https://glennwilliams.me/r4psych/">introductions for R
-available for free online</a> to help build a deeper understanding,
-including how to install R and RStudio if you are having problems.</p>
-<p>Here I provide the R code for combining and preparing your data from
-gorilla.</p>
+<p>This covers how to prepare your data for analysis <a
+href="https://joe-sweetman.github.io/PSY2213/Analysis-of-in-class-experiment.html">see
+“Analysis of in-class experiment” for details of analysis</a> Here I
+provide the R code for combining and preparing your data after exporting
+your data in .csv format. The data should be in “long” form which is the
+default for gorilla. There is also <a
+href="https://support.gorilla.sc/support/publishing-and-open-science/data-analysis#filteryourdatausingexcel">support
+for data prep in excel on the gorilla website</a></p>
 <div id="packages" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> packages</h1>
 <p>First, we will need to install and/or load then packages we need.</p>
@@ -386,7 +386,7 @@ directory</h1>
 <p>Setting a working directory can be helpful as it means you can keep
 all of your files and outputs in this folder making it easier to access
 them and meaning you don’t have to type so much.</p>
-<pre class="r"><code>setwd(&quot;~/Dropbox/Documents/My data/Moral sense task/practical&quot;)</code></pre>
+<pre class="r"><code>setwd(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/Groups/2024&quot;)</code></pre>
 <p>Your working directory address will be different depending on your
 folders and OS (this is for a Mac, Windows machines are different if you
 look at a folder/file and “get info” it will tell you the directory.
@@ -407,37 +407,37 @@ experiment. In this case we are interested in the main stimuli files
 conditions, Q=Yes vs. P=Yes). We read in the data from its directory
 address.</p>
 <pre class="r"><code>#Read in the data and rename
-dataQyes &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_121600-v4_task-zith.csv&quot;, header=TRUE, na.strings=&quot;&quot;)
+dataQyes &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/Groups/2024/group 1/data_exp_165515-v2_task-etwl.csv&quot;, header=TRUE, na.strings=&quot;&quot;)
 
-dataPyes &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_121600-v4_task-kbcz.csv&quot;, header=TRUE, na.strings=&quot;&quot;)
+dataPyes &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/Groups/2024/group 1/data_exp_165515-v2_task-lj2u.csv&quot;, header=TRUE, na.strings=&quot;&quot;)
 
-dataDemo &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/data_exp_114793-v1_questionnaire-vivn.csv&quot;, header=TRUE, na.strings=&quot;&quot;)</code></pre>
+dataDemo &lt;- read.csv(&quot;~/Dropbox/Documents/My data/Moral sense task/practical/Groups/2024/group 1/data_exp_165515-v2_questionnaire-vivn.csv&quot;, header=TRUE, na.strings=&quot;&quot;)</code></pre>
 <p>Now we have the two counterbalanced conditions we can combine the
 data files.</p>
 <pre class="r"><code># combine data
 df &lt;- rbind(dataQyes, dataPyes)
 head(df)</code></pre>
-<pre style="max-height: 500px;"><code>##   Event.Index UTC.Timestamp            UTC.Date Local.Timestamp Local.Timezone
-## 1           1  1.676994e+12 21/02/2023 15:47:25    1.676994e+12             -5
-## 2           2  1.676994e+12 21/02/2023 15:47:28    1.676994e+12             -5
-## 3           3  1.676994e+12 21/02/2023 15:47:30    1.676994e+12             -5
-## 4           4  1.676994e+12 21/02/2023 15:47:30    1.676994e+12             -5
-## 5           5  1.676994e+12 21/02/2023 15:47:34    1.676994e+12             -5
-## 6           6  1.676994e+12 21/02/2023 15:47:35    1.676994e+12             -5
-##            Local.Date Experiment.ID Experiment.Version Tree.Node.Key Repeat.Key
-## 1 21/02/2023 10:47:24        121600                  4     task-zith         NA
-## 2 21/02/2023 10:47:28        121600                  4     task-zith         NA
-## 3 21/02/2023 10:47:30        121600                  4     task-zith         NA
-## 4 21/02/2023 10:47:30        121600                  4     task-zith         NA
-## 5 21/02/2023 10:47:34        121600                  4     task-zith         NA
-## 6 21/02/2023 10:47:34        121600                  4     task-zith         NA
+<pre style="max-height: 500px;"><code>##   Event.Index UTC.Timestamp   UTC.Date.and.Time Local.Timestamp Local.Timezone
+## 1           1  1.708447e+12 20/02/2024 16:43:13    1.708447e+12              0
+## 2           2  1.708447e+12 20/02/2024 16:43:18    1.708447e+12              0
+## 3           3  1.708447e+12 20/02/2024 16:43:19    1.708447e+12              0
+## 4           4  1.708447e+12 20/02/2024 16:43:19    1.708447e+12              0
+## 5           5  1.708447e+12 20/02/2024 16:43:24    1.708447e+12              0
+## 6           6  1.708447e+12 20/02/2024 16:43:26    1.708447e+12              0
+##   Local.Date.and.Time Experiment.ID Experiment.Version Tree.Node.Key Repeat.Key
+## 1 20/02/2024 16:43:13        165515                  2     task-etwl         NA
+## 2 20/02/2024 16:43:18        165515                  2     task-etwl         NA
+## 3 20/02/2024 16:43:19        165515                  2     task-etwl         NA
+## 4 20/02/2024 16:43:19        165515                  2     task-etwl         NA
+## 5 20/02/2024 16:43:24        165515                  2     task-etwl         NA
+## 6 20/02/2024 16:43:25        165515                  2     task-etwl         NA
 ##   Schedule.ID Participant.Public.ID Participant.Private.ID
-## 1    27417249                 BLIND                8147566
-## 2    27417249                 BLIND                8147566
-## 3    27417249                 BLIND                8147566
-## 4    27417249                 BLIND                8147566
-## 5    27417249                 BLIND                8147566
-## 6    27417249                 BLIND                8147566
+## 1    35357038                 BLIND               10442392
+## 2    35357038                 BLIND               10442392
+## 3    35357038                 BLIND               10442392
+## 4    35357038                 BLIND               10442392
+## 5    35357038                 BLIND               10442392
+## 6    35357038                 BLIND               10442392
 ##   Participant.Starting.Group Participant.Status Participant.Completion.Code
 ## 1                         NA           complete                          NA
 ## 2                         NA           complete                          NA
@@ -453,61 +453,61 @@ head(df)</code></pre>
 ## 5                              NA                computer  Desktop or Laptop
 ## 6                              NA                computer  Desktop or Laptop
 ##   Participant.OS Participant.Browser Participant.Monitor.Size
-## 1 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 2 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 3 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 4 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 5 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 6 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-##   Participant.Viewport.Size Checkpoint          Task.Name Task.Version
-## 1                  1440x732         NA Main Stimuli Q_YES            6
-## 2                  1440x732         NA Main Stimuli Q_YES            6
-## 3                  1440x732         NA Main Stimuli Q_YES            6
-## 4                  1440x732         NA Main Stimuli Q_YES            6
-## 5                  1440x732         NA Main Stimuli Q_YES            6
-## 6                  1440x732         NA Main Stimuli Q_YES            6
-##   randomiser.e7d8  Spreadsheet Spreadsheet.Name Spreadsheet.Row Trial.Number
-## 1           Q_YES Spreadsheet1             &lt;NA&gt;              NA   BEGIN TASK
-## 2           Q_YES Spreadsheet1     Spreadsheet1               1            1
-## 3           Q_YES Spreadsheet1     Spreadsheet1               1            1
-## 4           Q_YES Spreadsheet1     Spreadsheet1             126            1
-## 5           Q_YES Spreadsheet1     Spreadsheet1             126            1
-## 6           Q_YES Spreadsheet1     Spreadsheet1             126            1
-##   Screen.Number Screen.Name       Zone.Name         Zone.Type
-## 1            NA        &lt;NA&gt;            &lt;NA&gt;              &lt;NA&gt;
-## 2             1    Screen 1 advancementZone continue_keyboard
-## 3             2    Screen 2 advancementZone continue_keyboard
-## 4             1    Screen 1        fixation          fixation
-## 5             2    Screen 2         content     content_video
-## 6             3    Screen 3 advancementZone response_keyboard
-##        Reaction.Time Reaction.Onset Response.Type Response Attempt Correct
-## 1               &lt;NA&gt;             NA            NA     &lt;NA&gt;      NA       0
-## 2  3344.899999976158             NA            NA     &lt;NA&gt;      NA       0
-## 3 1742.8999999761581             NA            NA     &lt;NA&gt;      NA       0
-## 4            450.491             NA            NA     &lt;NA&gt;      NA       0
-## 5  4068.399999976158             NA            NA     &lt;NA&gt;      NA       0
-## 6  441.7999999523163             NA            NA       NO       1       0
-##   Incorrect Dishonest X.Coordinate Y.Coordinate Timed.Out randomise_blocks
-## 1         1         0           NA           NA        NA               NA
-## 2         1         0           NA           NA        NA               NA
-## 3         1         0           NA           NA        NA               NA
-## 4         1         0           NA           NA        NA               NA
-## 5         1         0           NA           NA        NA               NA
-## 6         1         0           NA           NA        NA               NA
+## 1 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 2 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 3 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 4 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 5 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 6 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+##   Participant.Viewport.Size Checkpoint Room.ID Room.Order          Task.Name
+## 1                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 2                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 3                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 4                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 5                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 6                  1440x848         NA      NA         NA Main Stimuli Q_YES
+##   Task.Version randomiser.e7d8  Spreadsheet Spreadsheet.Name Spreadsheet.Row
+## 1            2           Q_YES Spreadsheet1             &lt;NA&gt;              NA
+## 2            2           Q_YES Spreadsheet1     Spreadsheet1               1
+## 3            2           Q_YES Spreadsheet1     Spreadsheet1               1
+## 4            2           Q_YES Spreadsheet1     Spreadsheet1             126
+## 5            2           Q_YES Spreadsheet1     Spreadsheet1             126
+## 6            2           Q_YES Spreadsheet1     Spreadsheet1             126
+##   Trial.Number Screen.Number Screen.Name       Zone.Name         Zone.Type
+## 1   BEGIN TASK            NA        &lt;NA&gt;            &lt;NA&gt;              &lt;NA&gt;
+## 2            1             1    Screen 1 advancementZone continue_keyboard
+## 3            1             2    Screen 2 advancementZone continue_keyboard
+## 4            1             1    Screen 1        fixation          fixation
+## 5            1             2    Screen 2         content     content_video
+## 6            1             3    Screen 3 advancementZone response_keyboard
+##   Reaction.Time Reaction.Onset Response.Type Response Attempt Correct Incorrect
+## 1          &lt;NA&gt;             NA            NA     &lt;NA&gt;      NA       0         1
+## 2          4867             NA            NA     &lt;NA&gt;      NA       0         1
+## 3           965             NA            NA     &lt;NA&gt;      NA       0         1
+## 4           450             NA            NA     &lt;NA&gt;      NA       0         1
+## 5          4512             NA            NA     &lt;NA&gt;      NA       0         1
+## 6          1609             NA            NA       NO       1       0         1
+##   Dishonest X.Coordinate Y.Coordinate Timed.Out randomise_blocks
+## 1         0           NA           NA        NA               NA
+## 2         0           NA           NA        NA               NA
+## 3         0           NA           NA        NA               NA
+## 4         0           NA           NA        NA               NA
+## 5         0           NA           NA        NA               NA
+## 6         0           NA           NA        NA               NA
 ##   randomise_trials      display ANSWER
-## 1               NA         &lt;NA&gt;   &lt;NA&gt;
-## 2               NA Instructions   &lt;NA&gt;
-## 3               NA Instructions   &lt;NA&gt;
-## 4                1        Trial    YES
-## 5                1        Trial    YES
-## 6                1        Trial    YES
-##                                                                             TVideo
-## 1                                                                             &lt;NA&gt;
-## 2                                                                             &lt;NA&gt;
-## 3                                                                             &lt;NA&gt;
-## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
+## 1               NA         &lt;NA&gt;     NA
+## 2               NA Instructions     NA
+## 3               NA Instructions     NA
+## 4                1        Trial     NA
+## 5                1        Trial     NA
+## 6                1        Trial     NA
+##                                                                                       TVideo
+## 1                                                                                       &lt;NA&gt;
+## 2                                                                                       &lt;NA&gt;
+## 3                                                                                       &lt;NA&gt;
+## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
 ##                                                                                       ResponceTitle
 ## 1                                                                                              &lt;NA&gt;
 ## 2                                                                                              &lt;NA&gt;
@@ -515,13 +515,13 @@ head(df)</code></pre>
 ## 4 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
 ## 5 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
 ## 6 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
-##                                                                        Dilemma
-## 1                                                                         &lt;NA&gt;
-## 2                                                                         &lt;NA&gt;
-## 3                                                                         &lt;NA&gt;
-## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
+##                                                                       Dilemma
+## 1                                                                        &lt;NA&gt;
+## 2                                                                        &lt;NA&gt;
+## 3                                                                        &lt;NA&gt;
+## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
 ##   Personal DPv1.0.Permissible Personal.force Intention DPv2.0.Permissible
 ## 1     &lt;NA&gt;               &lt;NA&gt;           &lt;NA&gt;      &lt;NA&gt;               &lt;NA&gt;
 ## 2     &lt;NA&gt;               &lt;NA&gt;           &lt;NA&gt;      &lt;NA&gt;               &lt;NA&gt;
@@ -529,27 +529,20 @@ head(df)</code></pre>
 ## 4       No                Yes             No       Yes                Yes
 ## 5       No                Yes             No       Yes                Yes
 ## 6       No                Yes             No       Yes                Yes
-##   Action.aversion Outcome.aversion DPv3.0.Permissible Prohibited.act
-## 1            &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;           &lt;NA&gt;
-## 2            &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;           &lt;NA&gt;
-## 3            &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;           &lt;NA&gt;
-## 4              No              Yes                 No             No
-## 5              No              Yes                 No             No
-## 6              No              Yes                 No             No
-##   Not.intended Good....bad.intended Good...bad No.alternative MG.Permissible
-## 1         &lt;NA&gt;                 &lt;NA&gt;       &lt;NA&gt;           &lt;NA&gt;           &lt;NA&gt;
-## 2         &lt;NA&gt;                 &lt;NA&gt;       &lt;NA&gt;           &lt;NA&gt;           &lt;NA&gt;
-## 3         &lt;NA&gt;                 &lt;NA&gt;       &lt;NA&gt;           &lt;NA&gt;           &lt;NA&gt;
-## 4           No                   No         No             No            Yes
-## 5           No                   No         No             No            Yes
-## 6           No                   No         No             No            Yes
-##                                                                           TVideo_1
-## 1                                                                             &lt;NA&gt;
-## 2                                                                             &lt;NA&gt;
-## 3                                                                             &lt;NA&gt;
-## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4</code></pre>
+##   Prohibited.act  PDE MG.Permissible
+## 1           &lt;NA&gt; &lt;NA&gt;           &lt;NA&gt;
+## 2           &lt;NA&gt; &lt;NA&gt;           &lt;NA&gt;
+## 3           &lt;NA&gt; &lt;NA&gt;           &lt;NA&gt;
+## 4             No   No            Yes
+## 5             No   No            Yes
+## 6             No   No            Yes
+##                                                                                     TVideo_1
+## 1                                                                                       &lt;NA&gt;
+## 2                                                                                       &lt;NA&gt;
+## 3                                                                                       &lt;NA&gt;
+## 4 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 5 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 6 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4</code></pre>
 <p>You will see that gorilla gives you a lot of stuff you don’t need. We
 can select only the rows from the dataframe that have
 responses/judgments.</p>
@@ -558,27 +551,27 @@ df &lt;- df %&gt;%
   filter(Zone.Type == &quot;response_keyboard&quot;)
 
 head(df)</code></pre>
-<pre style="max-height: 500px;"><code>##   Event.Index UTC.Timestamp            UTC.Date Local.Timestamp Local.Timezone
-## 1           6  1.676994e+12 21/02/2023 15:47:35    1.676994e+12             -5
-## 2           9  1.676994e+12 21/02/2023 15:47:39    1.676994e+12             -5
-## 3          12  1.676994e+12 21/02/2023 15:47:44    1.676994e+12             -5
-## 4          15  1.676994e+12 21/02/2023 15:47:50    1.676994e+12             -5
-## 5          18  1.676994e+12 21/02/2023 15:47:54    1.676994e+12             -5
-## 6          21  1.676994e+12 21/02/2023 15:47:59    1.676994e+12             -5
-##            Local.Date Experiment.ID Experiment.Version Tree.Node.Key Repeat.Key
-## 1 21/02/2023 10:47:34        121600                  4     task-zith         NA
-## 2 21/02/2023 10:47:39        121600                  4     task-zith         NA
-## 3 21/02/2023 10:47:44        121600                  4     task-zith         NA
-## 4 21/02/2023 10:47:50        121600                  4     task-zith         NA
-## 5 21/02/2023 10:47:54        121600                  4     task-zith         NA
-## 6 21/02/2023 10:47:59        121600                  4     task-zith         NA
+<pre style="max-height: 500px;"><code>##   Event.Index UTC.Timestamp   UTC.Date.and.Time Local.Timestamp Local.Timezone
+## 1           6  1.708447e+12 20/02/2024 16:43:26    1.708447e+12              0
+## 2           9  1.708447e+12 20/02/2024 16:43:34    1.708447e+12              0
+## 3          12  1.708447e+12 20/02/2024 16:43:39    1.708447e+12              0
+## 4          15  1.708447e+12 20/02/2024 16:43:45    1.708447e+12              0
+## 5          18  1.708447e+12 20/02/2024 16:43:50    1.708447e+12              0
+## 6          21  1.708447e+12 20/02/2024 16:43:55    1.708447e+12              0
+##   Local.Date.and.Time Experiment.ID Experiment.Version Tree.Node.Key Repeat.Key
+## 1 20/02/2024 16:43:25        165515                  2     task-etwl         NA
+## 2 20/02/2024 16:43:34        165515                  2     task-etwl         NA
+## 3 20/02/2024 16:43:39        165515                  2     task-etwl         NA
+## 4 20/02/2024 16:43:45        165515                  2     task-etwl         NA
+## 5 20/02/2024 16:43:50        165515                  2     task-etwl         NA
+## 6 20/02/2024 16:43:55        165515                  2     task-etwl         NA
 ##   Schedule.ID Participant.Public.ID Participant.Private.ID
-## 1    27417249                 BLIND                8147566
-## 2    27417249                 BLIND                8147566
-## 3    27417249                 BLIND                8147566
-## 4    27417249                 BLIND                8147566
-## 5    27417249                 BLIND                8147566
-## 6    27417249                 BLIND                8147566
+## 1    35357038                 BLIND               10442392
+## 2    35357038                 BLIND               10442392
+## 3    35357038                 BLIND               10442392
+## 4    35357038                 BLIND               10442392
+## 5    35357038                 BLIND               10442392
+## 6    35357038                 BLIND               10442392
 ##   Participant.Starting.Group Participant.Status Participant.Completion.Code
 ## 1                         NA           complete                          NA
 ## 2                         NA           complete                          NA
@@ -594,210 +587,171 @@ head(df)</code></pre>
 ## 5                              NA                computer  Desktop or Laptop
 ## 6                              NA                computer  Desktop or Laptop
 ##   Participant.OS Participant.Browser Participant.Monitor.Size
-## 1 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 2 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 3 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 4 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 5 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-## 6 Mac OS 10.15.7    Chrome 109.0.0.0                 1440x900
-##   Participant.Viewport.Size Checkpoint          Task.Name Task.Version
-## 1                  1440x732         NA Main Stimuli Q_YES            6
-## 2                  1440x732         NA Main Stimuli Q_YES            6
-## 3                  1440x732         NA Main Stimuli Q_YES            6
-## 4                  1440x732         NA Main Stimuli Q_YES            6
-## 5                  1440x732         NA Main Stimuli Q_YES            6
-## 6                  1440x732         NA Main Stimuli Q_YES            6
-##   randomiser.e7d8  Spreadsheet Spreadsheet.Name Spreadsheet.Row Trial.Number
-## 1           Q_YES Spreadsheet1     Spreadsheet1             126            1
-## 2           Q_YES Spreadsheet1     Spreadsheet1             116            2
-## 3           Q_YES Spreadsheet1     Spreadsheet1              56            3
-## 4           Q_YES Spreadsheet1     Spreadsheet1              34            4
-## 5           Q_YES Spreadsheet1     Spreadsheet1              91            5
-## 6           Q_YES Spreadsheet1     Spreadsheet1              70            6
-##   Screen.Number Screen.Name       Zone.Name         Zone.Type
-## 1             3    Screen 3 advancementZone response_keyboard
-## 2             3    Screen 3 advancementZone response_keyboard
-## 3             3    Screen 3 advancementZone response_keyboard
-## 4             3    Screen 3 advancementZone response_keyboard
-## 5             3    Screen 3 advancementZone response_keyboard
-## 6             3    Screen 3 advancementZone response_keyboard
-##        Reaction.Time Reaction.Onset Response.Type Response Attempt Correct
-## 1  441.7999999523163             NA            NA       NO       1       0
-## 2 296.89999997615814             NA            NA       NO       1       1
-## 3              286.5             NA            NA      YES       1       1
-## 4  893.2000000476837             NA            NA      YES       1       0
-## 5 268.39999997615814             NA            NA      YES       1       1
-## 6 284.59999990463257             NA            NA      YES       1       1
+## 1 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 2 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 3 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 4 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 5 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+## 6 Mac OS 10.15.7       Safari 17.3.1                 1440x900
+##   Participant.Viewport.Size Checkpoint Room.ID Room.Order          Task.Name
+## 1                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 2                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 3                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 4                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 5                  1440x848         NA      NA         NA Main Stimuli Q_YES
+## 6                  1440x848         NA      NA         NA Main Stimuli Q_YES
+##   Task.Version randomiser.e7d8  Spreadsheet Spreadsheet.Name Spreadsheet.Row
+## 1            2           Q_YES Spreadsheet1     Spreadsheet1             126
+## 2            2           Q_YES Spreadsheet1     Spreadsheet1               6
+## 3            2           Q_YES Spreadsheet1     Spreadsheet1             122
+## 4            2           Q_YES Spreadsheet1     Spreadsheet1              83
+## 5            2           Q_YES Spreadsheet1     Spreadsheet1              62
+## 6            2           Q_YES Spreadsheet1     Spreadsheet1              56
+##   Trial.Number Screen.Number Screen.Name       Zone.Name         Zone.Type
+## 1            1             3    Screen 3 advancementZone response_keyboard
+## 2            2             3    Screen 3 advancementZone response_keyboard
+## 3            3             3    Screen 3 advancementZone response_keyboard
+## 4            4             3    Screen 3 advancementZone response_keyboard
+## 5            5             3    Screen 3 advancementZone response_keyboard
+## 6            6             3    Screen 3 advancementZone response_keyboard
+##       Reaction.Time Reaction.Onset Response.Type Response Attempt Correct
+## 1              1609             NA            NA       NO       1       0
+## 2              3482             NA            NA      YES       1       0
+## 3 654.9999999999964             NA            NA      YES       1       0
+## 4 685.9999999999964             NA            NA      YES       1       0
+## 5               531             NA            NA      YES       1       0
+## 6               519             NA            NA      YES       1       0
 ##   Incorrect Dishonest X.Coordinate Y.Coordinate Timed.Out randomise_blocks
 ## 1         1         0           NA           NA        NA               NA
-## 2         0         0           NA           NA        NA               NA
-## 3         0         0           NA           NA        NA               NA
+## 2         1         0           NA           NA        NA               NA
+## 3         1         0           NA           NA        NA               NA
 ## 4         1         0           NA           NA        NA               NA
-## 5         0         0           NA           NA        NA               NA
-## 6         0         0           NA           NA        NA               NA
+## 5         1         0           NA           NA        NA               NA
+## 6         1         0           NA           NA        NA               NA
 ##   randomise_trials display ANSWER
-## 1                1   Trial    YES
-## 2                1   Trial     NO
-## 3                1   Trial    YES
-## 4                1   Trial     NO
-## 5                1   Trial    YES
-## 6                1   Trial    YES
-##                                                                             TVideo
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 2                                              Footbridge_Equipment_Save_Truck.mp4
-## 3                                                 InexpensiveRescue_Trolley_3b.mp4
-## 4                                                   BetterAlternative_Crane_V4.mp4
-## 5                                                  ExpensiveCollapse_Crane_12a.mp4
-## 6                                                   InexpensiveRescue_Truck_3b.mp4
-##                                                                                                    ResponceTitle
-## 1              &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
-## 2                 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to throw the man?
-## 3              &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to throw the switch?
-## 4              &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
-## 5              &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
-## 6 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to shout “Watch out! Turn left” ?
-##                                                                        Dilemma
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 2                                              Footbridge_Equipment_Save_Truck
-## 3                                                            InexpensiveRescue
-## 4                                                      better alternativeCrane
-## 5                                                       ExpensiveCollapseCrane
-## 6                                                       InexpensiveRescueTruck
+## 1                1   Trial     NA
+## 2                1   Trial     NA
+## 3                1   Trial     NA
+## 4                1   Trial     NA
+## 5                1   Trial     NA
+## 6                1   Trial     NA
+##                                                                                       TVideo
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 2                                                 IntentionalHomicide_Trolley_newtimings.mp4
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane_newtimings.mp4
+## 4                                                       ExpensiveRescue_Crane_newtimings.mp4
+## 5                                                       DropEquipment_Trolley_newtimings.mp4
+## 6                                                   InexpensiveRescue_Trolley_newtimings.mp4
+##                                                                                       ResponceTitle
+## 1 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
+## 2 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to throw the switch?
+## 3 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
+## 4 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to press the button?
+## 5 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to throw the switch?
+## 6 &lt;h3&gt; &lt;p style=&quot;text-align: center;&quot;&gt; Is it morally permissible for the agent to throw the switch?
+##                                                                       Dilemma
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 2                                                        intentional homicide
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane
+## 4                                                        ExpensiveRescueCrane
+## 5                                                               DropEquipment
+## 6                                                           InexpensiveRescue
 ##   Personal DPv1.0.Permissible Personal.force Intention DPv2.0.Permissible
 ## 1       No                Yes             No       Yes                Yes
-## 2      Yes                 No            Yes       Yes                 No
-## 3       No                Yes             No        No                Yes
+## 2       No                Yes             No       Yes                Yes
+## 3       No                Yes             No       Yes                Yes
 ## 4       No                Yes             No        No                Yes
-## 5       No                Yes             No        No                Yes
+## 5       No                Yes             No       Yes                Yes
 ## 6       No                Yes             No        No                Yes
-##   Action.aversion Outcome.aversion DPv3.0.Permissible Prohibited.act
-## 1              No              Yes                 No             No
-## 2             Yes              Yes                 No            Yes
-## 3              No               No                Yes            Yes
-## 4              No               No                Yes            Yes
-## 5              No               No                Yes             No
-## 6              No               No                Yes            Yes
-##   Not.intended Good....bad.intended Good...bad No.alternative MG.Permissible
-## 1           No                   No         No             No            Yes
-## 2           No                   No         No            Yes             No
-## 3          Yes                  Yes        Yes            Yes            Yes
-## 4          Yes                  Yes        Yes             No             No
-## 5           No                  Yes        Yes            Yes            Yes
-## 6          Yes                  Yes        Yes            Yes            Yes
-##                                                                           TVideo_1
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane.mp4
-## 2                                              Footbridge_Equipment_Save_Truck.mp4
-## 3                                                 InexpensiveRescue_Trolley_3b.mp4
-## 4                                                   BetterAlternative_Crane_V4.mp4
-## 5                                                  ExpensiveCollapse_Crane_12a.mp4
-## 6                                                   InexpensiveRescue_Truck_3b.mp4</code></pre>
+##   Prohibited.act PDE MG.Permissible
+## 1             No  No            Yes
+## 2            Yes  No             No
+## 3             No  No            Yes
+## 4             No Yes            Yes
+## 5             No  No            Yes
+## 6             No Yes            Yes
+##                                                                                     TVideo_1
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine_newtimings.mp4
+## 2                                                 IntentionalHomicide_Trolley_newtimings.mp4
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane_newtimings.mp4
+## 4                                                       ExpensiveRescue_Crane_newtimings.mp4
+## 5                                                       DropEquipment_Trolley_newtimings.mp4
+## 6                                                   InexpensiveRescue_Trolley_newtimings.mp4</code></pre>
 <p>This looks a lot nicer. Next we can select only the variables that we
 need for analysis.</p>
 <pre class="r"><code># select data we need 
 df &lt;- df %&gt;% 
   select(Participant.Private.ID, Task.Name, Trial.Number, Dilemma, Personal, DPv1.0.Permissible, 
-         Personal.force, Intention, DPv2.0.Permissible, Action.aversion, Outcome.aversion, DPv3.0.Permissible,
-         Prohibited.act, Not.intended, Good....bad.intended, Good...bad, No.alternative, MG.Permissible, Reaction.Time, Response)
+         Personal.force, Intention, DPv2.0.Permissible, Prohibited.act, PDE, MG.Permissible, Reaction.Time, Response)
 
 head(df)</code></pre>
 <pre style="max-height: 500px;"><code>##   Participant.Private.ID          Task.Name Trial.Number
-## 1                8147566 Main Stimuli Q_YES            1
-## 2                8147566 Main Stimuli Q_YES            2
-## 3                8147566 Main Stimuli Q_YES            3
-## 4                8147566 Main Stimuli Q_YES            4
-## 5                8147566 Main Stimuli Q_YES            5
-## 6                8147566 Main Stimuli Q_YES            6
-##                                                                        Dilemma
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 2                                              Footbridge_Equipment_Save_Truck
-## 3                                                            InexpensiveRescue
-## 4                                                      better alternativeCrane
-## 5                                                       ExpensiveCollapseCrane
-## 6                                                       InexpensiveRescueTruck
+## 1               10442392 Main Stimuli Q_YES            1
+## 2               10442392 Main Stimuli Q_YES            2
+## 3               10442392 Main Stimuli Q_YES            3
+## 4               10442392 Main Stimuli Q_YES            4
+## 5               10442392 Main Stimuli Q_YES            5
+## 6               10442392 Main Stimuli Q_YES            6
+##                                                                       Dilemma
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 2                                                        intentional homicide
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane
+## 4                                                        ExpensiveRescueCrane
+## 5                                                               DropEquipment
+## 6                                                           InexpensiveRescue
 ##   Personal DPv1.0.Permissible Personal.force Intention DPv2.0.Permissible
 ## 1       No                Yes             No       Yes                Yes
-## 2      Yes                 No            Yes       Yes                 No
-## 3       No                Yes             No        No                Yes
+## 2       No                Yes             No       Yes                Yes
+## 3       No                Yes             No       Yes                Yes
 ## 4       No                Yes             No        No                Yes
-## 5       No                Yes             No        No                Yes
+## 5       No                Yes             No       Yes                Yes
 ## 6       No                Yes             No        No                Yes
-##   Action.aversion Outcome.aversion DPv3.0.Permissible Prohibited.act
-## 1              No              Yes                 No             No
-## 2             Yes              Yes                 No            Yes
-## 3              No               No                Yes            Yes
-## 4              No               No                Yes            Yes
-## 5              No               No                Yes             No
-## 6              No               No                Yes            Yes
-##   Not.intended Good....bad.intended Good...bad No.alternative MG.Permissible
-## 1           No                   No         No             No            Yes
-## 2           No                   No         No            Yes             No
-## 3          Yes                  Yes        Yes            Yes            Yes
-## 4          Yes                  Yes        Yes             No             No
-## 5           No                  Yes        Yes            Yes            Yes
-## 6          Yes                  Yes        Yes            Yes            Yes
-##        Reaction.Time Response
-## 1  441.7999999523163       NO
-## 2 296.89999997615814       NO
-## 3              286.5      YES
-## 4  893.2000000476837      YES
-## 5 268.39999997615814      YES
-## 6 284.59999990463257      YES</code></pre>
-<p>A couple of the model parameter names have gone a little weird due to
-some of the automatic uploading settings. We can rename these so they
-are more descriptive.</p>
+##   Prohibited.act PDE MG.Permissible     Reaction.Time Response
+## 1             No  No            Yes              1609       NO
+## 2            Yes  No             No              3482      YES
+## 3             No  No            Yes 654.9999999999964      YES
+## 4             No Yes            Yes 685.9999999999964      YES
+## 5             No  No            Yes               531      YES
+## 6             No Yes            Yes               519      YES</code></pre>
+<p>We can rename a couple of the variables so they are more
+descriptive.</p>
 <pre class="r"><code># rename a couple of parameters
 df &lt;- df %&gt;% 
   rename(ID = Participant.Private.ID,
-         Good_not_Bad = Good....bad.intended,
-         Good_Grt_Bad = Good...bad,
          RT = Reaction.Time,
          Permissible = Response)
 
 head(df)</code></pre>
-<pre style="max-height: 500px;"><code>##        ID          Task.Name Trial.Number
-## 1 8147566 Main Stimuli Q_YES            1
-## 2 8147566 Main Stimuli Q_YES            2
-## 3 8147566 Main Stimuli Q_YES            3
-## 4 8147566 Main Stimuli Q_YES            4
-## 5 8147566 Main Stimuli Q_YES            5
-## 6 8147566 Main Stimuli Q_YES            6
-##                                                                        Dilemma
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 2                                              Footbridge_Equipment_Save_Truck
-## 3                                                            InexpensiveRescue
-## 4                                                      better alternativeCrane
-## 5                                                       ExpensiveCollapseCrane
-## 6                                                       InexpensiveRescueTruck
+<pre style="max-height: 500px;"><code>##         ID          Task.Name Trial.Number
+## 1 10442392 Main Stimuli Q_YES            1
+## 2 10442392 Main Stimuli Q_YES            2
+## 3 10442392 Main Stimuli Q_YES            3
+## 4 10442392 Main Stimuli Q_YES            4
+## 5 10442392 Main Stimuli Q_YES            5
+## 6 10442392 Main Stimuli Q_YES            6
+##                                                                       Dilemma
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 2                                                        intentional homicide
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane
+## 4                                                        ExpensiveRescueCrane
+## 5                                                               DropEquipment
+## 6                                                           InexpensiveRescue
 ##   Personal DPv1.0.Permissible Personal.force Intention DPv2.0.Permissible
 ## 1       No                Yes             No       Yes                Yes
-## 2      Yes                 No            Yes       Yes                 No
-## 3       No                Yes             No        No                Yes
+## 2       No                Yes             No       Yes                Yes
+## 3       No                Yes             No       Yes                Yes
 ## 4       No                Yes             No        No                Yes
-## 5       No                Yes             No        No                Yes
+## 5       No                Yes             No       Yes                Yes
 ## 6       No                Yes             No        No                Yes
-##   Action.aversion Outcome.aversion DPv3.0.Permissible Prohibited.act
-## 1              No              Yes                 No             No
-## 2             Yes              Yes                 No            Yes
-## 3              No               No                Yes            Yes
-## 4              No               No                Yes            Yes
-## 5              No               No                Yes             No
-## 6              No               No                Yes            Yes
-##   Not.intended Good_not_Bad Good_Grt_Bad No.alternative MG.Permissible
-## 1           No           No           No             No            Yes
-## 2           No           No           No            Yes             No
-## 3          Yes          Yes          Yes            Yes            Yes
-## 4          Yes          Yes          Yes             No             No
-## 5           No          Yes          Yes            Yes            Yes
-## 6          Yes          Yes          Yes            Yes            Yes
-##                   RT Permissible
-## 1  441.7999999523163          NO
-## 2 296.89999997615814          NO
-## 3              286.5         YES
-## 4  893.2000000476837         YES
-## 5 268.39999997615814         YES
-## 6 284.59999990463257         YES</code></pre>
-<p>We can also change our response variable from yes/no to 1/0 for
-analysis.</p>
+##   Prohibited.act PDE MG.Permissible                RT Permissible
+## 1             No  No            Yes              1609          NO
+## 2            Yes  No             No              3482         YES
+## 3             No  No            Yes 654.9999999999964         YES
+## 4             No Yes            Yes 685.9999999999964         YES
+## 5             No  No            Yes               531         YES
+## 6             No Yes            Yes               519         YES</code></pre>
+<p>We can also need to change our response variable from yes/no to 1/0
+for analysis.</p>
 <pre class="r"><code>#make DV numeric
 df &lt;- df %&gt;% 
   mutate(Permissible = recode(Permissible, 
@@ -807,52 +761,38 @@ df &lt;- df %&gt;%
 df$Permissible &lt;- as.numeric(as.character(df$Permissible))
 
 head(df)</code></pre>
-<pre style="max-height: 500px;"><code>##        ID          Task.Name Trial.Number
-## 1 8147566 Main Stimuli Q_YES            1
-## 2 8147566 Main Stimuli Q_YES            2
-## 3 8147566 Main Stimuli Q_YES            3
-## 4 8147566 Main Stimuli Q_YES            4
-## 5 8147566 Main Stimuli Q_YES            5
-## 6 8147566 Main Stimuli Q_YES            6
-##                                                                        Dilemma
-## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Crane
-## 2                                              Footbridge_Equipment_Save_Truck
-## 3                                                            InexpensiveRescue
-## 4                                                      better alternativeCrane
-## 5                                                       ExpensiveCollapseCrane
-## 6                                                       InexpensiveRescueTruck
+<pre style="max-height: 500px;"><code>##         ID          Task.Name Trial.Number
+## 1 10442392 Main Stimuli Q_YES            1
+## 2 10442392 Main Stimuli Q_YES            2
+## 3 10442392 Main Stimuli Q_YES            3
+## 4 10442392 Main Stimuli Q_YES            4
+## 5 10442392 Main Stimuli Q_YES            5
+## 6 10442392 Main Stimuli Q_YES            6
+##                                                                       Dilemma
+## 1 Unprohibited_BetterAlternative_Equipment_Intended_DisproportionateCost_Mine
+## 2                                                        intentional homicide
+## 3                      Unprohibted_BetterAlternative_Equipment_Intended_Crane
+## 4                                                        ExpensiveRescueCrane
+## 5                                                               DropEquipment
+## 6                                                           InexpensiveRescue
 ##   Personal DPv1.0.Permissible Personal.force Intention DPv2.0.Permissible
 ## 1       No                Yes             No       Yes                Yes
-## 2      Yes                 No            Yes       Yes                 No
-## 3       No                Yes             No        No                Yes
+## 2       No                Yes             No       Yes                Yes
+## 3       No                Yes             No       Yes                Yes
 ## 4       No                Yes             No        No                Yes
-## 5       No                Yes             No        No                Yes
+## 5       No                Yes             No       Yes                Yes
 ## 6       No                Yes             No        No                Yes
-##   Action.aversion Outcome.aversion DPv3.0.Permissible Prohibited.act
-## 1              No              Yes                 No             No
-## 2             Yes              Yes                 No            Yes
-## 3              No               No                Yes            Yes
-## 4              No               No                Yes            Yes
-## 5              No               No                Yes             No
-## 6              No               No                Yes            Yes
-##   Not.intended Good_not_Bad Good_Grt_Bad No.alternative MG.Permissible
-## 1           No           No           No             No            Yes
-## 2           No           No           No            Yes             No
-## 3          Yes          Yes          Yes            Yes            Yes
-## 4          Yes          Yes          Yes             No             No
-## 5           No          Yes          Yes            Yes            Yes
-## 6          Yes          Yes          Yes            Yes            Yes
-##                   RT Permissible
-## 1  441.7999999523163           0
-## 2 296.89999997615814           0
-## 3              286.5           1
-## 4  893.2000000476837           1
-## 5 268.39999997615814           1
-## 6 284.59999990463257           1</code></pre>
+##   Prohibited.act PDE MG.Permissible                RT Permissible
+## 1             No  No            Yes              1609           0
+## 2            Yes  No             No              3482           1
+## 3             No  No            Yes 654.9999999999964           1
+## 4             No Yes            Yes 685.9999999999964           1
+## 5             No  No            Yes               531           1
+## 6             No Yes            Yes               519           1</code></pre>
 <p>We can now analyse the data in R or if you like we can export it to a
-csv file to analyse in JASP.</p>
+csv file to analyse in Jamovi.</p>
 <pre class="r"><code># rename a couple of parameters
-write.csv(df, &quot;~/Dropbox/Documents/My data/Moral sense task/practical/data.csv&quot;, row.names=FALSE)</code></pre>
+write.csv(df, &quot;~/Dropbox/Documents/My data/Moral sense task/practical//Groups/2024/group 1/data.csv&quot;, row.names=FALSE)</code></pre>
 </div>
 
 
