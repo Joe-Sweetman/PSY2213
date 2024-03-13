@@ -375,11 +375,11 @@ different from 0) reflects a differences in whether researcher are
 interested in null hypothesis significance testing (i.e., knowing
 whether a slope is significantly different from 0) or whether they are
 interested in comparing different plausible models of the data
-generating process (i.e., how well the model predits the current and
+generating process (i.e., how well the model predicts the current and
 future data).</p>
 <p>If you want to run the code and have a play around with this yourself
 you’ll need to <a
-href="https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt">installed
+href="https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt">install
 R and RStudio</a>.</p>
 <hr />
 <p><br></p>
@@ -405,9 +405,9 @@ library(performance)
 library(broom)</code></pre>
 <p><br></p>
 </div>
-<div id="finding-out-whats-the-best-theory-is" class="section level1"
+<div id="finding-out-what-the-best-theory-is" class="section level1"
 number="2">
-<h1><span class="header-section-number">2</span> Finding out what’s the
+<h1><span class="header-section-number">2</span> Finding out what the
 best theory is?</h1>
 <p>The practical is trying to answer the question</p>
 <blockquote>
@@ -417,7 +417,7 @@ process models?”</p>
 <p>To do this we could follow business as usual and fit statistical
 models and see if their parameters/fixed effects are significant. Maybe
 we could count the number of significant effects and say that the model
-with the most significant effect is the best. But this would advantage
+with the most significant effects is the best. But this would advantage
 models with a large amount of small effects vs. a model with one overall
 larger effect. Indeed, R^2 as a measure of variance “explained” (really
 predicted) suffers from the problem that adding more predictors/IVs just
@@ -454,7 +454,7 @@ for analysis df.</p>
 <pre class="r"><code># we set a seed to make sure this example is exactly reproducible
 set.seed(123)                 
 
-# we generate some data for the varibale x1 and x2 from a uniform distribution
+# we generate some data for the variable x1 and x2 from a uniform distribution
 x1 = runif(1000, min=-5, max=5)  
 x2 = runif(1000, min=-5, max=5)  #  between -5 and 5
 
@@ -645,24 +645,27 @@ ggplot(df2, aes(x1, y2)) +
 <p><img src="Model-fit-vs-significant-effects_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 You can see that the residuals, or the distance between each data point
 and the regression line (i.e., the grey/black lines), are much greater
-for our second model (m2). The mean of the square of these residuals or
-the mean squared error (MSE) forms part of something called the
-likelihood which can thought of as the likelihood of observing the data
-given the model.</p>
+for our second model (m2). The sum of squared residuals is equal to -2 *
+the log-likelihood. The likelihood can thought of as the likelihood of
+observing the data given the model. We use the log-likelihood for
+mathematical reasons.</p>
 <pre class="r"><code>resm1&lt;-m1$residuals
 nm1&lt;-nrow(m1$model)    
 
 resm2&lt;-m2$residuals
 nm2&lt;-nrow(m2$model)
 
-llm1&lt;- 0.5 * (nm1 * (log(2 * pi) +1 - log(nm1) + log(sum(resm1^2))))
-llm2&lt;- 0.5 * (nm2 * (log(2 * pi) +1 - log(nm2) + log(sum(resm2^2))))
+w1&lt;-rep(1,nm1) #not applicable
+w2&lt;-rep(1,nm2) #not applicable
+
+llm1&lt;-0.5 * (sum(log(w1)) - nm1 * (log(2 * pi) + 1 - log(nm1) + log(sum(w1 * resm1^2))))
+llm2&lt;-0.5 * (sum(log(w2)) - nm2 * (log(2 * pi) + 1 - log(nm2) + log(sum(w2 * resm2^2))))
 
 print(sprintf(&quot;model 1, log likelihood = %s&quot;, llm1))</code></pre>
-<pre style="max-height: 500px;"><code>## [1] &quot;model 1, log likelihood = -1567.74801360134&quot;</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 1, log likelihood = 1567.74801360134&quot;</code></pre>
 <pre class="r"><code>print(sprintf(&quot;model 2, log likelihood = %s&quot;, llm2))</code></pre>
-<pre style="max-height: 500px;"><code>## [1] &quot;model 2, log likelihood = 3017.90051131984&quot;</code></pre>
-<p>The AIC and BIC are based on the log likelihood (ll), correcting or
+<pre style="max-height: 500px;"><code>## [1] &quot;model 2, log likelihood = -3017.90051131984&quot;</code></pre>
+<p>The AIC and BIC are based on the log-likelihood (ll), correcting or
 penalising to different degrees for the number of parameters (k)
 included in the model.</p>
 <pre class="r"><code>km1&lt;-length(m1$coefficients)
@@ -681,11 +684,11 @@ BICm2&lt;-round(bicm2, digits = 1)
 
 
 print(sprintf(&quot;model 1, AIC = %s; BIC = %s&quot;, AICm1, BICm1))</code></pre>
-<pre style="max-height: 500px;"><code>## [1] &quot;model 1, AIC = 3143.5; BIC = 3163.1&quot;</code></pre>
+<pre style="max-height: 500px;"><code>## [1] &quot;model 1, AIC = -3127.5; BIC = -3107.9&quot;</code></pre>
 <pre class="r"><code>print(sprintf(&quot;model 2, AIC = %s; BIC = %s&quot;, AICm2, BICm2))</code></pre>
-<pre style="max-height: 500px;"><code>## [1] &quot;model 2, AIC = -6027.8; BIC = -6008.2&quot;</code></pre>
-<p>So we can see how the residuals go into our indices of model fit.
-Even though the models have equivalent significant effects one of the
+<pre style="max-height: 500px;"><code>## [1] &quot;model 2, AIC = 6043.8; BIC = 6063.4&quot;</code></pre>
+<p>So we can see how the residuals relate to our indices of model fit.
+Even though the models have equivalent significant effects, one of the
 models (m1) is a better fit of the data.</p>
 </div>
 </div>
@@ -837,7 +840,7 @@ compare the model fit for our two models using information criterion
 number="6">
 <h1><span class="header-section-number">6</span> information criterion
 (AIC and BIC)</h1>
-<p>Let’s look at the more traditional information criterion indices.</p>
+<p>Let’s look at the AIC and BIC indices of model fit.</p>
 <pre class="r"><code># we can compare the AIC and BIC for model fit
 compare_performance(m3,m4)</code></pre>
 <pre><code>## When comparing models, please note that probably not all models were fit
@@ -860,13 +863,11 @@ you how good the model fits (predicts) the actual data and the
 underlying data generation process. If you have a look at R<sup>2</sup>
 you will see it’s favouring m4 which is why we shouldn’t pay it much
 attention as a measure of model fit! This is one of the many occasion
-when R<sup>2</sup> makes no sense as a measure of model fit [for
-details, see this] (<a
-href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf"
-class="uri">https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf</a>).
-We can see in the plot that prediction will be better in m3 than in m4
-because the m4 is trying to predict a curvlinear relationship with a
-linear regression line!</p>
+when R<sup>2</sup> makes no sense as a measure of model fit <a
+href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">for
+details, see this</a>. We can see in the plot that prediction will be
+better for m3 than m4 because m4 is trying to predict a curvilinear
+relationship (i.e., function) with a linear regression line!</p>
 </div>
 
 

@@ -45,7 +45,7 @@ The practical is trying to answer the question
 
 >Is the moral mind/brain best described by moral grammar or dual process models?”
 
-To do this we could follow business as usual and fit statistical models and see if their parameters/fixed effects are significant. Maybe we could count the number of significant effects and say that the model with the most significant effect is the best. But this would advantage models with a large amount of small effects vs. a model with one overall larger effect. Indeed, R^2 as a measure of variance "explained" (really predicted) suffers from the problem that adding more predictors/IVs just keeps on increasing R^2! In science we want parsimony - as simple an explanation as possible, that still accounts for the relevant data. Fortunately, there are a number of better ways of determining which model better fits (or predicts) the data such as AIC, BIC, or using Bayes Factors in model comparison. First, let's get our head around the difference between significant effects and model fit.  
+To do this we could follow business as usual and fit statistical models and see if their parameters/fixed effects are significant. Maybe we could count the number of significant effects and say that the model with the most significant effects is the best. But this would advantage models with a large amount of small effects vs. a model with one overall larger effect. Indeed, R^2 as a measure of variance "explained" (really predicted) suffers from the problem that adding more predictors/IVs just keeps on increasing R^2! In science we want parsimony - as simple an explanation as possible, that still accounts for the relevant data. Fortunately, there are a number of better ways of determining which model better fits (or predicts) the data such as AIC, BIC, or using Bayes Factors in model comparison. First, let's get our head around the difference between significant effects and model fit.  
 
 <br>
 
@@ -61,7 +61,7 @@ Simulation is an important tool for understanding statistics. Here we will simul
 # we set a seed to make sure this example is exactly reproducible
 set.seed(123)                 
 
-# we generate some data for the varibale x1 and x2 from a uniform distribution
+# we generate some data for the variable x1 and x2 from a uniform distribution
 x1 = runif(1000, min=-5, max=5)  
 x2 = runif(1000, min=-5, max=5)  #  between -5 and 5
 
@@ -179,10 +179,11 @@ nm1<-nrow(m1$model)
 resm2<-m2$residuals
 nm2<-nrow(m2$model)
 
-w<-rep(1,n) #not applicable
+w1<-rep(1,nm1) #not applicable
+w2<-rep(1,nm2) #not applicable
 
-llm1<-0.5 * (sum(log(w)) - nm1 * (log(2 * pi) + 1 - log(nm1) + log(sum(w * resm1^2))))
-llm2<-0.5 * (sum(log(w)) - nm2 * (log(2 * pi) + 1 - log(nm2) + log(sum(w * resm2^2))))
+llm1<-0.5 * (sum(log(w1)) - nm1 * (log(2 * pi) + 1 - log(nm1) + log(sum(w1 * resm1^2))))
+llm2<-0.5 * (sum(log(w2)) - nm2 * (log(2 * pi) + 1 - log(nm2) + log(sum(w2 * resm2^2))))
 
 print(sprintf("model 1, log likelihood = %s", llm1))
 print(sprintf("model 2, log likelihood = %s", llm2))
