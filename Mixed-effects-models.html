@@ -522,16 +522,16 @@ sim_lmer &lt;- function( sub_n = 200,
 <pre style="max-height: 500px;"><code>## # A tibble: 20,000 × 17
 ##    sub_id stim_id stim_version sub_i sub_version_slope sub_cond    stim_i
 ##     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
-##  1      1       1 impersonal    16.5             -24.4 permissible  -6.66
-##  2      1       1 personal      16.5             -24.4 permissible  -6.66
-##  3      1       2 impersonal    16.5             -24.4 permissible -75.8 
-##  4      1       2 personal      16.5             -24.4 permissible -75.8 
-##  5      1       3 impersonal    16.5             -24.4 permissible -25.9 
-##  6      1       3 personal      16.5             -24.4 permissible -25.9 
-##  7      1       4 impersonal    16.5             -24.4 permissible  75.6 
-##  8      1       4 personal      16.5             -24.4 permissible  75.6 
-##  9      1       5 impersonal    16.5             -24.4 permissible   9.91
-## 10      1       5 personal      16.5             -24.4 permissible   9.91
+##  1      1       1 impersonal   -151.              28.6 permissible  -87.9
+##  2      1       1 personal     -151.              28.6 permissible  -87.9
+##  3      1       2 impersonal   -151.              28.6 permissible  -45.4
+##  4      1       2 personal     -151.              28.6 permissible  -45.4
+##  5      1       3 impersonal   -151.              28.6 permissible   37.8
+##  6      1       3 personal     -151.              28.6 permissible   37.8
+##  7      1       4 impersonal   -151.              28.6 permissible  -31.5
+##  8      1       4 personal     -151.              28.6 permissible  -31.5
+##  9      1       5 impersonal   -151.              28.6 permissible  -48.0
+## 10      1       5 personal     -151.              28.6 permissible  -48.0
 ## # ℹ 19,990 more rows
 ## # ℹ 10 more variables: stim_version_slope &lt;dbl&gt;, stim_cond_slope &lt;dbl&gt;,
 ## #   stim_cond_version_slope &lt;dbl&gt;, sub_cond.e &lt;dbl&gt;, stim_version.e &lt;dbl&gt;,
@@ -592,7 +592,7 @@ one-way repeated measures ANOVA.</p>
 ## 
 ## Response: dv
 ##         Effect     df    MSE           F  ges p.value
-## 1 stim_version 1, 199 218.89 4854.19 *** .221   &lt;.001
+## 1 stim_version 1, 199 198.36 4865.88 *** .190   &lt;.001
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>As suggested by the plot, we can see a significant main effect of
@@ -610,7 +610,37 @@ mod1 &lt;- lmer(dv ~ stim_version +
                 (1+stim_version|sub_id),
               data = dat)
 
-summary(mod1)</code></pre>
+mod1.sum &lt;- summary(mod1)
+
+mod1.sum</code></pre>
+<pre style="max-height: 500px;"><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: dv ~ stim_version + (1 + stim_version | sub_id)
+##    Data: dat
+## 
+## REML criterion at convergence: 217299.5
+## 
+## Scaled residuals: 
+##        Min         1Q     Median         3Q        Max 
+## -3.0877320 -0.6765580 -0.0485672  0.6117997  3.8171290 
+## 
+## Random effects:
+##  Groups   Name          Variance   Std.Dev.  Corr   
+##  sub_id   (Intercept)   10241.4890 101.20024        
+##           stim_version2   282.5241  16.80845 0.28362
+##  Residual                2855.1893  53.43397        
+## Number of obs: 20000, groups:  sub_id, 200
+## 
+## Fixed effects:
+##                 Estimate Std. Error         df  t value   Pr(&gt;|t|)    
+## (Intercept)   384.064987   7.165906 199.000331 53.59615 &lt; 2.22e-16 ***
+## stim_version2  98.245573   1.408424 198.998667 69.75568 &lt; 2.22e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr)
+## stim_versn2 0.239</code></pre>
 <p>The model also shows a significant main effect of dilemma/stimuli
 type. Indeed, we can tell that the models are equivalent by comparing
 the F and t values. Since we know that F = t<sup>2</sup> we can see that
@@ -626,9 +656,9 @@ the LMM version of the model is that it is trivially easy to return the
 95% confidence intervals on this effect size (mean difference).</p>
 <pre class="r"><code>confint(mod1, parm = &quot;beta_&quot;)</code></pre>
 <pre><code>## Computing profile confidence intervals ...</code></pre>
-<pre style="max-height: 500px;"><code>##                     2.5 %      97.5 %
-## (Intercept)   386.8842566 413.6912365
-## stim_version2 100.1733214 105.9862148</code></pre>
+<pre style="max-height: 500px;"><code>##                      2.5 %      97.5 %
+## (Intercept)   369.98767865 398.1422950
+## stim_version2  95.47875467 101.0123779</code></pre>
 <p>This suggests that under repeated sampling (running experiments in
 the long run) 95% of these confidence intervals would contain the true
 parameter value. Unfortunately, we don’t know if these CIs are one of
@@ -656,9 +686,9 @@ vs. forbidden) between-subjects.</p>
 ## 
 ## Response: dv
 ##                  Effect     df      MSE           F   ges p.value
-## 1              sub_cond 1, 198 18688.67        0.28  .001    .599
-## 2          stim_version 1, 198   219.67 4837.00 ***  .221   &lt;.001
-## 3 sub_cond:stim_version 1, 198   219.67        0.30 &lt;.001    .587
+## 1              sub_cond 1, 198 20608.40        0.34  .002    .560
+## 2          stim_version 1, 198   197.58 4885.14 ***  .190   &lt;.001
+## 3 sub_cond:stim_version 1, 198   197.58        1.79 &lt;.001    .183
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Only the main effect of dilemma type is significant. The
@@ -681,6 +711,39 @@ mod2 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
 mod2.sum &lt;- summary(mod2)
 
 mod2.sum</code></pre>
+<pre style="max-height: 500px;"><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: dv ~ sub_cond + stim_version + sub_cond * stim_version + (1 +  
+##     stim_version | sub_id)
+##    Data: dat
+## 
+## REML criterion at convergence: 217286.6
+## 
+## Scaled residuals: 
+##        Min         1Q     Median         3Q        Max 
+## -3.0831872 -0.6762775 -0.0483569  0.6109423  3.8126269 
+## 
+## Random effects:
+##  Groups   Name          Variance   Std.Dev.  Corr   
+##  sub_id   (Intercept)   10275.2205 101.36676        
+##           stim_version2   280.9479  16.76150 0.28067
+##  Residual                2855.1911  53.43399        
+## Number of obs: 20000, groups:  sub_id, 200
+## 
+## Fixed effects:
+##                           Estimate Std. Error         df  t value Pr(&gt;|t|)    
+## (Intercept)             384.064987   7.177664 198.012341 53.50835  &lt; 2e-16 ***
+## sub_cond2                -8.377017  14.355328 198.012341 -0.58355  0.56019    
+## stim_version2            98.245573   1.405624 198.007220 69.89465  &lt; 2e-16 ***
+## sub_cond2:stim_version2  -3.758816   2.811247 198.007220 -1.33706  0.18274    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) sb_cn2 stm_v2
+## sub_cond2   0.000               
+## stim_versn2 0.236  0.000        
+## sb_cnd2:s_2 0.000  0.236  0.000</code></pre>
 <p>As you can the results are equivalent. If you wanted identical
 results to lots of decimal places this notation would probably be
 better.</p>
@@ -689,10 +752,50 @@ better.</p>
 mod3 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
                 (1|sub_id) + (0+stim_version|sub_id), 
               data = dat, control = lmerControl(optimizer = &quot;bobyqa&quot;))</code></pre>
-<pre><code>## Warning: Model failed to converge with 1 negative eigenvalue: -3.1e-05</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, : Model is nearly unidentifiable: large eigenvalue ratio
+##  - Rescale variables?</code></pre>
+<pre><code>## Warning: Model failed to converge with 1 negative eigenvalue: -1.3e-03</code></pre>
 <pre class="r"><code>mod3.sum &lt;- summary(mod3)
 
 mod3.sum</code></pre>
+<pre style="max-height: 500px;"><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: dv ~ sub_cond + stim_version + sub_cond * stim_version + (1 |  
+##     sub_id) + (0 + stim_version | sub_id)
+##    Data: dat
+## Control: lmerControl(optimizer = &quot;bobyqa&quot;)
+## 
+## REML criterion at convergence: 217286.6
+## 
+## Scaled residuals: 
+##        Min         1Q     Median         3Q        Max 
+## -3.0831860 -0.6762763 -0.0483568  0.6109425  3.8126256 
+## 
+## Random effects:
+##  Groups   Name                   Variance  Std.Dev. Corr   
+##  sub_id   (Intercept)            9073.7391 95.25618        
+##  sub_id.1 stim_versionimpersonal  795.2502 28.20018        
+##           stim_versionpersonal   1749.1047 41.82230 0.95956
+##  Residual                        2855.1893 53.43397        
+## Number of obs: 20000, groups:  sub_id, 200
+## 
+## Fixed effects:
+##                           Estimate Std. Error         df  t value Pr(&gt;|t|)    
+## (Intercept)             384.064987   7.177823 197.998860 53.50717  &lt; 2e-16 ***
+## sub_cond2                -8.377017  14.355646 197.998860 -0.58353  0.56020    
+## stim_version2            98.245573   1.405641 197.999903 69.89379  &lt; 2e-16 ***
+## sub_cond2:stim_version2  -3.758816   2.811282 197.999903 -1.33705  0.18274    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) sb_cn2 stm_v2
+## sub_cond2   0.000               
+## stim_versn2 0.236  0.000        
+## sb_cnd2:s_2 0.000  0.236  0.000 
+## optimizer (bobyqa) convergence code: 0 (OK)
+## Model is nearly unidentifiable: large eigenvalue ratio
+##  - Rescale variables?</code></pre>
 </div>
 <div id="averaging-over-scenarioitem-can-inflate-type-i-error"
 class="section level2" number="3.5">
@@ -737,9 +840,9 @@ weird items in the personal/permissible condition.</p>
 ## 
 ## Response: dv
 ##                  Effect     df      MSE           F  ges p.value
-## 1              sub_cond 1, 198 18688.67        0.33 .002    .569
-## 2          stim_version 1, 198   219.67 6347.18 *** .271   &lt;.001
-## 3 sub_cond:stim_version 1, 198   219.67  113.73 *** .007   &lt;.001
+## 1              sub_cond 1, 198 20608.40        0.21 .001    .645
+## 2          stim_version 1, 198   197.58 6490.73 *** .237   &lt;.001
+## 3 sub_cond:stim_version 1, 198   197.58   87.13 *** .004   &lt;.001
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Now we can see that the interaction between judgment (sub_cond) and
@@ -764,6 +867,39 @@ mod4 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
 mod4.sum &lt;- summary(mod4)
 
 mod4.sum</code></pre>
+<pre style="max-height: 500px;"><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: dv ~ sub_cond + stim_version + sub_cond * stim_version + (1 +  
+##     stim_version | sub_id)
+##    Data: dat1
+## 
+## REML criterion at convergence: 231891.4
+## 
+## Scaled residuals: 
+##        Min         1Q     Median         3Q        Max 
+## -2.5427629 -0.5521201 -0.0983631  0.3858573  7.2556792 
+## 
+## Random effects:
+##  Groups   Name          Variance   Std.Dev.  Corr   
+##  sub_id   (Intercept)   10244.1917 101.21359        
+##           stim_version2   154.5564  12.43207 0.37903
+##  Residual                6015.1278  77.55725        
+## Number of obs: 20000, groups:  sub_id, 200
+## 
+## Fixed effects:
+##                           Estimate Std. Error         df  t value Pr(&gt;|t|)    
+## (Intercept)             391.564987   7.177863 197.995908 54.55175  &lt; 2e-16 ***
+## sub_cond2                 6.622983  14.355726 197.995908  0.46135  0.64506    
+## stim_version2           113.245573   1.405634 198.000506 80.56546  &lt; 2e-16 ***
+## sub_cond2:stim_version2  26.241184   2.811268 198.000506  9.33429  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) sb_cn2 stm_v2
+## sub_cond2   0.000               
+## stim_versn2 0.236  0.000        
+## sb_cnd2:s_2 0.000  0.236  0.000</code></pre>
 </div>
 <div
 id="lmm-model-with-both-by-subject-and-by-scenario-random-factors-with-3-weird-items"
@@ -783,6 +919,44 @@ mod5 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
 mod5.sum &lt;- summary(mod5)
 
 mod5.sum</code></pre>
+<pre style="max-height: 500px;"><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: dv ~ sub_cond + stim_version + sub_cond * stim_version + (1 +  
+##     stim_version | sub_id) + (1 + stim_version * sub_cond | stim_id)
+##    Data: dat1
+## Control: lmerControl(optimizer = &quot;bobyqa&quot;)
+## 
+## REML criterion at convergence: 188673.3
+## 
+## Scaled residuals: 
+##        Min         1Q     Median         3Q        Max 
+## -3.6049338 -0.6658690  0.0045052  0.6752169  4.0350061 
+## 
+## Random effects:
+##  Groups   Name                    Variance   Std.Dev.  Corr                   
+##  sub_id   (Intercept)             10297.9217 101.47868                        
+##           stim_version2             369.9744  19.23472 0.24434                
+##  stim_id  (Intercept)              2709.7026  52.05480                        
+##           stim_version2            3555.5507  59.62844 0.56115                
+##           sub_cond2                3578.3939  59.81968 0.59659 0.92733        
+##           stim_version2:sub_cond2 14273.4928 119.47172 0.41912 0.97189 0.90744
+##  Residual                           629.7829  25.09548                        
+## Number of obs: 20000, groups:  sub_id, 200; stim_id, 50
+## 
+## Fixed effects:
+##                           Estimate Std. Error         df  t value Pr(&gt;|t|)    
+## (Intercept)             391.564987  10.281787 152.230496 38.08336  &lt; 2e-16 ***
+## sub_cond2                 6.622983  16.662901 241.364248  0.39747  0.69137    
+## stim_version2           113.245573   8.549084  51.568978 13.24651  &lt; 2e-16 ***
+## sub_cond2:stim_version2  26.241184  17.128140  51.559558  1.53205  0.13162    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) sb_cn2 stm_v2
+## sub_cond2   0.217               
+## stim_versn2 0.423  0.464        
+## sb_cnd2:s_2 0.296  0.488  0.946</code></pre>
 <p>Here we can see that the interaction is not significant. When we
 model dilemma as a random factor we are able to model the variance
 associated with the weirdly slow 3 dilemmas and this means that the

@@ -192,13 +192,15 @@ As suggested by the plot, we can see a significant main effect of dilemma/stimul
 ## LMM version of 1-way repeated measures ANOVA
 Let's fit a linear mixed model with by-subjects random intercept and slope (random effects) and dilemma/stimuli type (fixed effect).    
 
-```{r message=FALSE, results='hide'}
+```{r, attr.output='style="max-height: 500px;"'}
 #random slope of stim_version within subjects with correlated intercept
 mod1 <- lmer(dv ~ stim_version +
                 (1+stim_version|sub_id),
               data = dat)
 
-summary(mod1)
+mod1.sum <- summary(mod1)
+
+mod1.sum
 ```
 
 The model also shows a significant main effect of dilemma/stimuli type. Indeed, we can tell that the models are equivalent by comparing the F and t values. Since we know that F = t^2^ we can see that 59.92643^2^ = 3591.177013 or 3591.18 as per the F from the ANOVA. The estimates are more informative than the ANOVA table as they tell us that (given our coding) as you go from impersonal (coded -0.5) to personal (coded 0.5), that is an increase in one unit of dilemma/stimuli type, you see an increase in response time of 101.15 ms. This is the mean difference between conditions or the (unstandardised) effect size. If we standardised the DV and ran the model this would be the standardised mean difference (or "d"). Another advantage of using the LMM version of the model is that it is trivially easy to return the 95% confidence intervals on this effect size (mean difference).
@@ -221,7 +223,7 @@ Only the main effect of dilemma type is significant. The between-subjects judgme
 ## LMM version of 2-way  mixed (repeated/between measures) ANOVA
 Let's fit a linear mixed model with by-subjects random intercept and slope (random effects) and dilemma/stimuli type, judgment (sub_cond) and their interaction (fixed effects).    
 
-```{r message=FALSE, results='hide'}
+```{r, attr.output='style="max-height: 500px;"'}
 #random slope of stim_version within subjects with correlated intercept
 
 mod2 <- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
@@ -235,7 +237,7 @@ mod2.sum
 
 As you can the results are equivalent. If you wanted identical results to lots of decimal places this notation would probably be better.
 
-```{r message=FALSE, results='hide'}
+```{r, attr.output='style="max-height: 500px;"'}
 #uncorrelated random intercept and random slope within subjects
 
 mod3 <- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
@@ -279,7 +281,7 @@ We can use linear mixed effects models to run an equivalent model to the above A
 ## LMM version with 3 weird items
 Let's fit the linear mixed model with by-subjects random intercept and slope (random effects) and  dilemma/stimuli type, judgment (sub_cond) and their interaction (fixed effects).    
 
-```{r message=FALSE, results='hide'}
+```{r, attr.output='style="max-height: 500px;"'}
 #random slope of stim_version within subjects with correlated intercept
 
 mod4 <- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
@@ -294,7 +296,7 @@ mod4.sum
 ## LMM model with both by-subject and by-scenario random factors with 3 weird items
 Let's fit the linear mixed model with by-subjects random intercept and slope and by-dilemmas random intercept and slopes (random effects) and  dilemma/stimuli type, judgment (sub_cond) and their interaction (fixed effects).
 
-```{r message=FALSE, results='hide'}
+```{r, attr.output='style="max-height: 500px;"'}
 #random slope of stim_version within subjects with correlated intercept and random slopes of stim_version, judgment, aand thier interaction within dielmmas with correlated intercept
 
 mod5 <- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
