@@ -43,6 +43,8 @@ library(GGally)
 library(faux)
 library(afex)
 
+options(digits = 10)
+
 ```
 
 # make some data
@@ -196,10 +198,7 @@ mod1 <- lmer(dv ~ stim_version +
                 (1+stim_version|sub_id),
               data = dat)
 
-mod1.sum <- summary(mod1)
-options(digits = 10)
-mod1.sum
-
+summary(mod1)
 ```
 
 The model also shows a significant main effect of dilemma/stimuli type. Indeed, we can tell that the models are equivalent by comparing the F and t values. Since we know that F = t^2^ we can see that 59.92643^2^ = 3591.177013 or 3591.18 as per the F from the ANOVA. The estimates are more informative than the ANOVA table as they tell us that (given our coding) as you go from impersonal (coded -0.5) to personal (coded 0.5), that is an increase in one unit of dilemma/stimuli type, you see an increase in response time of 101.15 ms. This is the mean difference between conditions or the (unstandardised) effect size. If we standardised the DV and ran the model this would be the standardised mean difference (or "d"). Another advantage of using the LMM version of the model is that it is trivially easy to return the 95% confidence intervals on this effect size (mean difference).
