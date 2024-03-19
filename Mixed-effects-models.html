@@ -411,7 +411,9 @@ library(tidyverse)
 library(sjPlot)
 library(GGally)    
 library(faux)
-library(afex)</code></pre>
+library(afex)
+
+options(digits = 10)</code></pre>
 </div>
 <div id="make-some-data" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> make some data</h1>
@@ -520,16 +522,16 @@ sim_lmer &lt;- function( sub_n = 200,
 <pre style="max-height: 500px;"><code>## # A tibble: 20,000 × 17
 ##    sub_id stim_id stim_version sub_i sub_version_slope sub_cond    stim_i
 ##     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
-##  1      1       1 impersonal   -35.1              11.0 permissible  -73.3
-##  2      1       1 personal     -35.1              11.0 permissible  -73.3
-##  3      1       2 impersonal   -35.1              11.0 permissible   35.7
-##  4      1       2 personal     -35.1              11.0 permissible   35.7
-##  5      1       3 impersonal   -35.1              11.0 permissible   38.3
-##  6      1       3 personal     -35.1              11.0 permissible   38.3
-##  7      1       4 impersonal   -35.1              11.0 permissible   62.8
-##  8      1       4 personal     -35.1              11.0 permissible   62.8
-##  9      1       5 impersonal   -35.1              11.0 permissible   87.2
-## 10      1       5 personal     -35.1              11.0 permissible   87.2
+##  1      1       1 impersonal    16.5             -24.4 permissible  -6.66
+##  2      1       1 personal      16.5             -24.4 permissible  -6.66
+##  3      1       2 impersonal    16.5             -24.4 permissible -75.8 
+##  4      1       2 personal      16.5             -24.4 permissible -75.8 
+##  5      1       3 impersonal    16.5             -24.4 permissible -25.9 
+##  6      1       3 personal      16.5             -24.4 permissible -25.9 
+##  7      1       4 impersonal    16.5             -24.4 permissible  75.6 
+##  8      1       4 personal      16.5             -24.4 permissible  75.6 
+##  9      1       5 impersonal    16.5             -24.4 permissible   9.91
+## 10      1       5 personal      16.5             -24.4 permissible   9.91
 ## # ℹ 19,990 more rows
 ## # ℹ 10 more variables: stim_version_slope &lt;dbl&gt;, stim_cond_slope &lt;dbl&gt;,
 ## #   stim_cond_version_slope &lt;dbl&gt;, sub_cond.e &lt;dbl&gt;, stim_version.e &lt;dbl&gt;,
@@ -590,7 +592,7 @@ one-way repeated measures ANOVA.</p>
 ## 
 ## Response: dv
 ##         Effect     df    MSE           F  ges p.value
-## 1 stim_version 1, 199 225.23 4389.51 *** .204   &lt;.001
+## 1 stim_version 1, 199 218.89 4854.19 *** .221   &lt;.001
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>As suggested by the plot, we can see a significant main effect of
@@ -608,9 +610,7 @@ mod1 &lt;- lmer(dv ~ stim_version +
                 (1+stim_version|sub_id),
               data = dat)
 
-mod1.sum &lt;- summary(mod1)
-options(digits = 10)
-mod1.sum</code></pre>
+summary(mod1)</code></pre>
 <p>The model also shows a significant main effect of dilemma/stimuli
 type. Indeed, we can tell that the models are equivalent by comparing
 the F and t values. Since we know that F = t<sup>2</sup> we can see that
@@ -626,9 +626,9 @@ the LMM version of the model is that it is trivially easy to return the
 95% confidence intervals on this effect size (mean difference).</p>
 <pre class="r"><code>confint(mod1, parm = &quot;beta_&quot;)</code></pre>
 <pre><code>## Computing profile confidence intervals ...</code></pre>
-<pre style="max-height: 500px;"><code>##                      2.5 %      97.5 %
-## (Intercept)   376.60726847 403.8411780
-## stim_version2  96.48279436 102.3791615</code></pre>
+<pre style="max-height: 500px;"><code>##                     2.5 %      97.5 %
+## (Intercept)   386.8842566 413.6912365
+## stim_version2 100.1733214 105.9862148</code></pre>
 <p>This suggests that under repeated sampling (running experiments in
 the long run) 95% of these confidence intervals would contain the true
 parameter value. Unfortunately, we don’t know if these CIs are one of
@@ -656,9 +656,9 @@ vs. forbidden) between-subjects.</p>
 ## 
 ## Response: dv
 ##                  Effect     df      MSE           F   ges p.value
-## 1              sub_cond 1, 198 19313.65        0.02 &lt;.001    .884
-## 2          stim_version 1, 198   221.96 4454.23 ***  .204   &lt;.001
-## 3 sub_cond:stim_version 1, 198   221.96      3.93 * &lt;.001    .049
+## 1              sub_cond 1, 198 18688.67        0.28  .001    .599
+## 2          stim_version 1, 198   219.67 4837.00 ***  .221   &lt;.001
+## 3 sub_cond:stim_version 1, 198   219.67        0.30 &lt;.001    .587
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Only the main effect of dilemma type is significant. The
@@ -688,9 +688,9 @@ better.</p>
 
 mod3 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
                 (1|sub_id) + (0+stim_version|sub_id), 
-              data = dat, control = lmerControl(optimizer = &quot;bobyqa&quot;))
-
-mod3.sum &lt;- summary(mod3)
+              data = dat, control = lmerControl(optimizer = &quot;bobyqa&quot;))</code></pre>
+<pre><code>## Warning: Model failed to converge with 1 negative eigenvalue: -3.1e-05</code></pre>
+<pre class="r"><code>mod3.sum &lt;- summary(mod3)
 
 mod3.sum</code></pre>
 </div>
@@ -737,9 +737,9 @@ weird items in the personal/permissible condition.</p>
 ## 
 ## Response: dv
 ##                  Effect     df      MSE           F  ges p.value
-## 1              sub_cond 1, 198 19313.65        0.87 .004    .352
-## 2          stim_version 1, 198   221.96 5899.51 *** .253   &lt;.001
-## 3 sub_cond:stim_version 1, 198   221.96   65.37 *** .004   &lt;.001
+## 1              sub_cond 1, 198 18688.67        0.33 .002    .569
+## 2          stim_version 1, 198   219.67 6347.18 *** .271   &lt;.001
+## 3 sub_cond:stim_version 1, 198   219.67  113.73 *** .007   &lt;.001
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Now we can see that the interaction between judgment (sub_cond) and
@@ -797,7 +797,7 @@ chosen (see this talk by <a
 href="https://www.youtube.com/watch?v=wzIfKyqgiOM&amp;t=3530s">Tal
 Yarkoni</a>). Strictly, if you have multiple items and find an effect
 averaged across them, then you can only generalise the effect to the
-stimuli used in the study - not what researchers usally want to do with
+stimuli used in the study - not what researchers usually want to do with
 their generalisations!</p>
 </div>
 </div>
