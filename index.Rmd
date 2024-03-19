@@ -16,7 +16,7 @@ This practical aims to provide students with the chance to develop their skills 
 
 >"Is our moral sense best described by moral grammar or dual process models?” 
 
-This site provides important information, materials, data and R code to help you both develop your skills and a deeper understanding of the content covered in the practical. As the practical covers content and methods that may be new to students (e.g.,  mixed effects models, effect sizes, confidence intervals, model comparison, and using the programming language R), I encourage you to [develop a scientific mindset for the practical](Developing-the-right-mindset-for-the-practical.html). You will find that many of these seemingly new approaches are in fact just variations on topics that you have previously covered (e.g., multiple regression, logistic regression, repeated measures ANOVA, etc). 
+This site provides important information, materials, data and R code to help you both develop your skills and a deeper understanding of the content covered in the practical. As the practical covers content and methods that may be new to students (e.g., effect sizes, confidence intervals, [mixed effects models](Model-fit-vs-significant-effects.html), [model comparison](Model-fit-vs-significant-effects.html), and using the programming language R), I encourage you to [develop a scientific mindset for the practical](Developing-the-right-mindset-for-the-practical.html). You will find that many of these seemingly new approaches are in fact just variations on topics that you have previously covered (e.g., ANOVA, logistic regression, etc). 
 
 ***
 
@@ -30,9 +30,11 @@ This site provides important information, materials, data and R code to help you
 
 # [The replication crisis and some solutions](The-replication-crisis-and-some-solutions.html)
 
-# [Analysis of in-class experiment](Analysis-of-in-class-experiment.html)
+# [Mixed effects models](Mixed-effects-models.html)
 
 # [Model fit vs. significant effects](Model-fit-vs-significant-effects.html)
+
+# [Analysis of in-class experiment](Analysis-of-in-class-experiment.html)
 
 # [Prevalence analysis of within-person effects for in-class experiment](Prevalence-analysis.html)
 

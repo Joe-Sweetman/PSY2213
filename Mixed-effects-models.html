@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Joe Sweetman" />
+
+
+<title>Mixed effects models</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Mixed effects models</h1>
+<h4 class="author">Joe Sweetman</h4>
+
+</div>
+
+
+<p>Here we examine (generalised) linear mixed effects models (LMM) with
+the aim of explaining such models by grounding them in the ANOVA models
+that you are familiar with. LMMs allow for a great deal of flexibility
+in data analysis. You can think of t-tests, ANOVA and logistic
+regression as being a bit like Ikea flat-packed furniture - they are
+quick and easy to use but might not actually fit your requirements
+perfectly, and sometimes prove to be a bit of a disaster! LMM are like
+bespoke furniture, they can be ideally crafted to your specific
+requirements. For example, LMMs allow one to model variance associated
+with participants, items, tasks, sites, labs, or anything else that
+might be part of the data generating process. It is this flexibility
+that allows one to make better statistical inferences - e.g.,
+better/accurate type I error rates, better power, generalisation to the
+population of stimuli/items, better handling of missing and unbalanced
+data, etc. For a practical introduction to LMMs see <a
+href="https://journals.sagepub.com/doi/10.1177/2515245920960351">Brown
+2021</a>.</p>
+<p>We will generate some data is inspired by <a
+href="http://nwkpsych.rutgers.edu/~kharber/gradseminar/readings/class%204%20readings/Science%202001%20Greene.pdf">Greene
+et al., (2001)</a> who claimed that the time taken to make moral
+judgments of personal (e.g., footbridge) vs. impersonal (e.g.,
+bystander) dilemmas varied as a function of the judgment they made, with
+people who judged a personal dilemmas as morally permissible taking
+longer to make that judgment. This was taken as evidence for the dual
+process model, suggesting that judging a personal dilemma as morally
+permissible requires one to “override” the automatic emotional response
+to it, employing our slower, deliberative system.</p>
+<p>If you want to run the code and have a play around with this yourself
+you’ll need to <a
+href="https://www.youtube.com/embed/PGocx5cfq5w?si=ubd0OwwBlF5fNBwt">install
+R and RStudio</a>.</p>
+<hr />
+<p><br></p>
+<div id="packages" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> packages</h1>
+<p>We will need to install and/or load the packages that we need into
+RStudio.</p>
+<pre class="r"><code># Package names
+packages &lt;- c(&quot;ggplot2&quot;,  &quot;tidyverse&quot;, &quot;lme4&quot;, &quot;lmerTest&quot;, &quot;sjPlot&quot;,&quot;GGally&quot;,&quot;faux&quot;,&quot;afex&quot;)
+
+# Install packages not yet installed
+installed_packages &lt;- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+library(ggplot2)
+library(lme4)
+library(lmerTest)
+library(tidyverse)
+library(sjPlot)
+library(GGally)    
+library(faux)
+library(afex)</code></pre>
+</div>
+<div id="make-some-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> make some data</h1>
+<p>Let’s simulate some complex data for a 2 (stim_version: personal
+vs. impersonal) x 2 (judgment: permissible vs. forbidden) mixed design
+with response time (RT) as the DV. We will simulate data for 200
+subjects who made judgments of 50 personal and 50 impersonal moral
+dilemmas. You don’t need to follow the details of this just that we are
+simulating data where the random effects variances (by-participant and
+by-stimulus slopes and intercepts and the correlation between them) will
+not be zero. In other words, particular participants and items had
+different average RTs and were differently impacted by the experimental
+manipulations - e.g., some participants/items showed big effects whereas
+others show no or the opposite effect.</p>
+<pre class="r"><code># function for by-subject and by-stimuli random intercepts and slopes
+
+sim_lmer &lt;- function( sub_n = 200,
+                      sub_sd = 100,
+                      sub_version_sd = 20, 
+                      sub_i_version_cor = -0.2,
+                      stim_n = 50,
+                      stim_sd = 50,
+                      stim_version_sd = 10,
+                      stim_cond_sd = 30,
+                      stim_cond_version_sd = 15,
+                      stim_i_cor = -0.4,
+                      stim_s_cor = +0.2,
+                      grand_i = 400,
+                      permis_impers = +50,
+                      permis_pers = -50,
+                      forbid_impers = +50,
+                      forbid_pers = -50,
+                      error_sd = 25) {
+  sub &lt;- faux::rnorm_multi(
+    n = sub_n, 
+    vars = 2, 
+    r = sub_i_version_cor,
+    mu = 0, # means of random intercepts and slopes are always 0
+    sd = c(sub_sd, sub_version_sd),
+    varnames = c(&quot;sub_i&quot;, &quot;sub_version_slope&quot;)
+  ) %&gt;%
+    mutate(
+      sub_id = 1:sub_n,
+      sub_cond = rep(c(&quot;permissible&quot;,&quot;forbidden&quot;), each = sub_n/2) # between-subjects factor
+    )
+  
+  stim_cors &lt;- c(stim_i_cor, stim_i_cor, stim_i_cor,
+                             stim_s_cor, stim_s_cor,
+                                         stim_s_cor)
+  stim &lt;- faux::rnorm_multi(
+    n = stim_n, 
+    vars = 4, 
+    r = stim_cors, 
+    mu = 0, # means of random intercepts and slopes are always 0
+    sd = c(stim_sd, stim_version_sd, stim_cond_sd, stim_cond_version_sd),
+    varnames = c(&quot;stim_i&quot;, &quot;stim_version_slope&quot;, &quot;stim_cond_slope&quot;, &quot;stim_cond_version_slope&quot;)
+  ) %&gt;%
+    mutate(
+      stim_id = 1:stim_n
+    )
+  
+ # mean difference between forbidden and permissible conditions
+  sub_cond_eff     &lt;- (forbid_impers + forbid_pers)/2 -
+                    (permis_impers + permis_pers)/2
+  # mean difference between personal and impersonal versions
+  stim_version_eff &lt;- (forbid_pers + permis_pers)/2 - 
+                    (forbid_impers + permis_impers)/2  
+  # interaction between version and condition
+  cond_version_ixn &lt;- (forbid_pers - forbid_impers) -
+                    (permis_pers - permis_impers) 
+  
+  trials &lt;- crossing(
+    sub_id = sub$sub_id, # get subject IDs from the sub data table
+    stim_id = stim$stim_id, # get stimulus IDs from the stim data table
+    stim_version = c(&quot;personal&quot;, &quot;impersonal&quot;) # all subjects see both congruent and incongruent versions of all stimuli
+  ) %&gt;%
+    left_join(sub, by = &quot;sub_id&quot;) %&gt;% # includes the intercept, slope, and condition for each subject
+    left_join(stim, by = &quot;stim_id&quot;)   # includes the intercept and slopes for each stimulus
+  
+  dat &lt;- trials %&gt;%
+    mutate(
+      # effect-code subject condition and stimulus version
+      sub_cond.e = recode(sub_cond, &quot;permissible&quot; = -0.5, &quot;forbidden&quot; = +0.5),
+      stim_version.e = recode(stim_version, &quot;personal&quot; = -0.5, &quot;impersonal&quot; = +0.5),
+      # calculate trial-specific effects by adding overall effects and slopes
+      cond_eff = sub_cond_eff + stim_cond_slope,
+      version_eff = stim_version_eff + stim_version_slope + sub_version_slope,
+      cond_version_eff = cond_version_ixn + stim_cond_version_slope,
+      # calculate error term (normally distributed residual with SD set above)
+      err = rnorm(nrow(.), 0, error_sd),
+      # calculate DV from intercepts, effects, and error
+      dv = grand_i + sub_i + stim_i + err +
+           (sub_cond.e * cond_eff) + 
+           (stim_version.e * version_eff) + 
+           (sub_cond.e * stim_version.e * cond_version_eff)
+    )
+  
+  # get data in environment
+  assign(&quot;dat&quot;, dat, envir = .GlobalEnv)
+  
+  return(dat)
+  
+}</code></pre>
+<p>Let’s run the function we have created.</p>
+<pre class="r"><code>sim_lmer()</code></pre>
+<pre style="max-height: 500px;"><code>## # A tibble: 20,000 × 17
+##    sub_id stim_id stim_version sub_i sub_version_slope sub_cond    stim_i
+##     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1      1       1 impersonal   -35.1              11.0 permissible  -73.3
+##  2      1       1 personal     -35.1              11.0 permissible  -73.3
+##  3      1       2 impersonal   -35.1              11.0 permissible   35.7
+##  4      1       2 personal     -35.1              11.0 permissible   35.7
+##  5      1       3 impersonal   -35.1              11.0 permissible   38.3
+##  6      1       3 personal     -35.1              11.0 permissible   38.3
+##  7      1       4 impersonal   -35.1              11.0 permissible   62.8
+##  8      1       4 personal     -35.1              11.0 permissible   62.8
+##  9      1       5 impersonal   -35.1              11.0 permissible   87.2
+## 10      1       5 personal     -35.1              11.0 permissible   87.2
+## # ℹ 19,990 more rows
+## # ℹ 10 more variables: stim_version_slope &lt;dbl&gt;, stim_cond_slope &lt;dbl&gt;,
+## #   stim_cond_version_slope &lt;dbl&gt;, sub_cond.e &lt;dbl&gt;, stim_version.e &lt;dbl&gt;,
+## #   cond_eff &lt;dbl&gt;, version_eff &lt;dbl&gt;, cond_version_eff &lt;dbl&gt;, err &lt;dbl&gt;,
+## #   dv &lt;dbl&gt;</code></pre>
+<p>You can see the data (the dataframe “dat”) pop up in the environment.
+In addition, we can see the data with subject ID, stimulus ID, stimulus
+version, and all of the random effects for each participant and stimuli.
+Let’s plot the data to get an idea of what it’s showing.</p>
+<pre class="r"><code>ggplot(dat, aes(sub_cond, dv, fill = stim_version)) +
+  stat_summary(aes(sub_cond, dv, fill = stim_version), fun = &quot;mean&quot;, geom = &quot;bar&quot;, position=&quot;dodge&quot;)+
+  stat_summary(fun.data = &quot;mean_cl_normal&quot;, geom = &quot;errorbar&quot;, position=&quot;dodge&quot;)</code></pre>
+<p><img src="Mixed-effects-models_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+The figure suggests that participants are slower when judging personal
+(vs. impersonal) dilemmas - i.e., a main effect of stimulus/dilemma
+type. This effect doesn’t seem to vary depending on whether the judgment
+is permissible or forbidden. However, it does seem that, on average,
+folks take longer when they see a dilemma as morally permissible.</p>
+<p>a “maximal” model <a
+href="https://www.sciencedirect.com/science/article/abs/pii/S0749596X12001180?via%3Dihub">(see
+Barr et al., 2013)</a> with all random intercepts and slopes
+by-participant and by-stimulus.</p>
+</div>
+<div id="modeling-response-time" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> modeling response
+time</h1>
+<p>Let’s run a series of statistical models in order to examine the
+effect of dilemma type and moral judgment on response time. First let’s
+set some deviation coding for ease of interpretation. This means the
+main effects will be mean differences and the interaction will be the
+difference of the mean differences.</p>
+<pre class="r"><code>#set deviation contrasts for ease of interpretation -.5 vs .5
+c&lt;-contr.treatment(2)
+my.coding&lt;-matrix(rep(1/2, 2), ncol=1)
+my.simple&lt;-c-my.coding
+my.simple
+
+#dilemma type  -.5 impersonal,  .5 personal 
+dat$stim_version &lt;- as.factor(dat$stim_version)
+contrasts(dat$stim_version)&lt;-my.simple
+contrasts(dat$stim_version)
+
+#Judgment type  -.5 forbidden,  .5 permissible 
+dat$sub_cond &lt;- as.factor(dat$sub_cond)
+contrasts(dat$sub_cond)&lt;-my.simple
+contrasts(dat$sub_cond)</code></pre>
+<div id="a-simple-repeated-measures-anova" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> a simple repeated
+measures ANOVA</h2>
+<p>Let’s start with a simple model that you are familiar with, a simple
+one-way repeated measures ANOVA.</p>
+<pre class="r"><code>ANOVA1 &lt;- aov_4(dv ~ (stim_version|sub_id), data=dat)</code></pre>
+<pre><code>## Warning: More than one observation per design cell, aggregating data using `fun_aggregate = mean`.
+## To turn off this warning, pass `fun_aggregate = mean` explicitly.</code></pre>
+<pre class="r"><code>ANOVA1</code></pre>
+<pre style="max-height: 500px;"><code>## Anova Table (Type 3 tests)
+## 
+## Response: dv
+##         Effect     df    MSE           F  ges p.value
+## 1 stim_version 1, 199 225.23 4389.51 *** .204   &lt;.001
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>As suggested by the plot, we can see a significant main effect of
+dilemma/stimuli type. Participants take longer making a judgment of
+personal (vs. impersonal) dilemmas.</p>
+</div>
+<div id="lmm-version-of-1-way-repeated-measures-anova"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> LMM version of 1-way
+repeated measures ANOVA</h2>
+<p>Let’s fit a linear mixed model with by-subjects random intercept and
+slope (random effects) and dilemma/stimuli type (fixed effect).</p>
+<pre class="r"><code>#random slope of stim_version within subjects with correlated intercept
+mod1 &lt;- lmer(dv ~ stim_version +
+                (1+stim_version|sub_id),
+              data = dat)
+
+mod1.sum &lt;- summary(mod1)
+options(digits = 10)
+mod1.sum</code></pre>
+<p>The model also shows a significant main effect of dilemma/stimuli
+type. Indeed, we can tell that the models are equivalent by comparing
+the F and t values. Since we know that F = t<sup>2</sup> we can see that
+59.92643<sup>2</sup> = 3591.177013 or 3591.18 as per the F from the
+ANOVA. The estimates are more informative than the ANOVA table as they
+tell us that (given our coding) as you go from impersonal (coded -0.5)
+to personal (coded 0.5), that is an increase in one unit of
+dilemma/stimuli type, you see an increase in response time of 101.15 ms.
+This is the mean difference between conditions or the (unstandardised)
+effect size. If we standardised the DV and ran the model this would be
+the standardised mean difference (or “d”). Another advantage of using
+the LMM version of the model is that it is trivially easy to return the
+95% confidence intervals on this effect size (mean difference).</p>
+<pre class="r"><code>confint(mod1, parm = &quot;beta_&quot;)</code></pre>
+<pre><code>## Computing profile confidence intervals ...</code></pre>
+<pre style="max-height: 500px;"><code>##                      2.5 %      97.5 %
+## (Intercept)   376.60726847 403.8411780
+## stim_version2  96.48279436 102.3791615</code></pre>
+<p>This suggests that under repeated sampling (running experiments in
+the long run) 95% of these confidence intervals would contain the true
+parameter value. Unfortunately, we don’t know if these CIs are one of
+the 95% of confidence intervals that contain the true parameter value!
+Indeed, the 95% CIs are often taken to be a measure of precision of the
+estimate. Technically this would only apply if these were the same as
+the Bayesian credible intervals (the Bayesian version of CIs), but let’s
+just pretend that they are roughly (not statistically) speaking measures
+of precision, assuming they will be similar to Bayesian credible
+intervals.</p>
+</div>
+<div id="x-2-mixed-repeatedbetween-measures-anova"
+class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> 2 x 2 mixed
+(repeated/between measures) ANOVA</h2>
+<p>Let’s specify the full ANOVA model with dilemma/stimuli type
+(personal vs. impersonal) within-subjects and judgment (permissible
+vs. forbidden) between-subjects.</p>
+<pre class="r"><code>ANOVA2 &lt;- aov_4(dv ~ sub_cond + (stim_version|sub_id), data=dat)</code></pre>
+<pre><code>## Warning: More than one observation per design cell, aggregating data using `fun_aggregate = mean`.
+## To turn off this warning, pass `fun_aggregate = mean` explicitly.</code></pre>
+<pre><code>## Contrasts set to contr.sum for the following variables: sub_cond</code></pre>
+<pre class="r"><code>ANOVA2</code></pre>
+<pre style="max-height: 500px;"><code>## Anova Table (Type 3 tests)
+## 
+## Response: dv
+##                  Effect     df      MSE           F   ges p.value
+## 1              sub_cond 1, 198 19313.65        0.02 &lt;.001    .884
+## 2          stim_version 1, 198   221.96 4454.23 ***  .204   &lt;.001
+## 3 sub_cond:stim_version 1, 198   221.96      3.93 * &lt;.001    .049
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Only the main effect of dilemma type is significant. The
+between-subjects judgment is not significant, neither is the
+interaction.</p>
+</div>
+<div id="lmm-version-of-2-way-mixed-repeatedbetween-measures-anova"
+class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> LMM version of 2-way
+mixed (repeated/between measures) ANOVA</h2>
+<p>Let’s fit a linear mixed model with by-subjects random intercept and
+slope (random effects) and dilemma/stimuli type, judgment (sub_cond) and
+their interaction (fixed effects).</p>
+<pre class="r"><code>#random slope of stim_version within subjects with correlated intercept
+
+mod2 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
+                (1+stim_version|sub_id),
+              data = dat)
+
+mod2.sum &lt;- summary(mod2)
+
+mod2.sum</code></pre>
+<p>As you can the results are equivalent. If you wanted identical
+results to lots of decimal places this notation would probably be
+better.</p>
+<pre class="r"><code>#uncorrelated random intercept and random slope within subjects
+
+mod3 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
+                (1|sub_id) + (0+stim_version|sub_id), 
+              data = dat, control = lmerControl(optimizer = &quot;bobyqa&quot;))
+
+mod3.sum &lt;- summary(mod3)
+
+mod3.sum</code></pre>
+</div>
+<div id="averaging-over-scenarioitem-can-inflate-type-i-error"
+class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> averaging over
+scenario/item can inflate type I error</h2>
+<p>The problem with ANOVA is that you can only add one random factor
+(e.g., participant). As the ANOVA warning above informed us, dilemma was
+averaged over. What’s the problem with averaging across one potential
+random factor? Well, we know that when you average you lose information,
+which can’t be a good thing in terms of science. This averaging over
+dilemma/item leads to considerable inflation in the type I error rate.
+That is, the 0.05 alpha you are expecting isn’t really 0.05 see <a
+href="https://psycnet.apa.org/doiLanding?doi=10.1037%2Fa0028347">Judd,
+Westfall &amp; Kenny (2012)</a>.</p>
+<p>We can demonstrate how this works by adding a constant of 500 ms to
+first three items in the personal, permissible condition. Remember there
+are 100 items that didn’t show any interaction effect, so making 3 items
+out of 100 take a little longer to respond to shouldn’t determine
+whether there is an interaction effect, right?</p>
+<pre class="r"><code>dat1 &lt;- dat %&gt;% mutate(dv = case_when(sub_cond == &quot;permissible&quot; &amp; stim_version == &quot;personal&quot; &amp; stim_id &lt; 4 ~  dv+500, TRUE ~ dv))</code></pre>
+<p>We can see that the mean RT when participants judge personal dilemmas
+(like the footbridge) is higher than the other conditions. Specifically,
+the data are suggesting that the effect of dilemma type (stim_version)
+is greater when participants see the action as morally permissible.</p>
+<pre class="r"><code>ggplot(dat1, aes(sub_cond, dv, fill = stim_version)) +
+  stat_summary(aes(sub_cond, dv, fill = stim_version), fun = &quot;mean&quot;, geom = &quot;bar&quot;, position=&quot;dodge&quot;)+
+  stat_summary(fun.data = &quot;mean_cl_normal&quot;, geom = &quot;errorbar&quot;, position=&quot;dodge&quot;)</code></pre>
+<p><img src="Mixed-effects-models_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="x-2-mixed-repeatedbetween-measures-anova-with-3-weird-items"
+class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> 2 x 2 mixed
+(repeated/between measures) ANOVA with 3 weird items</h2>
+<p>Let’s run the full ANOVA model again the new data that includes the 3
+weird items in the personal/permissible condition.</p>
+<pre class="r"><code>ANOVA3 &lt;- aov_4(dv ~ sub_cond + (stim_version|sub_id), data=dat1)</code></pre>
+<pre><code>## Warning: More than one observation per design cell, aggregating data using `fun_aggregate = mean`.
+## To turn off this warning, pass `fun_aggregate = mean` explicitly.</code></pre>
+<pre><code>## Contrasts set to contr.sum for the following variables: sub_cond</code></pre>
+<pre class="r"><code>ANOVA3</code></pre>
+<pre style="max-height: 500px;"><code>## Anova Table (Type 3 tests)
+## 
+## Response: dv
+##                  Effect     df      MSE           F  ges p.value
+## 1              sub_cond 1, 198 19313.65        0.87 .004    .352
+## 2          stim_version 1, 198   221.96 5899.51 *** .253   &lt;.001
+## 3 sub_cond:stim_version 1, 198   221.96   65.37 *** .004   &lt;.001
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Now we can see that the interaction between judgment (sub_cond) and
+dilemma type (stim_version) is significant. All on the basis of 3 weird
+dilemmas out of 100 (less than 5 out 100!).</p>
+<p>We can use linear mixed effects models to run an equivalent model to
+the above ANOVA.</p>
+</div>
+<div id="lmm-version-with-3-weird-items" class="section level2"
+number="3.7">
+<h2><span class="header-section-number">3.7</span> LMM version with 3
+weird items</h2>
+<p>Let’s fit the linear mixed model with by-subjects random intercept
+and slope (random effects) and dilemma/stimuli type, judgment (sub_cond)
+and their interaction (fixed effects).</p>
+<pre class="r"><code>#random slope of stim_version within subjects with correlated intercept
+
+mod4 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
+                (1+stim_version|sub_id),
+              data = dat1)
+
+mod4.sum &lt;- summary(mod4)
+
+mod4.sum</code></pre>
+</div>
+<div
+id="lmm-model-with-both-by-subject-and-by-scenario-random-factors-with-3-weird-items"
+class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> LMM model with both
+by-subject and by-scenario random factors with 3 weird items</h2>
+<p>Let’s fit the linear mixed model with by-subjects random intercept
+and slope and by-dilemmas random intercept and slopes (random effects)
+and dilemma/stimuli type, judgment (sub_cond) and their interaction
+(fixed effects).</p>
+<pre class="r"><code>#random slope of stim_version within subjects with correlated intercept and random slopes of stim_version, judgment, aand thier interaction within dielmmas with correlated intercept
+
+mod5 &lt;- lmer(dv ~ sub_cond + stim_version + sub_cond*stim_version +
+                (1+stim_version|sub_id) + (1 + stim_version*sub_cond | stim_id),
+              data = dat1, control = lmerControl(optimizer = &quot;bobyqa&quot;))
+
+mod5.sum &lt;- summary(mod5)
+
+mod5.sum</code></pre>
+<p>Here we can see that the interaction is not significant. When we
+model dilemma as a random factor we are able to model the variance
+associated with the weirdly slow 3 dilemmas and this means that the
+standard erros used to test the significance reflect this variance and
+so are larger, making the once significant effect now
+non-significant.</p>
+<p>Only LMMs allow us to avoid these kinds of type I errors that occur
+via aggregating across dilemmas/multiple items in an experiment. In
+addition, adding dilemma as a random factor also allows us to generalise
+to the population of dilemmas from which our chosen 100 dilemmas were
+chosen (see this talk by <a
+href="https://www.youtube.com/watch?v=wzIfKyqgiOM&amp;t=3530s">Tal
+Yarkoni</a>). Strictly, if you have multiple items and find an effect
+averaged across them, then you can only generalise the effect to the
+stimuli used in the study - not what researchers usally want to do with
+their generalisations!</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
